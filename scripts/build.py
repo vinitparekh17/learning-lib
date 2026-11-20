@@ -49,8 +49,8 @@ ROUTES = [
     ("Integrate judgment", "Work through decisions about effects, capacity, autonomy, and suppliers.", "C01 C03 C05 C06"),
 ]
 TOPIC_ROUTES = [
-    ("Cloud and distributed systems", "F01 S01 S02 S03 S04 S05 S06 C01 C03"),
-    ("AI engineering and LLM judgment", "F02 F03 F04 A01 A02 A03 A04 A05 C02 C05 C06"),
+    ("Cloud and distributed systems", "F01 S01 S02 S03 S04 S05 S06 C01 C03 X01 X02 X03"),
+    ("AI engineering and LLM judgment", "F02 F03 F04 A01 A02 A03 A04 A05 C02 C05 C06 X03"),
     ("Technology and business decisions", "B01 F02 F03 B02 B03 C02 C04 C06"),
 ]
 LEVELS = ["Unstarted", "Recognize", "Reproduce", "Transfer", "Defend"]
@@ -210,7 +210,7 @@ def home_page():
 <div class="hero-graphic" aria-hidden="true"><div class="hero-grid"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><div class="orbit orbit-four"></div><div class="orbit orbit-five"></div><div class="orbit orbit-six"></div><div class="orbit orbit-seven"></div><div class="graphic-point"></div></div>
 </section>
 <div class="overview-facts"><span><strong>{len(modules)}</strong> modules</span><span><strong>{len(TRACKS)}</strong> topic areas</span><span><strong>{len(modules)}</strong> worked companions</span></div>
-<section class="dashboard-section panel"><p class="eyebrow">New extension · X02</p><h2>When does a retry prevent recovery?</h2><p>Trace a recovering dependency and decide whether another attempt can finish before the deadline.</p><div class="hero-actions">{button('/learn/x02.html', 'Explore retry budgets')}{button('/reference/extensions.html', 'View extension roadmap', 'secondary')}</div></section>
+<section class="dashboard-section panel"><p class="eyebrow">New extension · X03</p><h2>Approximate membership and the price of forgetting</h2><p>Use compact membership filters to skip expensive negative work without trusting incomplete state.</p><div class="hero-actions">{button('/learn/x03.html', 'Price the filter')}{button('/reference/extensions.html', 'View extension roadmap', 'secondary')}</div></section>
 <section class="dashboard-section"><div class="section-head"><div><p class="eyebrow">Choose a subject</p><h2>Browse by topic</h2></div><a class="text-link" href="/topics.html">All modules <span aria-hidden="true">→</span></a></div>
 <div class="topic-grid">{track_cards}</div>
 </section>
@@ -450,6 +450,7 @@ for entry in execution.xpath(".//tr[td]"):
 
 prereq_ids["X01"] = ["F01", "S02", "S03"]
 prereq_ids["X02"] = ["S05", "S06", "C03"]
+prereq_ids["X03"] = ["F01", "F02", "S02"]
 register_anchors = {}
 for heading in docs["SDE_SOURCES"][0].xpath("./h2[@id] | ./h3[@id]"):
     match = re.search(r"\b([FSABC]\d\d)\b", clean_text(heading))

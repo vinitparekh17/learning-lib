@@ -21,7 +21,7 @@
 <div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
 </nav>
 <a class="side-progress" href="/progress.html">
-<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 27</strong></span>
 <span class="meter"><span data-meter></span></span>
 <span class="side-progress-note">Modules with a recorded level</span>
 </a>
@@ -79,6 +79,18 @@
 <td>X02 practice</td>
 <td>Produced and checked</td>
 </tr>
+<tr class="odd">
+<td><a href="/learn/x03.html">X03 — Approximate membership and the price of forgetting</a></td>
+<td>Price avoided negative work while preserving snapshot completeness</td>
+<td>F01, F02, S02</td>
+<td>Produced and checked</td>
+</tr>
+<tr class="even">
+<td><a href="/answers/x03.html">X03 worked companion</a></td>
+<td>Reproduce sizing, load and stale-snapshot decisions</td>
+<td>X03 practice</td>
+<td>Produced and checked</td>
+</tr>
 </tbody>
 </table>
 </div><p>X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.</p>
@@ -102,17 +114,11 @@
 <tbody>
 <tr class="odd">
 <td>Next</td>
-<td>X03 — Approximate membership and the price of forgetting</td>
-<td>Derive when a Bloom filter saves work and why false positives and false negatives have different consequences</td>
-<td>F01, F02, S02</td>
-</tr>
-<tr class="even">
-<td>Then</td>
 <td>X04 — Information gain and choosing the next experiment</td>
 <td>Choose a useful measurement when several explanations fit the evidence</td>
 <td>F02, F03, B01</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Review</td>
 <td>Extension audit</td>
 <td>Recheck X01–X04 claims, companion mappings, source boundaries and site navigation</td>
@@ -122,7 +128,7 @@
 </table>
 </div><h2 id="how-continued-work-is-maintained">How continued work is maintained</h2>
 <p>The website source repository is the working record for these additions. Existing first-edition exports and Library documents remain historical snapshots; this extension does not claim to update those downloads. Published lessons appear in search, topic browsing, study paths and progress tracking. Progress continues to be saved in your browser.</p>
-<p>Keep the original R01–R24 identities stable. New extension sources use XR identifiers, with passage locators recorded below and in the relevant lesson. A future update should read this roadmap, inspect the repository’s actual state, finish one substantial item, validate it and publish to the same private site. Reconcile an existing partial lesson before creating another. Keep the original production automation paused until a website continuation schedule is explicitly configured.</p>
+<p>Keep the original R01–R24 identities stable. New extension sources use XR identifiers, with passage locators recorded below and in the relevant lesson. A future update should read this roadmap, inspect the repository’s actual state, finish one substantial item, validate it and publish to the same private site. Reconcile an existing partial lesson before creating another.</p>
 <h2 id="extension-evidence-register">Extension evidence register</h2>
 <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
 <colgroup>
@@ -148,9 +154,30 @@
 <td><a href="https://www.rfc-editor.org/rfc/rfc9111.html">RFC 9111, HTTP Caching</a>, §§4.2–4.2.3, 4.4 and 6; inspected 2026-11-20</td>
 <td>HTTP freshness/age and scope; application-cache example remains an original model</td>
 </tr>
+<tr class="odd">
+<td>XR03</td>
+<td><a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">Marc Brooker, “Timeouts, retries, and backoff with jitter,” AWS Builders’ Library</a>, “Retries and backoff” and final five paragraphs of “Jitter”; inspected 2026-11-20</td>
+<td>Production experience with burst timing and retry guidance; X02 queue and deadline values are invented</td>
+</tr>
+<tr class="even">
+<td>XR04</td>
+<td><a href="https://sre.google/sre-book/addressing-cascading-failures/">Mike Ulrich, “Addressing Cascading Failures,” Google SRE</a>, “Retries” and “Queue Management”; inspected 2026-11-20</td>
+<td>Retry feedback, aggregate limits and waiting costs; no universal retry budget</td>
+</tr>
+<tr class="odd">
+<td>XR05</td>
+<td><a href="https://courses.cs.washington.edu/courses/csep521/21wi/readings/bloom_cacm.pdf">Burton H. Bloom, “Space/Time Trade-offs in Hash Coding with Allowable Errors,” CACM 13(7), 1970</a>, printed pp. 422–423 and 425–426, equations 16–17 and Table I; inspected 2026-11-20</td>
+<td>Original one-sided membership model and analytical trade-off; deployment freshness is outside scope</td>
+</tr>
+<tr class="even">
+<td>XR06</td>
+<td><a href="https://research.google.com/archive/bigtable-osdi06.pdf">Chang et al., “Bigtable: A Distributed Storage System for Structured Data,” OSDI 2006</a>, §6 “Bloom filters,” proceedings p. 211 / PDF printed p. 7; inspected 2026-11-20</td>
+<td>Deployed SSTable decision and qualitative disk-seek outcome; no universal percentage or sizing rule</td>
+</tr>
 </tbody>
 </table>
 </div><h2 id="change-record">Change record</h2>
+<p>20 November 2026 · Added X03 and five worked analyses. XR05 is Bloom’s original one-sided membership construction and trade-off; XR06 is Google’s Bigtable account of using filters to avoid SSTable disk seeks. Checked the sizing, expected-load, incremental-memory and version-mismatch examples. X04 is next.</p>
 <p>20 November 2026 · Added X02 and four worked analyses. XR03 is Marc Brooker’s AWS Builders’ Library account of burst timing on EBS and Lambda. XR04 is Google SRE chapter 22 on retry feedback. The lesson records passage locators. Checked the synthetic queue, deadline and attempt calculations. X03 is next.</p>
 <p>20 November 2026: X01 and its six worked analyses added, with an interactive comparison of unguarded and guarded cache fills. Executed ten legal schedules plus negative-premise fixtures, TTL boundary checks and exact load arithmetic. Original 24 modules retained. Real cache recovery, invalidation delivery and replica lag remain implementation questions; learner mastery is unknown. Next substantial item: X02.</p>
 </article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#available-now">Available now</a></li><li class="h2"><a href="#next-questions-worth-investigating">Next questions worth investigating</a></li><li class="h2"><a href="#how-continued-work-is-maintained">How continued work is maintained</a></li><li class="h2"><a href="#extension-evidence-register">Extension evidence register</a></li><li class="h2"><a href="#change-record">Change record</a></li></ol></nav></aside></div></main>

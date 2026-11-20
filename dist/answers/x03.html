@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X03 — Worked membership decisions and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 27</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X03</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/x03.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">X03 <span aria-hidden="true">/</span> Worked companion</p><h1 id="x03-worked-membership-decisions-and-checks">Worked membership decisions and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/x03.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#reproduce-the-false-positive-estimate">1. Reproduce the false-positive estimate</a></li><li class="h2"><a href="#price-two-memory-choices">2. Price two memory choices</a></li><li class="h2"><a href="#reject-a-mismatched-snapshot">3. Reject a mismatched snapshot</a></li><li class="h2"><a href="#replay-the-retrieval-path">4. Replay the retrieval path</a></li><li class="h2"><a href="#keep-authorization-exact">5. Keep authorization exact</a></li><li class="h2"><a href="#reproduce-the-arithmetic-and-premises">Reproduce the arithmetic and premises</a></li></ol></nav></details><article class="prose"><p><a href="/learn/x03.html">Return to the lesson</a>. Keep two questions separate: how often a complete filter admits unnecessary work, and whether the deployed filter is complete for the data being served.</p>
+<h2 id="reproduce-the-false-positive-estimate">1. Reproduce the false-positive estimate</h2>
+<p>The invented snapshot has <code>n = 1,000,000</code>, <code>m = 10,000,000</code> and <code>k = 7</code>, so <code>m/n = 10</code> bits per key.</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>≈</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>7</mn><mi>/</mi><mn>10</mn></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>7</mn></msup><mo>=</mo><mn>0.0081937</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+p \approx (1-e^{-7/10})^7 = 0.0081937.
+</annotation></semantics></math></p>
+<p>That is about 0.819%. Among 3,000,000 queries for absent keys, the expected count admitted to the authoritative lookup is <code>3,000,000 × p ≈ 24,581</code>. The remaining roughly 2,975,419 are useful negatives. Expected counts are workload averages, not a guarantee for a particular day.</p>
+<h2 id="price-two-memory-choices">2. Price two memory choices</h2>
+<p>Twelve bits per key needs 12,000,000 bits, or about 1.50 MB, versus 1.25 MB at ten bits. The incremental memory is 0.25 MB using decimal units. With <code>k = 8</code>, the modeled false-positive probability is about 0.003142, so approximately 9,427 of the 3,000,000 negative queries reach the slow path.</p>
+<p>The additional memory avoids about <code>24,581 − 9,427 = 15,154</code> slow lookups per day. At the invented 2 ms each, this is only about 30.3 service-seconds beyond the 10-bit filter’s saving. Decide using measured end-to-end tail latency, I/O and cache churn, memory pressure, filter probe CPU and rebuild cost. A lower isolated false-positive rate is not itself the product outcome.</p>
+<h2 id="reject-a-mismatched-snapshot">3. Reject a mismatched snapshot</h2>
+<p>The version-42 filter never received the key added to data version 43. Its negative is a system-created false negative even though the mathematical insert-only filter kept its promise for version 42. The serving invariant should be <code>filter.manifest_version == data.manifest_version</code> before a negative can skip the lookup. On mismatch, perform the authoritative lookup or fail the snapshot switch before it becomes visible. Publish the filter and data through one immutable manifest reference so readers cannot independently select versions.</p>
+<h2 id="replay-the-retrieval-path">4. Replay the retrieval path</h2>
+<p>Use one captured trace with stable tenant, index snapshot, canonical key encoding and cache starting state. Run it against the unfiltered path and the candidate filter. Record total queries, true absent queries, filter negatives, filter positives, verified true positives, verified false positives, authoritative lookups, bytes read, CPU, cache misses and latency distributions.</p>
+<p>To detect hidden valid documents, independently enumerate the authoritative snapshot and assert that every present key returns “maybe.” Include keys added at each publication boundary and force version mismatch, partial-build and fallback fixtures. Compare retrieval recall and final evidence-bearing answers on a labeled set as a downstream check. The membership check establishes whether a document identifier is in one snapshot; it does not establish semantic relevance.</p>
+<h2 id="keep-authorization-exact">5. Keep authorization exact</h2>
+<p>Do not deny authorization from a Bloom-filter negative unless the filter’s completeness and freshness are themselves part of the authorization system’s proven invariant. A stale or partially published filter could deny an allowed subject. The safer optimization is to use a positive only to trigger the authoritative policy lookup and to fall back on any version uncertainty. Authorization also has revocation semantics that a basic insert-only filter cannot represent safely.</p>
+<h2 id="reproduce-the-arithmetic-and-premises">Reproduce the arithmetic and premises</h2>
+<p>The checks use deterministic invented inputs and the standard independent-uniform approximation.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> exp, log</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modeled_fpr(bits_per_key, probes):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">1</span> <span class="op">-</span> exp(<span class="op">-</span>probes <span class="op">/</span> bits_per_key)) <span class="op">**</span> probes</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>p10 <span class="op">=</span> modeled_fpr(<span class="dv">10</span>, <span class="dv">7</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>p12 <span class="op">=</span> modeled_fpr(<span class="dv">12</span>, <span class="dv">8</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(p10 <span class="op">-</span> <span class="fl">0.0081937221</span>) <span class="op">&lt;</span> <span class="fl">1e-10</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">abs</span>(p12 <span class="op">-</span> <span class="fl">0.0031423503</span>) <span class="op">&lt;</span> <span class="fl">1e-10</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">round</span>(<span class="dv">3_000_000</span> <span class="op">*</span> p10) <span class="op">==</span> <span class="dv">24_581</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">round</span>(<span class="dv">3_000_000</span> <span class="op">*</span> p12) <span class="op">==</span> <span class="dv">9_427</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">round</span>(<span class="dv">3_000_000</span> <span class="op">*</span> (p10 <span class="op">-</span> p12)) <span class="op">==</span> <span class="dv">15_154</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">10_000_000</span> <span class="op">/</span> <span class="dv">8</span> <span class="op">/</span> <span class="dv">1_000_000</span> <span class="op">==</span> <span class="fl">1.25</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">12_000_000</span> <span class="op">/</span> <span class="dv">8</span> <span class="op">/</span> <span class="dv">1_000_000</span> <span class="op">==</span> <span class="fl">1.5</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">round</span>((<span class="dv">24_581</span> <span class="op">-</span> <span class="dv">9_427</span>) <span class="op">*</span> <span class="fl">0.002</span>, <span class="dv">3</span>) <span class="op">==</span> <span class="fl">30.308</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">round</span>(<span class="dv">10</span> <span class="op">*</span> log(<span class="dv">2</span>)) <span class="op">==</span> <span class="dv">7</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">round</span>(<span class="dv">12</span> <span class="op">*</span> log(<span class="dv">2</span>)) <span class="op">==</span> <span class="dv">8</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> may_skip(filter_version, data_version, bits):</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filter_version <span class="op">==</span> data_version <span class="kw">and</span> <span class="dv">0</span> <span class="kw">in</span> bits</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> may_skip(<span class="dv">42</span>, <span class="dv">42</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> may_skip(<span class="dv">42</span>, <span class="dv">43</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> may_skip(<span class="dv">43</span>, <span class="dv">43</span>, [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>])</span></code></pre></div>
+<p>A complete answer names the authoritative follow-up, quantifies avoided work, and treats freshness, completeness and key encoding as premises of every “definitely absent” result.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#reproduce-the-false-positive-estimate">1. Reproduce the false-positive estimate</a></li><li class="h2"><a href="#price-two-memory-choices">2. Price two memory choices</a></li><li class="h2"><a href="#reject-a-mismatched-snapshot">3. Reject a mismatched snapshot</a></li><li class="h2"><a href="#replay-the-retrieval-path">4. Replay the retrieval path</a></li><li class="h2"><a href="#keep-authorization-exact">5. Keep authorization exact</a></li><li class="h2"><a href="#reproduce-the-arithmetic-and-premises">Reproduce the arithmetic and premises</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>
