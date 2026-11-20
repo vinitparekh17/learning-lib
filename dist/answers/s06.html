@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S06 — Hints, worked answers and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S06</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/s06.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">S06 <span aria-hidden="true">/</span> Worked companion</p><h1 id="s06-hints-worked-answers-and-checks">Hints, worked answers and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/s06.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#principals-and-paths">1. Principals and paths</a></li><li class="h2"><a href="#revocation-and-cached-permission">2. Revocation and cached permission</a></li><li class="h2"><a href="#a-forbidden-model-proposal">3. A forbidden model proposal</a></li><li class="h2"><a href="#sli-and-error-budget">4. SLI and error budget</a></li><li class="h2"><a href="#capacity-isolation-and-cost">5. Capacity isolation and cost</a></li><li class="h2"><a href="#bounded-validation-plan">6. Bounded validation plan</a></li><li class="h2"><a href="#reproduce-the-executed-checks">Reproduce the executed checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>S06 answers · 1.0 · 2026-11-08</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>S03–S05, C01 and <a href="/learn/s06.html">S06 core</a></td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Evaluate authority and availability separately, with an explicit outcome population</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R09, R11 and R10 passages inspected; URLs and exact locators in the core evidence table</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Executed finite Python checks below; no live fault injection or security certification</td>
+</tr>
+</tbody>
+</table>
+</div><p>These are reference solutions, not inferred learner responses. Try the six exercises first.</p>
+<h2 id="hints">Hints</h2>
+<ol type="1">
+<li>An arrow is an intended interface. Ask which credential could bypass it.</li>
+<li>Place the authorization check and the protected effect on the same ordered timeline.</li>
+<li>Preventing a mutation is narrower than preventing all harm.</li>
+<li>Start with original eligible operations; count the union of bad outcomes.</li>
+<li>Track worker availability, then distinguish occupied time from paid capacity.</li>
+<li>Define what must remain unchanged before injecting any failure.</li>
+</ol>
+<h2 id="principals-and-paths">1. Principals and paths</h2>
+<p>The core diagram puts reviewer identity and proposal data on separate inputs to the approval authority. Current policy and trusted object metadata supply authorization facts. The authority alone commits approval receipts and payment intents; the dispatcher consumes committed intents. The proposal worker receives only its job’s evidence subset and cannot grant itself approval rights.</p>
+<p>Two bypass examples are a maintenance script with unrestricted write credentials and a batch endpoint that writes approvals without invoking the same checks. A third is a read endpoint that trusts a caller-supplied tenant rather than matching trusted object metadata. All require explicit controls and tests; the drawing does not supply them. The policy administrator is not automatically authorized to read evidence or pay invoices.</p>
+<p><strong>Criteria:</strong> Distinct accountable principals, objects and actions; at least two concrete bypasses; no reliance on a model’s declared actor identity.</p>
+<h2 id="revocation-and-cached-permission">2. Revocation and cached permission</h2>
+<p>If approval commits before revocation, it was authorized at the modeled decision boundary and remains historical fact. Revocation alone cannot undo its external consequences. If revocation commits first, a later new approval must be denied and create no receipt of acceptance or payment intent.</p>
+<p>The bad sequence is page check at v=10, revocation at v=11, delayed request using cached allow from v=10, then unguarded commit. It violates the selected current-authority contract. A valid repair orders revocation and decision through one authority, or validates the policy version atomically with the protected commit. Logging v=10 after committing is diagnostic information, not a repair.</p>
+<p>Historical receipt retrieval is also an access. Check current permission to read it before disclosure. Do not execute its old effect again merely to answer a status question. Lack of a current grant and inability to establish policy are different reasons, but neither authorizes the mutation in this design.</p>
+<p><strong>Criteria:</strong> Both orders, concrete failure trace and atomicity premise; distinguish denial, deferral and undo.</p>
+<h2 id="a-forbidden-model-proposal">3. A forbidden model proposal</h2>
+<p>A tenant A proposal-worker identity cannot approve tenant B’s document, even if generated JSON claims <code>actor=admin</code>. The authority evaluates verified context and trusted object ownership. It rejects the request without altering the owner, acceptance receipt or payment-intent state.</p>
+<p>The worker may still generate a misleading draft or consume its resource allocation. It may expose data already granted to its context through an allowed output path. These harms call for evidence-quality evaluation, restricted read/output scope and resource limits. They are not excluded by the approval guard. Compromise of the authority itself also lies outside this finite model.</p>
+<p>A retry of the same forbidden request cannot repair authorization. Adding replicas or raising a timeout likewise cannot grant permission. An authorized human may make a factually wrong choice: the authorization invariant does not prove decision correctness.</p>
+<p><strong>Criteria:</strong> State exactly which state remains unchanged and identify two residual harms; do not equate denial with complete system safety.</p>
+<h2 id="sli-and-error-budget">4. SLI and error budget</h2>
+<p>Good/eligible is <code>9,960/10,000 = 99.6%</code>. The 99.5% target allows 50 bad operations in that completed fixed-size population. The 25 late plus 15 unavailable operations are disjoint here, so 40 are bad and ten remain relative to the allowance. The extra 20 distinct bad operations produce 60 bad, 99.4% good and a ten-operation excess.</p>
+<p>If late and incorrect sets overlap, use their union. For example, late <code>{1,2,3}</code> and incorrect <code>{3,4}</code> contain four bad operations, not five. A retry can improve the original operation’s outcome only if the required result arrives within its original deadline; it does not create another denominator entry to dilute failures.</p>
+<p>A policy-service outage for a predeclared eligible request counts against useful completion. Calling it a policy denial and excluding it would improve the chart while users receive less service. Genuine forbidden requests need separate tracking so the service is not rewarded for granting access to them. If authorization changes during a measurement window, define that classification rule before comparing results. The numerical example avoids this complication by holding grants constant.</p>
+<p>An unauthorized disclosure requires investigation independently of the availability budget. No observed incidents is incomplete evidence, especially when instrumentation has gaps.</p>
+<p><strong>Criteria:</strong> Correct arithmetic, population, time window and original-operation clock; no security-violation allowance inferred from availability tolerance.</p>
+<h2 id="capacity-isolation-and-cost">5. Capacity isolation and cost</h2>
+<p>With four shared workers, A’s four jobs occupy every worker from 0 to 10. B begins at 10 and ends at 11. With two reserved workers per tenant, A’s first pair ends at 10 and second pair at 20; B ends at 1. The last A completion worsens by ten seconds, while B improves by ten. Total busy work is unchanged at 41 worker-seconds, but reserved idle capacity may still be billed.</p>
+<p>A common database connection pool or storage throttle can defeat the expected isolation even with separate CPU pools. Conversely, separate credentials limit authority but do not reserve worker time.</p>
+<p>Three additional milliseconds per operation across 10,000 operations is 30,000 milliseconds, or 30 CPU-seconds in the assigned model. Concurrency, resource saturation and queueing determine elapsed time. This number cannot justify a fixed latency increase or current cost estimate without measurements.</p>
+<p><strong>Criteria:</strong> Trace assignments correctly; distinguish work, elapsed time and billed capacity; identify a specific remaining shared dependency.</p>
+<h2 id="bounded-validation-plan">6. Bounded validation plan</h2>
+<p>Use an isolated test environment with synthetic tenant A/B data and no live payment destination. Establish authorized controls that should succeed and cross-tenant/model-worker controls that must fail. Interrupt policy availability while submitting new approvals. Observe unavailable/denied reasons, protected-state deltas, ingress/outcome counts, latency and audit completeness. The required result is no new unverified approval; useful completion may fall. Stop immediately if an unauthorized state change, disclosure, or unintended external call occurs. Restore policy and verify that ordinary authorized requests recover without replaying old effects.</p>
+<p>For overload, replay the same timestamped A burst and B traffic into shared and reserved pools, with the same deadlines, resource budget and original-operation IDs. Include rejects, late completions and retries. Measure database contention as well as worker occupancy. Stop at predeclared resource or queue bounds. If reserved pools waste substantial paid capacity and B meets its target under a fair shared scheduler, reconsider rigid reservation. If shared dependencies keep B slow in both cases, isolate or control that dependency before buying more workers.</p>
+<p>This is a proposed deployment test, not one performed here. Actual measurements, approved limits and environment isolation are required. Finite arithmetic cannot select a production design.</p>
+<p><strong>Criteria:</strong> Observable outcomes, explicit invariant, safe scope, stop conditions and evidence that could reverse the choice. Tests that merely assert a successful HTTP response are insufficient.</p>
+<h2 id="reproduce-the-executed-checks">Reproduce the executed checks</h2>
+<p>The predicate check enumerates all 256 combinations of eight premises and verifies that only the all-true case can change protected state. It assumes the transition is indivisible and the premises truthful; it does not test authentication, policy synchronization or database isolation. The two revocation orders show the chosen contract, while the cached-allow case exhibits a violating premise. Scheduling checks implement the stated all-at-zero FIFO model. These are constructed cases, not frequency estimates or a security proof for deployed code.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> product, permutations</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> F</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> heapq</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decide(flags, state):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Eight premises from the lesson; one indivisible transition assumed.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">all</span>(flags):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'denied'</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> state[<span class="st">'owner'</span>] <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'occupied'</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    state.update(owner<span class="op">=</span><span class="st">'R'</span>, receipts<span class="op">=</span><span class="dv">1</span>, intents<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'accepted'</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>accepted <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> flags <span class="kw">in</span> product((<span class="va">False</span>, <span class="va">True</span>), repeat<span class="op">=</span><span class="dv">8</span>):</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    state <span class="op">=</span> <span class="bu">dict</span>(owner<span class="op">=</span><span class="va">None</span>, receipts<span class="op">=</span><span class="dv">0</span>, intents<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    before <span class="op">=</span> state.copy()</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> decide(flags, state)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="va">False</span> <span class="kw">in</span> flags:</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> result <span class="op">==</span> <span class="st">'denied'</span> <span class="kw">and</span> state <span class="op">==</span> before</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        accepted <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> result <span class="op">==</span> <span class="st">'accepted'</span> <span class="kw">and</span> state[<span class="st">'intents'</span>] <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> decide(flags, state) <span class="op">==</span> <span class="st">'occupied'</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> accepted <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> order <span class="kw">in</span> permutations((<span class="st">'approve'</span>, <span class="st">'revoke'</span>)):</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    grant, effects <span class="op">=</span> <span class="va">True</span>, <span class="dv">0</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> event <span class="kw">in</span> order:</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> event <span class="op">==</span> <span class="st">'revoke'</span>:</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>            grant <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> grant:</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>            effects <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> effects <span class="op">==</span> (<span class="dv">1</span> <span class="cf">if</span> order[<span class="dv">0</span>] <span class="op">==</span> <span class="st">'approve'</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Stale cached permission admits after revocation: counterexample.</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>cached_allow, current_grant <span class="op">=</span> <span class="va">True</span>, <span class="va">False</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> cached_allow <span class="kw">and</span> <span class="kw">not</span> current_grant</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># No authoritative policy available: selected mutation contract denies.</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> decide((<span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>),</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>              <span class="bu">dict</span>(owner<span class="op">=</span><span class="va">None</span>, receipts<span class="op">=</span><span class="dv">0</span>, intents<span class="op">=</span><span class="dv">0</span>)) <span class="op">==</span> <span class="st">'denied'</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>n, good <span class="op">=</span> <span class="dv">10000</span>, <span class="dv">9960</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(good, n) <span class="op">==</span> F(<span class="dv">996</span>, <span class="dv">1000</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>allowed <span class="op">=</span> n <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>F(<span class="dv">995</span>,<span class="dv">1000</span>))</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> allowed <span class="op">==</span> <span class="dv">50</span> <span class="kw">and</span> n<span class="op">-</span>good <span class="op">==</span> <span class="dv">40</span> <span class="kw">and</span> allowed<span class="op">-</span>(n<span class="op">-</span>good) <span class="op">==</span> <span class="dv">10</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(good<span class="op">-</span><span class="dv">20</span>, n) <span class="op">==</span> F(<span class="dv">994</span>,<span class="dv">1000</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (n<span class="op">-</span>good<span class="op">+</span><span class="dv">20</span>)<span class="op">-</span>allowed <span class="op">==</span> <span class="dv">10</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>late, incorrect <span class="op">=</span> {<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>}, {<span class="dv">3</span>,<span class="dv">4</span>}</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(late <span class="op">|</span> incorrect) <span class="op">==</span> <span class="dv">4</span>  <span class="co"># not five failures</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">3</span>,<span class="dv">1000</span>)<span class="op">*</span>n <span class="op">==</span> <span class="dv">30</span>  <span class="co"># added CPU-seconds</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> finish(costs, workers):</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    ready<span class="op">=</span>[(<span class="dv">0</span>,i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(workers)]</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    heapq.heapify(ready)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    out<span class="op">=</span>[]</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cost <span class="kw">in</span> costs:</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        t,i<span class="op">=</span>heapq.heappop(ready)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        out.append(t<span class="op">+</span>cost)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>        heapq.heappush(ready,(t<span class="op">+</span>cost,i))</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> finish([<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">1</span>],<span class="dv">4</span>)<span class="op">==</span>[<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">11</span>]</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> finish([<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">10</span>],<span class="dv">2</span>)<span class="op">==</span>[<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">20</span>]</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> finish([<span class="dv">1</span>],<span class="dv">2</span>)<span class="op">==</span>[<span class="dv">1</span>]</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>([<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">1</span>])<span class="op">==</span><span class="dv">41</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: 256 predicate cases, both revocation orders, stale-cache counterexample;'</span>)</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'SLO, budget, overlap and CPU arithmetic; shared/reserved worker traces.'</span>)</span></code></pre></div>
+<p>Observed output on 2026-11-08:</p>
+<pre class="text" tabindex="0" aria-label="Code example"><code>PASS: 256 predicate cases, both revocation orders, stale-cache counterexample;
+SLO, budget, overlap and CPU arithmetic; shared/reserved worker traces.</code></pre>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-08. Six answers, hints, criteria and executed finite checks. Learner readiness and mastery remain unknown.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#principals-and-paths">1. Principals and paths</a></li><li class="h2"><a href="#revocation-and-cached-permission">2. Revocation and cached permission</a></li><li class="h2"><a href="#a-forbidden-model-proposal">3. A forbidden model proposal</a></li><li class="h2"><a href="#sli-and-error-budget">4. SLI and error budget</a></li><li class="h2"><a href="#capacity-isolation-and-cost">5. Capacity isolation and cost</a></li><li class="h2"><a href="#bounded-validation-plan">6. Bounded validation plan</a></li><li class="h2"><a href="#reproduce-the-executed-checks">Reproduce the executed checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

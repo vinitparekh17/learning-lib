@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>B02 — Hints, worked answers and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">B02</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/b02.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">B02 <span aria-hidden="true">/</span> Worked companion</p><h1 id="b02-hints-worked-answers-and-checks">Hints, worked answers and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/b02.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#ledger-and-units">1. Ledger and units</a></li><li class="h2"><a href="#contribution-and-break-even">2. Contribution and break-even</a></li><li class="h2"><a href="#cheaper-compute-counterexample">3. Cheaper compute counterexample</a></li><li class="h2"><a href="#thresholds-and-capacity">4. Thresholds and capacity</a></li><li class="h2"><a href="#conditional-retry">5. Conditional retry</a></li><li class="h2"><a href="#offer-and-evidence">6. Offer and evidence</a></li><li class="h2"><a href="#executable-checks">Executable checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>B02 answers · 1.0 · 2026-11-12</td>
+</tr>
+<tr class="even">
+<td>Title</td>
+<td>Unit economics, pricing units, and sensitivity — worked answers</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>F02, B01, A05 and <a href="/learn/b02.html">B02 core</a></td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Audit denominators, cost boundaries and conditional decisions</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R20/R21/R12 passages and URLs in the core evidence table</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Exact Python arithmetic executed; no observed prices, customers or revenue</td>
+</tr>
+</tbody>
+</table>
+</div><p>These are reference solutions, not learner responses or mastery assessments.</p>
+<h2 id="hints">Hints</h2>
+<ol type="1">
+<li>Failed cases consume routine resources too. Separate their additional handling.</li>
+<li>Subtract variable costs before fixed overhead. Check the sign before dividing.</li>
+<li>Replace all changed inputs, not just compute price.</li>
+<li>Solve an inequality under one capacity range, then check whether the solution belongs to that range.</li>
+<li>Use the recovery probability among failures. Original costs are already included.</li>
+<li>A billable event needs a definition, evidence and a dispute rule.</li>
+</ol>
+<h2 id="ledger-and-units">1. Ledger and units</h2>
+<p>There are 800 successful and 200 failed cases. Compute costs 400, routine verification 1,000, routine support 200 and additional failure handling 400 U. Total variable cost is 2,000; adding 1,500 fixed cost yields 3,500 U. Variable cost per attempt is 2, per success 2.5, full cost per attempt 3.5 and full cost per success 4.375 U.</p>
+<p>Routine verification applies to all 1,000 cases. Dividing only successful-case expenditure by 800 would hide failed work. The 2 U failure charge must be incremental to routine review/support. If the review minutes are salaried capacity rather than proportional purchases, revise the cash ledger; do not charge the same labor twice. Report capacity usage even when cash cost is fixed.</p>
+<p><strong>Criterion:</strong> All rows reconcile, units and denominators are explicit, and labor/cost categories do not overlap.</p>
+<h2 id="contribution-and-break-even">2. Contribution and break-even</h2>
+<p>Revenue is 800×4=3,200 U. Contribution is 3,200−2,000=1,200 U, or 1.2 per attempted case. Its revenue fraction is 1,200/3,200=3/8=37.5%. Modeled operating remainder is −300 U. At unchanged costs and quality, 1,500/1.2=1,250 cases cover the modeled fixed cost exactly.</p>
+<p>For integer attempts and positive margin, round a noninteger break-even threshold upward. If margin is zero, positive fixed cost cannot be recovered; if negative, volume makes the result worse. This formula assumes sufficient demand and unchanged capacity cost. It excludes unlisted company expenses and collection delays. Contribution is neither total profit nor cash in the bank.</p>
+<p><strong>Criterion:</strong> Preserve the time horizon, positive-margin condition, cost scope and demand limitation.</p>
+<h2 id="cheaper-compute-counterexample">3. Cheaper compute counterexample</h2>
+<p>Alternative variable cost is 0.1+3×0.5+0.3+0.3×2=2.5 U per attempt. At 700 successes, revenue is 2,800, variable costs 2,500, contribution 300 and modeled remainder −1,200 U. Variable cost per success is 25/7≈3.571 U. Baseline cost per success is 2.5 U. Compute fell from 0.4 to 0.1, but the complete system lost 900 U in monthly contribution.</p>
+<p>Compare matched eligible cases with frozen verification standards, recording actual calls, active review/support, failures and deadline-qualified successes. A new model with lower review effort or higher success could reverse the result. The hypothetical ledger establishes only that compute price alone is insufficient.</p>
+<p><strong>Criterion:</strong> Recalculate the whole service; do not infer measured superiority or weaken quality to lower apparent cost.</p>
+<h2 id="thresholds-and-capacity">4. Thresholds and capacity</h2>
+<p>Baseline cost c=3.6−2p, hence contribution m=6p−3.6 at P=4. It is positive above p=0.6. With N=1,000 and F=1,500, the remainder is 6,000p−5,100, so modeled break-even requires p≥0.85. At p=0.8, the cost-covering price is (2+1.5)/0.8=4.375 U.</p>
+<p>Support rising from 0.2 to 0.7 adds 0.5 per case. Margin becomes 0.7 and the monthly remainder is −800. With overhead fixed at 1,500, baseline N=500,1,000,1,500 produces −900,−300,300. Above 1,500 the new overhead is 2,100; N=1,501 yields 1,801.2−2,100=−298.8. This tier breaks even at 2,100/1.2=1,750. Assume that volume fits the tier; do not extend it beyond a known capacity range.</p>
+<p>The table varies one input at a time. For a real scenario, higher price can change N and customer mix; higher load can increase review delays and reduce p. Cost thresholds do not establish an acceptable offer.</p>
+<p><strong>Criterion:</strong> Correct inclusive versus strict thresholds, discontinuity and explicit coupling assumptions.</p>
+<h2 id="conditional-retry">5. Conditional retry</h2>
+<p>Of 200 failures, recovery rate 1/4 produces 50 extra successes. The new rate is 850/1,000=0.85. Incremental cost is 200×1=200 U, incremental revenue 50×4=200, and incremental contribution zero. Total variable costs become 2,200, revenue 3,400, contribution remains 1,200 and remainder stays −300.</p>
+<p>For 0≤p&lt;1, positive incremental contribution requires Pr&gt;d, or r&gt;d/P for positive P. Here r&gt;1/4. At p=1 there are no failures and therefore no retry increment regardless of r. At P=0 and positive d no paid recovery can improve contribution. The recovery rate is conditional on the failed-case population; independence is not assumed. A late or unverified recovery does not qualify under this contract.</p>
+<p><strong>Criterion:</strong> Do not double-charge original handling or treat retries as independent new cases. Preserve deadline and verification rules.</p>
+<h2 id="offer-and-evidence">6. Offer and evidence</h2>
+<p>Per-attempt billing exposes the buyer to unsuccessful work; it needs an agreed eligibility and duplicate policy. Per-success billing exposes the supplier to failure costs and requires agreed verification/disputes. Subscription plus allowance requires workload limits and overage rules; averages can hide a costly heavy-use segment. These are hypotheses for customer testing, not commitments already obtained.</p>
+<p>A bounded plan: select an authorized sample from the intended segment; freeze the success rubric; log all cases, costs and non-overlapping labor; reconcile invoices and observe a complete outcome window. Include failed and disputed work. Independently check a subset of success labels. Reconstruct who can authorize payment and what alternatives they use. Seek an explicit trial on stated terms rather than treating favorable interview comments as revenue. No outreach is performed by this file.</p>
+<p>Reject or revise if permitted data cannot be obtained, actual review/failure costs exceed the feasible range, the buyer rejects the billing unit, useful outcomes fail quality/authority gates, or demand cannot cover fixed commitments. Preserve reasons and uncertainty; a single refusal is not proof of no market. Separate the cash ledger from the customer’s released-capacity value.</p>
+<p><strong>Criterion:</strong> Operationally observable units, matched evidence, explicit rejection conditions and no invented willingness to pay.</p>
+<h2 id="executable-checks">Executable checks</h2>
+<p>The script checks constructed counts, exact thresholds, ledger reconciliation, capacity tiers and conditional retries. The grid is sensitivity analysis, not sampling or an empirical confidence interval.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> Q</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> product</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cost(p, compute<span class="op">=</span>Q(<span class="dv">2</span>,<span class="dv">5</span>), minutes<span class="op">=</span><span class="dv">2</span>, support<span class="op">=</span>Q(<span class="dv">1</span>,<span class="dv">5</span>)):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="dv">0</span> <span class="op">&lt;=</span> p <span class="op">&lt;=</span> <span class="dv">1</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> compute <span class="op">+</span> minutes<span class="op">*</span>Q(<span class="dv">1</span>,<span class="dv">2</span>) <span class="op">+</span> support <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>p)<span class="op">*</span><span class="dv">2</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ledger(n,p,price<span class="op">=</span><span class="dv">4</span>,fixed<span class="op">=</span><span class="dv">1500</span>):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    revenue<span class="op">=</span>n<span class="op">*</span>p<span class="op">*</span>price</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    variable<span class="op">=</span>n<span class="op">*</span>cost(p)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> revenue,variable,revenue<span class="op">-</span>variable,revenue<span class="op">-</span>variable<span class="op">-</span>fixed</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>p<span class="op">=</span>Q(<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> cost(p)<span class="op">==</span><span class="dv">2</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ledger(<span class="dv">1000</span>,p)<span class="op">==</span>(<span class="dv">3200</span>,<span class="dv">2000</span>,<span class="dv">1200</span>,<span class="op">-</span><span class="dv">300</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> Q(<span class="dv">2000</span>,<span class="dv">800</span>)<span class="op">==</span>Q(<span class="dv">5</span>,<span class="dv">2</span>) <span class="kw">and</span> Q(<span class="dv">3500</span>,<span class="dv">800</span>)<span class="op">==</span>Q(<span class="dv">35</span>,<span class="dv">8</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> Q(<span class="dv">1200</span>,<span class="dv">3200</span>)<span class="op">==</span>Q(<span class="dv">3</span>,<span class="dv">8</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ledger(<span class="dv">1250</span>,p)[<span class="dv">3</span>]<span class="op">==</span><span class="dv">0</span> <span class="kw">and</span> ledger(<span class="dv">1249</span>,p)[<span class="dv">3</span>]<span class="op">&lt;</span><span class="dv">0</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> cost(Q(<span class="dv">7</span>,<span class="dv">10</span>),Q(<span class="dv">1</span>,<span class="dv">10</span>),<span class="dv">3</span>,Q(<span class="dv">3</span>,<span class="dv">10</span>))<span class="op">==</span>Q(<span class="dv">5</span>,<span class="dv">2</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">1000</span><span class="op">*</span>Q(<span class="dv">7</span>,<span class="dv">10</span>)<span class="op">*</span><span class="dv">4</span><span class="op">-</span><span class="dv">2500</span><span class="op">-</span><span class="dv">1500</span><span class="op">==-</span><span class="dv">1200</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> Q(<span class="dv">2500</span>,<span class="dv">700</span>)<span class="op">==</span>Q(<span class="dv">25</span>,<span class="dv">7</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ledger(<span class="dv">1000</span>,Q(<span class="dv">3</span>,<span class="dv">5</span>))[<span class="dv">2</span>]<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ledger(<span class="dv">1000</span>,Q(<span class="dv">17</span>,<span class="dv">20</span>))[<span class="dv">3</span>]<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ledger(<span class="dv">1000</span>,p,Q(<span class="dv">35</span>,<span class="dv">8</span>))[<span class="dv">3</span>]<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [ledger(<span class="dv">1000</span>,x)[<span class="dv">3</span>] <span class="cf">for</span> x <span class="kw">in</span> [Q(<span class="dv">3</span>,<span class="dv">5</span>),p,Q(<span class="dv">9</span>,<span class="dv">10</span>)]]<span class="op">==</span>[<span class="op">-</span><span class="dv">1500</span>,<span class="op">-</span><span class="dv">300</span>,<span class="dv">300</span>]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [ledger(<span class="dv">1000</span>,p,x)[<span class="dv">3</span>] <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">3</span>,<span class="dv">5</span>]]<span class="op">==</span>[<span class="op">-</span><span class="dv">1100</span>,<span class="dv">500</span>]</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">3200</span><span class="op">-</span><span class="dv">1000</span><span class="op">*</span>cost(p,support<span class="op">=</span>Q(<span class="dv">7</span>,<span class="dv">10</span>))<span class="op">-</span><span class="dv">1500</span><span class="op">==-</span><span class="dv">800</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [ledger(n,p)[<span class="dv">3</span>] <span class="cf">for</span> n <span class="kw">in</span> [<span class="dv">500</span>,<span class="dv">1000</span>,<span class="dv">1500</span>]]<span class="op">==</span>[<span class="op">-</span><span class="dv">900</span>,<span class="op">-</span><span class="dv">300</span>,<span class="dv">300</span>]</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ledger(<span class="dv">1501</span>,p,fixed<span class="op">=</span><span class="dv">2100</span>)[<span class="dv">3</span>]<span class="op">==</span>Q(<span class="op">-</span><span class="dv">1494</span>,<span class="dv">5</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ledger(<span class="dv">1750</span>,p,fixed<span class="op">=</span><span class="dv">2100</span>)[<span class="dv">3</span>]<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Exact observed partition agrees with the expected-cost formula.</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> successes <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1001</span>):</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    p0<span class="op">=</span>Q(successes,<span class="dv">1000</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    observed<span class="op">=</span><span class="dv">400</span><span class="op">+</span><span class="dv">1000</span><span class="op">+</span><span class="dv">200</span><span class="op">+</span>(<span class="dv">1000</span><span class="op">-</span>successes)<span class="op">*</span><span class="dv">2</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> observed<span class="op">==</span><span class="dv">1000</span><span class="op">*</span>cost(p0)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (<span class="dv">4</span><span class="op">*</span>p0<span class="op">-</span>cost(p0)<span class="op">&gt;</span><span class="dv">0</span>)<span class="op">==</span>(p0<span class="op">&gt;</span>Q(<span class="dv">3</span>,<span class="dv">5</span>))</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (ledger(<span class="dv">1000</span>,p0)[<span class="dv">3</span>]<span class="op">&gt;=</span><span class="dv">0</span>)<span class="op">==</span>(p0<span class="op">&gt;=</span>Q(<span class="dv">17</span>,<span class="dv">20</span>))</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Retry extension: all original failures offered exactly one extra attempt.</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>checks<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p0,r,price,d <span class="kw">in</span> product([Q(<span class="dv">0</span>),Q(<span class="dv">4</span>,<span class="dv">5</span>),Q(<span class="dv">1</span>)],</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>                             [Q(<span class="dv">0</span>),Q(<span class="dv">1</span>,<span class="dv">4</span>),Q(<span class="dv">1</span>,<span class="dv">2</span>),Q(<span class="dv">1</span>)],</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>                             [Q(<span class="dv">0</span>),Q(<span class="dv">4</span>),Q(<span class="dv">5</span>)],[Q(<span class="dv">0</span>),Q(<span class="dv">1</span>),Q(<span class="dv">2</span>)]):</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    newp<span class="op">=</span>p0<span class="op">+</span>(<span class="dv">1</span><span class="op">-</span>p0)<span class="op">*</span>r</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    extra<span class="op">=</span>(<span class="dv">1</span><span class="op">-</span>p0)<span class="op">*</span>d</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    delta<span class="op">=</span>(<span class="dv">1</span><span class="op">-</span>p0)<span class="op">*</span>(price<span class="op">*</span>r<span class="op">-</span>d)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> p0<span class="op">&lt;=</span>newp<span class="op">&lt;=</span><span class="dv">1</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> newp<span class="op">*</span>price<span class="op">-</span>(cost(p0)<span class="op">+</span>extra)<span class="op">-</span>(p0<span class="op">*</span>price<span class="op">-</span>cost(p0))<span class="op">==</span>delta</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p0<span class="op">&lt;</span><span class="dv">1</span> <span class="kw">and</span> price<span class="op">&gt;</span><span class="dv">0</span>:</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> (delta<span class="op">&gt;</span><span class="dv">0</span>)<span class="op">==</span>(r<span class="op">&gt;</span>d<span class="op">/</span>price)</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    checks<span class="op">+=</span><span class="dv">1</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> checks<span class="op">==</span><span class="dv">108</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> p<span class="op">+</span>(<span class="dv">1</span><span class="op">-</span>p)<span class="op">*</span>Q(<span class="dv">1</span>,<span class="dv">4</span>)<span class="op">==</span>Q(<span class="dv">17</span>,<span class="dv">20</span>)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (<span class="dv">1</span><span class="op">-</span>p)<span class="op">*</span>(<span class="dv">4</span><span class="op">*</span>Q(<span class="dv">1</span>,<span class="dv">4</span>)<span class="op">-</span><span class="dv">1</span>)<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Cost per observed success is undefined at zero, not zero cost.</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> per_success(total,successes):</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span> <span class="cf">if</span> successes<span class="op">==</span><span class="dv">0</span> <span class="cf">else</span> Q(total,successes)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> per_success(<span class="dv">3600</span>,<span class="dv">0</span>) <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> per_success(<span class="dv">2000</span>,<span class="dv">800</span>)<span class="op">==</span>Q(<span class="dv">5</span>,<span class="dv">2</span>)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: ledger, thresholds, 1001 success counts, capacity tiers, 108 retry cases and zero-success handling'</span>)</span></code></pre></div>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-12. Six worked answers and executed exact checks.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#ledger-and-units">1. Ledger and units</a></li><li class="h2"><a href="#contribution-and-break-even">2. Contribution and break-even</a></li><li class="h2"><a href="#cheaper-compute-counterexample">3. Cheaper compute counterexample</a></li><li class="h2"><a href="#thresholds-and-capacity">4. Thresholds and capacity</a></li><li class="h2"><a href="#conditional-retry">5. Conditional retry</a></li><li class="h2"><a href="#offer-and-evidence">6. Offer and evidence</a></li><li class="h2"><a href="#executable-checks">Executable checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

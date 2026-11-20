@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S04 — Replication, consensus, and partial failure | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="S04">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S04</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=S#track-S"><span aria-hidden="true">←</span> Systems</a><p class="eyebrow">Systems <span aria-hidden="true">/</span> S04</p><h1 id="s04-replication-consensus-and-partial-failure">Replication, consensus, and partial failure</h1><p class="article-description">Trace a leader failure, defend a commitment boundary, and distinguish client uncertainty from repeated effects</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/s03.html" data-chip="S03">S03</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-reference-card" >Evidence</a><a class="button secondary" href="/answers/s04.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#the-authority-can-fail-too">The authority can fail too</a></li><li class="h2"><a href="#declare-the-world-before-claiming-reliability">Declare the world before claiming reliability</a></li><li class="h2"><a href="#a-committed-approval-with-no-reply">A committed approval with no reply</a></li><li class="h2"><a href="#move-the-crash-earlier">Move the crash earlier</a></li><li class="h2"><a href="#retry-the-operation-preserve-its-identity">Retry the operation, preserve its identity</a></li><li class="h2"><a href="#safety-has-an-operating-cost">Safety has an operating cost</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-reference-card">Evidence and reference card</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>S04 · 1.0 · 2026-11-06</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>S03 histories, epochs and receipts; S02 durable commit and immutable evidence</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Trace a leader failure, defend a commitment boundary, and distinguish client uncertainty from repeated effects</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R07 extended Raft paper and R10 author-hosted paper inspected. Exact locators below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Executed finite quorum, voting, log-repair and application-replay checks. No live cluster tested.</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/s04.html">Hints, worked answers, and checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="the-authority-can-fail-too">The authority can fail too</h2>
+<p>S03 gave D17 one authority for deciding which approval occupies a round. That authority checked the epoch, selected revision and operation key together. Now its machine fails after accepting a request. A replacement must distinguish a decision that must survive from a speculative update that can disappear. Merely copying files to another server does not define that distinction.</p>
+<p>We will replicate an ordered sequence of commands across three servers A, B and C. A command is input to a deterministic state transition. Given the same initial state and command sequence, each server must compute the same results. For example, <code>Approve(k,D17,epoch=7,rev=2,actor=R)</code> either records an acceptance and receipt or returns a defined rejection. It cannot call a changing external model during replay and still promise identical results. Store the chosen evidence identity in the command and validate it against replicated state.</p>
+<p>A <strong>log index</strong> is a position in the sequence. A <strong>term</strong> is a leadership generation. An <strong>approval epoch</strong> is the business round introduced in S03. These are three different numbers. Electing a new leader does not reopen D17’s approval round. A log entry records its index, term and command.</p>
+<p>Raft is our worked mechanism, using the paper’s fixed-membership core. Its persistent state includes term, vote and log; its voting and append rules constrain successors. Current-term entries advance commitment through a majority, with earlier entries covered by the committed prefix. The detailed rules are in R07 Figure 2 and §§5.2–5.4. This pack constructs one trace to explain why those restrictions matter rather than reproducing a full implementation.</p>
+<h2 id="declare-the-world-before-claiming-reliability">Declare the world before claiming reliability</h2>
+<p>Assume three fixed members with stable identities. Servers may stop and recover. Messages may be lost, delayed, duplicated or reordered. Stable storage retains completed writes across the modeled restart. Servers follow the protocol; malicious replies and undetected corruption are outside the model. Required persistent changes reach stable storage before success responses to protocol RPCs.</p>
+<p>Progress needs a communicating majority and enough stability to elect and retain a leader. A network timeout is evidence that a response did not arrive by a deadline, not proof that the other machine stopped. An isolated old leader can remain alive while the other two elect a successor.</p>
+<p>Our safety target is that different servers never apply different commands at the same log index. Our application target is at most one acceptance per document/approval epoch. Those properties differ. An agreed command that erroneously ignores the epoch could be replicated perfectly and still violate the business rule. The replicated state transition must preserve S03’s invariant.</p>
+<p>For three members a majority has two. Any two such majorities overlap because two disjoint sets of size two would require four members. More generally, two subsets of size q in N members intersect in at least <code>2q−N</code> members. Intersection provides a witness shared by two decisions. Rules about what that witness may approve supply the safety argument. Counting copies alone does not.</p>
+<h2 id="a-committed-approval-with-no-reply">A committed approval with no reply</h2>
+<p>Start with the same committed prefix through index 4 on all servers. Its last term is 1. D17 is at epoch 7, published revision 2, with no owner. A is leader in term 2. The following values and events are an original hypothetical case.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Event</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>Client knowledge</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td>Persist entry 5, term 2, approval k</td>
+<td>Prefix through 4</td>
+<td>Prefix through 4</td>
+<td>Waiting</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td>Send entry 5</td>
+<td>Check predecessor (4,1), persist entry 5, reply</td>
+<td>Unreachable</td>
+<td>Waiting</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td>Receive B’s success; majority A+B holds entry 5</td>
+<td>Has entry 5, may not know it is committed</td>
+<td>Still through 4</td>
+<td>Waiting</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td>Advance commitment, apply approval, then crash before reply</td>
+<td>No commit notification received</td>
+<td>Still through 4</td>
+<td>Timeout</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td>Down</td>
+<td>Seek election in term 3</td>
+<td>Vote for B</td>
+<td>Outcome unknown</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td>Down</td>
+<td>Replicate no-op at index 6, term 3, to C after entry 5</td>
+<td>Persist entries 5 and 6</td>
+<td>Outcome unknown</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td>Down</td>
+<td>Commit through 6, apply 5 then 6</td>
+<td>Learn commit boundary, apply in order</td>
+<td>Retry k can receive original result</td>
+</tr>
+</tbody>
+</table>
+</div><p>At event 3, the original leader’s term-2 entry has reached a majority. Its protection does not depend on whether the client hears about it. B’s uncertainty about the commit boundary also does not make that entry disposable.</p>
+<p>Why can B win? Its last entry is (term 2,index 5), while C ends at (term 1,index 4). C can vote for B. In the reverse attempt, B rejects C’s older log, so C cannot obtain two votes while A is down. The up-to-date comparison examines last term first, then last index for a tie. A long log with an older last term is not automatically preferred.</p>
+<p>Why include the no-op? B must not simply infer that an inherited entry is committed by counting its copies under the new term. B replicates an entry from its own term at index 6. Committing that entry establishes the whole preceding prefix, including approval k. A no-op changes no business state. It still occupies a log position and establishes a commitment boundary. R07 §5.4.2 and Figure 8 explain why the general rule needs the current-term restriction.</p>
+<p>If A returns, observing term 3 makes it step down. A follower checks the index and term of the preceding entry before accepting an extension. Conflicting uncommitted suffixes can be replaced. That repair operation is not permission to erase an arbitrary committed entry; election restrictions prevent a valid successor from lacking committed history.</p>
+<h2 id="move-the-crash-earlier">Move the crash earlier</h2>
+<p>Change only event 2. Suppose B never persisted entry 5, so A alone has it when A crashes. B and C both end at index 4. They can elect B and commit a different term-3 entry at index 5. On recovery A’s uncommitted suffix is replaced. This does not violate the safety target because A must not have applied or reported success for its speculative entry.</p>
+<p>An early reply after A’s local append would create a false promise. The client would have heard “accepted” for a decision that a legitimate replacement leader could discard. This is S02’s acknowledgement discipline extended across machines. A durable local log protects against one kind of restart; it does not by itself establish replicated commitment.</p>
+<p>A different naive rule lets whichever server times out become leader and accept locally. Partition A from B+C. A accepts proposal k, while B accepts competing proposal j for the same epoch. If both return success, merging the histories later cannot make both original promises true. Under our contract the minority cannot commit new approvals. It can return an unavailable response or offer a clearly labeled stale view, but cannot call that view an authoritative current decision.</p>
+<h2 id="retry-the-operation-preserve-its-identity">Retry the operation, preserve its identity</h2>
+<p>Replaying k can append another log entry. Log consensus alone does not identify that entry as the same business request. Our deterministic application retains <code>key → (payload,result)</code> with the acceptance. Reapplying the identical key returns its stored result. Reusing the key for a different payload is rejected. The receipt state must survive recovery and any snapshot that discards older log entries.</p>
+<p>Suppose an approval round was reopened after k succeeded. A retry still receives the historical result for k, without accepting anything in the new epoch. The response must distinguish a past accepted decision from a currently active approval. A client that generates a new key after every timeout loses this protection.</p>
+<p>This contract prevents repeated application of the same recorded operation within the retention boundary. It does not make an external payment atomic with the log. If a dispatcher sends a payment and crashes before recording its response, another dispatcher may send again. The destination needs an effect-level identity and contract, or the workflow needs explicit reconciliation. R10’s duplicate-message discussion shows why lower-layer duplicate suppression cannot recognize every application retry. C01 will develop that responsibility boundary.</p>
+<p>Likewise, a server that calls itself leader cannot safely answer every “is k accepted?” query from local memory. It may be isolated and superseded. R07 §8 describes additional safeguards for authoritative reads. For this lesson, route result resolution through a protocol that establishes current authority and applies the required committed prefix. A stale “not found” response is not evidence that a retry should receive a new key.</p>
+<h2 id="safety-has-an-operating-cost">Safety has an operating cost</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Design choice</th>
+<th>What it buys under its model</th>
+<th>Cost or remaining gap</th>
+<th>Evidence that changes the decision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>One durable server with recovery</td>
+<td>Simple local persistence</td>
+<td>Machine/device failure can halt service or lose unavailable data</td>
+<td>Required recovery window and actual restore tests</td>
+</tr>
+<tr class="even">
+<td>Three-member consensus group</td>
+<td>Majority progress despite one unavailable member</td>
+<td>Durable replication and communication on the critical path</td>
+<td>Storage latency, network delay, correlated outages</td>
+</tr>
+<tr class="odd">
+<td>Five-member consensus group</td>
+<td>Majority of three can remain after two unavailable members</td>
+<td>More replicated storage and operational work</td>
+<td>Failure-domain analysis justifies the extra tolerance</td>
+</tr>
+<tr class="even">
+<td>Async copy plus early success</td>
+<td>Lower acknowledgement dependency</td>
+<td>Latest acknowledged decisions can be absent after failover</td>
+<td>Acceptable data-loss window explicitly permits that outcome</td>
+</tr>
+</tbody>
+</table>
+</div><p>Three processes on one failed host do not provide three independent failure domains. Replicating a bad command also creates three copies of the same bug. Backups, restore procedures, authorization and application validation remain separate needs.</p>
+<p>Measure acknowledgement latency, election disruption, follower lag, disk flush behavior and retry outcomes under the intended workload. Do not translate the historical paper’s timing examples into a production timeout. Safety requires the rules to hold even during long delay; useful progress additionally requires favorable communication and scheduling conditions. No universal recovery-time bound is derived here.</p>
+<h2 id="practice">Practice</h2>
+<ol type="1">
+<li>List all two-member majorities of A,B,C. Show their intersections. Explain why overlap alone cannot stop conflicting decisions if a voter may vote twice in one term.</li>
+<li>Trace the main failure through B’s election. Identify when entry 5 becomes committed, when B can establish its commit boundary, and what the client knows at each point.</li>
+<li>Crash A before B stores entry 5. Show a legitimate replacement at index 5 and explain which earlier success reply would be invalid.</li>
+<li>Compare candidate logs ending at (term 2,index 9) and (term 3,index 6). Then explain why counting a majority of copies of an inherited entry is insufficient as the general commitment rule.</li>
+<li>Retry k before and after reopening D17. Specify receipt retention and payload binding. Give one duplicate-payment failure this cannot exclude.</li>
+<li>Partition A from B+C and then partition all three separately. State safety and progress expectations. Name one failure outside the model and a measurement needed before choosing three versus five members.</li>
+</ol>
+<h2 id="evidence-and-reference-card">Evidence and reference card</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Inspected locator</th>
+<th>Use and scope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R07, Ongaro/Ousterhout, extended version, May 20, 2014</td>
+<td><a href="https://raft.github.io/raft.pdf">Paper</a>, §2 pp. 1–2; Figure 2 p. 4; §§5.1–5.4 pp. 4–9</td>
+<td>Replicated state, durable protocol state, election and log rules, current-term restriction. Fixed membership here.</td>
+</tr>
+<tr class="even">
+<td>R07, same edition</td>
+<td>§5.6 pp. 9–10; §8 p. 13</td>
+<td>Timing/progress distinction, client retries and authoritative reads. No benchmark result adopted.</td>
+</tr>
+<tr class="odd">
+<td>R10, Saltzer/Reed/Clark, 1984</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/endtoend/endtoend.pdf">Author copy</a>, PDF p. 6 Duplicate message suppression; p. 7 Transaction management</td>
+<td>Application-level retry and acknowledgement meaning. No historical performance figure adopted.</td>
+</tr>
+<tr class="even">
+<td>Original case and checks</td>
+<td>Trace tables, majority arithmetic, companion model</td>
+<td>Constructed inputs. The checks are not a full Raft implementation or proof.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Recall the sequence: persist → replicate under the protocol → establish commitment → apply deterministically → reply. Separate log index, leadership term, business epoch and operation key. After a timeout, resolve the same operation identity. Keep the external-effect boundary visible.</p>
+<p>S03’s invariant is now replicated; S02’s durability promise applies to each required persistent write. S06 will add authority and damage boundaries. B02 will price reliability and recovery. Open deployment questions include storage failure modes, read semantics, receipt retention, evidence availability, membership changes and snapshot correctness. The last two are deliberately deferred implementation depth, not removed curriculum items.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-06. Fixed three-member trace, majority derivation, two crash boundaries, retry contract, and separate finite checks.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/s04.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#s04-passage-record-2026-11-06">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="S04"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/s03.html"><small>Previous module · S03</small><strong>Concurrency, transactions, and logical time</strong></a><a href="/learn/s05.html"><small>Next module · S05</small><strong>Queues, tail latency, and cloud elasticity</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#the-authority-can-fail-too">The authority can fail too</a></li><li class="h2"><a href="#declare-the-world-before-claiming-reliability">Declare the world before claiming reliability</a></li><li class="h2"><a href="#a-committed-approval-with-no-reply">A committed approval with no reply</a></li><li class="h2"><a href="#move-the-crash-earlier">Move the crash earlier</a></li><li class="h2"><a href="#retry-the-operation-preserve-its-identity">Retry the operation, preserve its identity</a></li><li class="h2"><a href="#safety-has-an-operating-cost">Safety has an operating cost</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-reference-card">Evidence and reference card</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

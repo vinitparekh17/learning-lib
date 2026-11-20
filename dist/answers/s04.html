@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S04 — Hints, worked answers, and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S04</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/s04.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">S04 <span aria-hidden="true">/</span> Worked companion</p><h1 id="s04-hints-worked-answers-and-checks">Hints, worked answers, and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/s04.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#an-intersection-needs-a-rule">1. An intersection needs a rule</a></li><li class="h2"><a href="#three-distinct-observations">2. Three distinct observations</a></li><li class="h2"><a href="#the-local-only-suffix">3. The local-only suffix</a></li><li class="h2"><a href="#log-freshness-and-an-inherited-entry">4. Log freshness and an inherited entry</a></li><li class="h2"><a href="#replaying-an-identity">5. Replaying an identity</a></li><li class="h2"><a href="#partition-behavior-and-the-choice">6. Partition behavior and the choice</a></li><li class="h2"><a href="#executable-checks">Executable checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>S04 answers · 1.1 · 2026-11-08</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td><a href="/learn/s04.html">Replication, consensus, and partial failure</a>, S03 and S02</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Separate replicated commitment, client knowledge and repeated business effects</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R07 and R10 locators in the core pack</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Python finite checks executed; no distributed deployment or complete protocol simulator</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="hints">Hints</h2>
+<ol type="1">
+<li>Write AB, AC and BC before making a general claim.</li>
+<li>Separate where the entry exists from who knows it is committed.</li>
+<li>Compare the surviving logs before holding an election.</li>
+<li>Term is the first comparison key. An inherited entry retains its original term.</li>
+<li>The operation key belongs to the business request, not the network connection.</li>
+<li>A process can be alive while unreachable. A majority must be able to communicate.</li>
+</ol>
+<h2 id="an-intersection-needs-a-rule">1. An intersection needs a rule</h2>
+<p>The majorities are {A,B}, {A,C}, {B,C}. Distinct pairs intersect in A, B or C. For N members and q-member sets, their union has size at most N, so the intersection has size at least 2q−N. With N=3 and q=2 the bound is one. With N=5 and q=3 it is also one.</p>
+<p>If A votes for both B and C in the same term, B+A and C+A can each claim a majority. Intersection has not helped because the shared member contradicted itself. Persisting the vote before responding is essential across restarts. The majority calculation also does not prove the elected log contains every committed entry; the log freshness restriction and log-matching properties supply further structure.</p>
+<h2 id="three-distinct-observations">2. Three distinct observations</h2>
+<p>Entry 5 becomes committed once A, its term-2 leader, has durably replicated it on A+B. A learns that threshold was reached from B’s successful response. B can still be unaware of commitment because no commit notification reached it. The client times out and cannot distinguish this history from one in which A never committed.</p>
+<p>B wins term 3 with its own vote and C’s. C has an older last log term. A candidate C cannot win using B because B’s log is more up-to-date. In this particular trace A is down, so C’s own vote is insufficient.</p>
+<p>B’s term-3 no-op at index 6 reaches B+C. B can advance its commit boundary through 6 under the current-term rule and apply entry 5 before 6. B reconstructs the acceptance and receipt even if it had never applied them before the election. An identical retry of k returns that receipt. The term-3 no-op does not change D17’s epoch 7 or selected revision 2.</p>
+<h2 id="the-local-only-suffix">3. The local-only suffix</h2>
+<p>If only A stored entry 5 before crashing, B and C retain the common prefix through 4. B can win term 3 and append command j at index 5, then commit it on B+C. When A rejoins as a follower, an AppendEntries extension whose predecessor is (4,1) can replace A’s conflicting term-2 entry with term-3 j.</p>
+<p>No committed entry has been removed in this branch. A’s success reply after only its local append would have been invalid because the promised result can disappear during valid failover. The correct client outcome before replicated commitment is still pending or failed/unknown, depending on the exact API contract; a timeout alone remains unknown.</p>
+<h2 id="log-freshness-and-an-inherited-entry">4. Log freshness and an inherited entry</h2>
+<p>(term 3,index 6) is more up-to-date than (term 2,index 9), because term is compared first. Within the same last term, the higher last index wins. This is a log comparison, distinct from the candidate’s current election term and distinct from a wall-clock timestamp.</p>
+<p>R07 Figure 8 constructs a history in which a previous-term entry reaches a majority through later replication yet can still be overwritten. Therefore the general replica-count rule requires an entry from the current leader’s term. Once that newer entry commits, the preceding prefix is committed with it. In the main case entry 5 had already committed under A; the extra step lets B establish a safe boundary without assuming knowledge it did not receive. It does not change the historical fact of commitment.</p>
+<h2 id="replaying-an-identity">5. Replaying an identity</h2>
+<p>Retain k with its canonical input payload and result in replicated application state. Apply acceptance and receipt together. A repeat with matching inputs returns the stored result. A repeat with different inputs is an error. Retain enough receipt history to cover the supported retry period, including snapshots and restores. The lesson’s model retains every receipt indefinitely; a bounded production policy must define what happens to expired keys.</p>
+<p>After reopening, return “accepted in epoch 7” for k without consuming the new round. A fresh key targeting epoch 7 fails epoch validation. The key-reuse check must not silently reinterpret an old request against today’s evidence.</p>
+<p>A payment dispatcher can send once, crash before recording the response, then send again after recovery. The local receipt cannot prove how many effects the destination performed. Replicated intent helps recover pending work; safe retry at the payment boundary needs the destination’s identity/effect contract or explicit reconciliation. Transport acknowledgements and application completion acknowledgements answer different questions.</p>
+<h2 id="partition-behavior-and-the-choice">6. Partition behavior and the choice</h2>
+<p>With A isolated from B+C, B+C can elect and commit once communication and scheduling stabilize. A cannot obtain a majority for a new entry. It may still believe it is leader, so authority-sensitive reads need the read protocol described in the core pack. With all three isolated, no group can form a majority. Stopping new commitments preserves safety while availability is lost.</p>
+<p>A malicious server inventing successful replication acknowledgements, loss of required stable state, or divergent application logic violates the stated model. Correlated host or region failure can also remove more members than the tolerated number. Three members need two available; five need three. Measure failure domains, quorum write latency, election disruption and restoration behavior before paying for five. A larger member count is not evidence of a lower business outage rate without those assumptions.</p>
+<p><strong>Assessment criteria.</strong> A useful answer distinguishes stored, committed, applied and acknowledged; traces a valid election; preserves request identity; and states both a safety property and a limit on progress. It does not equate consensus with authorization or exactly-once external payment. These criteria do not record learner mastery.</p>
+<h2 id="executable-checks">Executable checks</h2>
+<p>Run the block under Python 3. Log entries are (term, command) pairs in a one-based conceptual log. Prefix entries 1–4 are synthetic setup. The append helper models only the predecessor check and conflicting-suffix replacement. The commit helper models only the leader’s current-term majority rule. Using its result as a commitment decision requires caller-provided match indexes to be truthful and durably acknowledged; the helper does not establish that premise. The synthetic input sweep below also includes unreachable protocol states to exercise the predicate. Elections, crashes, message delivery, persistent votes, snapshots and actual storage are not simulated.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations, product</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> copy <span class="im">import</span> deepcopy</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Exhaust all majority-pair intersections for three and five members.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pair_counts <span class="op">=</span> []</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> (<span class="dv">3</span>,<span class="dv">5</span>):</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> n<span class="op">//</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    groups <span class="op">=</span> [<span class="bu">set</span>(g) <span class="cf">for</span> g <span class="kw">in</span> combinations(<span class="bu">range</span>(n),q)]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    pairs <span class="op">=</span> <span class="bu">list</span>(product(groups, repeat<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">all</span>(<span class="bu">len</span>(a <span class="op">&amp;</span> b) <span class="op">&gt;=</span> <span class="dv">2</span><span class="op">*</span>q<span class="op">-</span>n <span class="cf">for</span> a,b <span class="kw">in</span> pairs)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    pair_counts.append(<span class="bu">len</span>(pairs))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> pair_counts <span class="op">==</span> [<span class="dv">9</span>,<span class="dv">100</span>]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Lexicographic (last term,last index) vote freshness predicate.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fresh(candidate, voter):</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> candidate <span class="op">&gt;=</span> voter</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> fresh((<span class="dv">2</span>,<span class="dv">5</span>),(<span class="dv">1</span>,<span class="dv">4</span>))</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> fresh((<span class="dv">1</span>,<span class="dv">4</span>),(<span class="dv">2</span>,<span class="dv">5</span>))</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> fresh((<span class="dv">3</span>,<span class="dv">6</span>),(<span class="dv">2</span>,<span class="dv">9</span>))</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> fresh((<span class="dv">2</span>,<span class="dv">9</span>),(<span class="dv">3</span>,<span class="dv">6</span>))</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> fresh((<span class="dv">2</span>,<span class="dv">6</span>),(<span class="dv">2</span>,<span class="dv">5</span>)) <span class="kw">and</span> fresh((<span class="dv">2</span>,<span class="dv">5</span>),(<span class="dv">2</span>,<span class="dv">5</span>))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> fresh((<span class="dv">2</span>,<span class="dv">4</span>),(<span class="dv">2</span>,<span class="dv">5</span>))</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>prefix <span class="op">=</span> [(<span class="dv">1</span>,<span class="st">'setup'</span><span class="op">+</span><span class="bu">str</span>(i)) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">5</span>)]</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> (<span class="dv">2</span>,<span class="st">'approve-k'</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> append(log, prev_index, prev_term, entries):</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> <span class="bu">list</span>(log)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> prev_index <span class="op">&gt;</span> <span class="bu">len</span>(out):</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span>, out</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> prev_index <span class="kw">and</span> out[prev_index<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="op">!=</span> prev_term:</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span>, out</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> index,entry <span class="kw">in</span> <span class="bu">enumerate</span>(entries, start<span class="op">=</span>prev_index):</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> index <span class="op">&lt;</span> <span class="bu">len</span>(out) <span class="kw">and</span> out[index][<span class="dv">0</span>] <span class="op">!=</span> entry[<span class="dv">0</span>]:</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>            out <span class="op">=</span> out[:index]</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> index <span class="op">==</span> <span class="bu">len</span>(out):</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>            out.append(entry)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Raft's same-index/same-term command identity is assumed.</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> out[index] <span class="op">==</span> entry</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span>,out</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> commit(log, term, matches, old<span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> <span class="bu">len</span>(matches)<span class="op">//</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    candidates <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(old<span class="op">+</span><span class="dv">1</span>,<span class="bu">len</span>(log)<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>                  <span class="cf">if</span> log[i<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="op">==</span> term</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>                  <span class="kw">and</span> <span class="bu">sum</span>(m <span class="op">&gt;=</span> i <span class="cf">for</span> m <span class="kw">in</span> matches) <span class="op">&gt;=</span> q]</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">max</span>([old]<span class="op">+</span>candidates)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> prefix <span class="op">+</span> [x]</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="bu">list</span>(prefix)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> <span class="bu">list</span>(prefix)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>ok,B <span class="op">=</span> append(B,<span class="dv">4</span>,<span class="dv">1</span>,[x])</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ok <span class="kw">and</span> commit(A,<span class="dv">2</span>,[<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>]) <span class="op">==</span> <span class="dv">5</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># B inherits entry 5, but its term-3 rule cannot count it directly.</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> commit(B,<span class="dv">3</span>,[<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>]) <span class="op">==</span> <span class="dv">4</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>B.append((<span class="dv">3</span>,<span class="st">'noop'</span>))</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>ok,C <span class="op">=</span> append(C,<span class="dv">4</span>,<span class="dv">1</span>,B[<span class="dv">4</span>:])</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ok <span class="kw">and</span> C <span class="op">==</span> B</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> commit(B,<span class="dv">3</span>,[<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">6</span>]) <span class="op">==</span> <span class="dv">6</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Duplicate RPC adds no entries. Incorrect predecessor is rejected.</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> append(C,<span class="dv">4</span>,<span class="dv">1</span>,B[<span class="dv">4</span>:]) <span class="op">==</span> (<span class="va">True</span>,C)</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> append(prefix,<span class="dv">4</span>,<span class="dv">2</span>,[x]) <span class="op">==</span> (<span class="va">False</span>,prefix)</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> append(prefix,<span class="dv">5</span>,<span class="dv">2</span>,[x]) <span class="op">==</span> (<span class="va">False</span>,prefix)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative branch: local-only x is replaced after valid successor election.</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> (<span class="dv">3</span>,<span class="st">'approve-j'</span>)</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>ok,repaired <span class="op">=</span> append(A,<span class="dv">4</span>,<span class="dv">1</span>,[y])</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ok <span class="kw">and</span> repaired <span class="op">==</span> prefix<span class="op">+</span>[y]</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> commit(A,<span class="dv">2</span>,[<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>]) <span class="op">==</span> <span class="dv">4</span>  <span class="co"># early reply cannot claim replicated commit</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Enumerate synthetic term/match-index inputs for the commitment predicate.</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Some combinations are unreachable in a valid leader state; this is not</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="co"># an enumeration of legal Raft executions or protocol-state coverage.</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> term <span class="kw">in</span> (<span class="dv">2</span>,<span class="dv">3</span>):</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> matches <span class="kw">in</span> product(<span class="bu">range</span>(<span class="dv">4</span>,<span class="dv">7</span>),repeat<span class="op">=</span><span class="dv">3</span>):</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>        boundary <span class="op">=</span> commit(B,term,matches)</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> boundary <span class="op">&gt;</span> <span class="dv">4</span>:</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> B[boundary<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>] <span class="op">==</span> term</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> <span class="bu">sum</span>(m <span class="op">&gt;=</span> boundary <span class="cf">for</span> m <span class="kw">in</span> matches) <span class="op">&gt;=</span> <span class="dv">2</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Deterministic application state; all calls here represent committed commands.</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> initial():</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">'epoch'</span>:<span class="dv">7</span>,<span class="st">'rev'</span>:<span class="dv">2</span>,<span class="st">'owner'</span>:<span class="va">None</span>,<span class="st">'receipts'</span>:{}}</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">apply</span>(s,key,epoch,rev,actor):</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    payload <span class="op">=</span> (epoch,rev,actor)</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> key <span class="kw">in</span> s[<span class="st">'receipts'</span>]:</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>        old_payload,result <span class="op">=</span> s[<span class="st">'receipts'</span>][key]</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> payload <span class="op">!=</span> old_payload:</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">'key-conflict'</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> result</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (epoch,rev) <span class="op">!=</span> (s[<span class="st">'epoch'</span>],s[<span class="st">'rev'</span>]):</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="st">'stale'</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> s[<span class="st">'owner'</span>] <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="st">'occupied'</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>        s[<span class="st">'owner'</span>] <span class="op">=</span> key</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="st">'accepted-epoch-'</span><span class="op">+</span><span class="bu">str</span>(epoch)</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    s[<span class="st">'receipts'</span>][key] <span class="op">=</span> (payload,result)</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>a,b <span class="op">=</span> initial(),initial()</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> state <span class="kw">in</span> (a,b):</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">apply</span>(state,<span class="st">'k'</span>,<span class="dv">7</span>,<span class="dv">2</span>,<span class="st">'R'</span>) <span class="op">==</span> <span class="st">'accepted-epoch-7'</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> a <span class="op">==</span> b</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>before <span class="op">=</span> deepcopy(b)</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">apply</span>(b,<span class="st">'k'</span>,<span class="dv">7</span>,<span class="dv">2</span>,<span class="st">'R'</span>) <span class="op">==</span> <span class="st">'accepted-epoch-7'</span> <span class="kw">and</span> b <span class="op">==</span> before</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>b.update(epoch<span class="op">=</span><span class="dv">8</span>,rev<span class="op">=</span><span class="dv">3</span>,owner<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">apply</span>(b,<span class="st">'k'</span>,<span class="dv">7</span>,<span class="dv">2</span>,<span class="st">'R'</span>) <span class="op">==</span> <span class="st">'accepted-epoch-7'</span> <span class="kw">and</span> b[<span class="st">'owner'</span>] <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">apply</span>(b,<span class="st">'k'</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="st">'R'</span>) <span class="op">==</span> <span class="st">'key-conflict'</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">apply</span>(b,<span class="st">'late'</span>,<span class="dv">7</span>,<span class="dv">2</span>,<span class="st">'R'</span>) <span class="op">==</span> <span class="st">'stale'</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">apply</span>(b,<span class="st">'new'</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="st">'R'</span>) <span class="op">==</span> <span class="st">'accepted-epoch-8'</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>restored <span class="op">=</span> deepcopy(b)  <span class="co"># modeled snapshot includes receipts</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">apply</span>(restored,<span class="st">'new'</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="st">'R'</span>) <span class="op">==</span> <span class="st">'accepted-epoch-8'</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> restored <span class="op">==</span> b</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'109 quorum pairs; freshness, append/repair, commit and retry checks passed.'</span>)</span></code></pre></div>
+<p>The commitment loop checks 54 synthetic term/match-index combinations, including unreachable states. For example, it passes current term 2 with a log containing a term-3 entry, which is not a valid leader state under Raft’s monotonic term rules. It checks the predicate’s output conditions; it neither establishes state reachability nor validates Raft’s full safety proof. See R07 Figure 2, p. 4, and §§5.1, 5.4 in the core source ledger. The two crash branches are constructed histories with declared durable state, not injected machine failures. A production evaluation needs actual crash, partition, delayed-message and restoration tests, including observably correct client results.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li><p>1.0 — 2026-11-06. Six worked answers, finite protocol-component checks, and receipt replay checks.</p></li>
+<li><p>1.1 — 2026-11-08. Audit B corrected the scope of the 54-input commitment check: synthetic predicate cases include unreachable states. Executable assertions and exercise answers unchanged; corrected block rerun successfully.</p></li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#an-intersection-needs-a-rule">1. An intersection needs a rule</a></li><li class="h2"><a href="#three-distinct-observations">2. Three distinct observations</a></li><li class="h2"><a href="#the-local-only-suffix">3. The local-only suffix</a></li><li class="h2"><a href="#log-freshness-and-an-inherited-entry">4. Log freshness and an inherited entry</a></li><li class="h2"><a href="#replaying-an-identity">5. Replaying an identity</a></li><li class="h2"><a href="#partition-behavior-and-the-choice">6. Partition behavior and the choice</a></li><li class="h2"><a href="#executable-checks">Executable checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

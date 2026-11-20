@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S03 — Hints, worked answers, and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S03</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/s03.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">S03 <span aria-hidden="true">/</span> Worked companion</p><h1 id="s03-hints-worked-answers-and-checks">Hints, worked answers, and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/s03.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#read-dependencies-can-defeat-disjoint-writes">1. Read dependencies can defeat disjoint writes</a></li><li class="h2"><a href="#hold-the-guard-across-the-decision">2. Hold the guard across the decision</a></li><li class="h2"><a href="#reopening-with-unchanged-evidence">3. Reopening with unchanged evidence</a></li><li class="h2"><a href="#clock-values-and-missing-information">4. Clock values and missing information</a></li><li class="h2"><a href="#the-response-and-the-effect-are-separate-boundaries">5. The response and the effect are separate boundaries</a></li><li class="h2"><a href="#multi-document-scope-and-a-decision">6. Multi-document scope and a decision</a></li><li class="h2"><a href="#reproduce-the-finite-checks">Reproduce the finite checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>S03 answers · 1.0 · 2026-11-06</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td><a href="/learn/s03.html">Concurrency, transactions, and logical time</a>, F01, S02</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Test a history against an invariant and identify where a guarantee ends</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R05 and R06 primary passages and locators recorded in the core pack</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Finite Python models executed. These checks do not test an actual database, lock manager, network, or external payment service.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="hints">Hints</h2>
+<ol type="1">
+<li>Include the row each transaction reads but does not write.</li>
+<li>Ask whether another transaction can change the state before the first decision commits.</li>
+<li>Two occurrences of “empty” can belong to different approval rounds.</li>
+<li>Follow process and message arrows before comparing numbers.</li>
+<li>A timeout describes client knowledge. It does not identify the commit outcome.</li>
+<li>Draw who waits for whom. Then separate safety, eventual progress, and observed latency.</li>
+</ol>
+<h2 id="read-dependencies-can-defeat-disjoint-writes">1. Read dependencies can defeat disjoint writes</h2>
+<p>One expanded history is <code>R_A(a)=0, R_A(b)=0, R_B(a)=0, R_B(b)=0, W_A(a)=1, C_A, W_B(b)=1, C_B</code>. The writes become visible at their respective commits. Both transactions base their decisions on (0,0).</p>
+<p><code>R_A(b)</code> precedes <code>W_B(b)</code>, giving A→B. <code>R_B(a)</code> precedes <code>W_A(a)</code>, giving B→A. Preserving both read dependencies requires a cycle, so this history is not conflict serializable. The direct serial comparison is even more specific to the application. A then B produces (1,0), and B then A produces (0,1). The actual (1,1) is neither.</p>
+<p>Both rows are valid bits and both candidate IDs are unique. The violated condition spans the pair. A unique key on <code>(doc,epoch)</code> in the authoritative Acceptance relation can encode the one-slot invariant. The rule must apply to every acceptance path, and the rejected transaction must not report success or execute a payment.</p>
+<h2 id="hold-the-guard-across-the-decision">2. Hold the guard across the decision</h2>
+<p>B obtains the guard, reads (0,0), stages its acceptance and evidence, commits, then releases the guard. A waits, acquires it, reads current committed (0,1), and declines. If either transaction aborts, all of its database changes are discarded before the guard becomes available.</p>
+<p>Early release gives this counterexample. A acquires, reads (0,0), releases. B acquires, reads (0,0), releases. A commits a=1. B commits b=1. Each read held a lock, but the decision was not protected through the update. The missing property is exclusion across the whole read/validate/write/commit interval, or an atomic revalidation at the write boundary.</p>
+<p>Holding the guard while using an old snapshot is also insufficient. B must read state that includes A’s committed acceptance after waiting, or restart. All acceptance, reopening, and publication writers must participate in the same protocol. A lock on an unrelated row creates no such exclusion.</p>
+<h2 id="reopening-with-unchanged-evidence">3. Reopening with unchanged evidence</h2>
+<p>State changes from (7,2,empty) to (8,2,empty). A delayed request expecting (7,2) passes a revision-only comparison because both revisions are 2. It fails the epoch comparison because 7 differs from 8. Checking both fields at the same atomic decision boundary rejects it without altering the current round.</p>
+<p>Let <code>Accepted(d,e)</code> be the set of accepted operation keys for document d and epoch e. The invariant is <code>|Accepted(d,e)| &lt;= 1</code> for every historical epoch. Never clear an owner and reuse the epoch. Reopening creates a new epoch, and old receipts remain historical facts. An immutable evidence key still points to D17/2 even after D17/3 is published.</p>
+<p>If an old request had already succeeded, replaying its operation key returns that previous receipt. It must not create another acceptance in epoch 8. Return enough information to distinguish “accepted in epoch 7” from “currently selected approval.” If the same key carries a different payload, reject the key reuse. The examples assume keys remain available for the entire possible retry period. Deciding that period is a deployment requirement.</p>
+<h2 id="clock-values-and-missing-information">4. Clock values and missing information</h2>
+<p>P increments from 0 to 1 for p1, then to 2 for p2. Q independently increments to 1 for q1. D receives q1 at <code>max(0,1)+1=2</code>, performs d2 at 3, receives p1 at <code>max(3,1)+1=4</code>, and rejects at 5.</p>
+<p>The events p2 and d2 have timestamps 2 and 3 but no happened-before path in either direction. A clock comparison therefore does not prove causal dependence. In contrast, p1→d3 follows the actual message, and d3→d4 follows D’s process order. The clock inequality holds along both edges and their transitive consequence.</p>
+<p>The table’s row placement is one possible display order, not an extra communication edge. A physical observer could record a chronology that is absent from the modeled processes’ information. Neither a wall-clock timestamp nor a Lamport timestamp grants permission to accept an old epoch.</p>
+<p>If D has only received one request, sorting its received set cannot distinguish a world with no other request from a world with an earlier request still delayed. A policy promising causal request order needs additional information or waiting assumptions. The pack’s authority instead decides using validated current state. It promises the capacity and epoch invariants, without promising that the earliest sender wins.</p>
+<h2 id="the-response-and-the-effect-are-separate-boundaries">5. The response and the effect are separate boundaries</h2>
+<p>Store the acceptance, exact evidence references, operation key, payload binding, and result in one database transaction. After an uncertain reply, query or retry that key. An identical accepted retry returns its receipt with no new consumption. An aborted transaction leaves no accepted receipt in this model. Durability of a successful commit still depends on S02’s storage/failure assumptions.</p>
+<p>A stable key stored in a worker’s volatile memory is insufficient. Writing a receipt in a later transaction leaves a gap after acceptance in which a retry cannot find it. Writing a receipt first in a separate transaction can claim success even if the later acceptance fails.</p>
+<p>Now send a payment before committing, then abort the database transaction. The payee may already have received the money while the local transaction disappears. Retrying can send again. Database rollback cannot reverse that external service’s state. An atomic record of intent plus a dispatcher can make delivery recoverable, but duplicate delivery still requires a suitable receiver-side effect contract. C01 develops that boundary. This pack does not claim exactly-once payment from a local receipt or logical timestamp.</p>
+<h2 id="multi-document-scope-and-a-decision">6. Multi-document scope and a decision</h2>
+<p>A holds D17 and wants D18. B holds D18 and wants D17. A waits for B and B waits for A. Neither can reach its release step unaided. Require every transaction to acquire guards in ascending document order, D17 then D18, and retain them through the combined commit. B then waits for D17 before it can hold D18, excluding the constructed cycle. Atomic acceptance of both reservations still requires one transaction encompassing both.</p>
+<p>For one very hot document with short validations, begin by testing the guarded design because its waiting behavior and proof are simple. Keep slow extraction or remote requests outside the lock. A conditional transition is attractive when collisions are rare and validation is cheap to repeat. At high contention, aborted attempts may consume significant work. The recommendation is practitioner judgment to test, not a universal ranking.</p>
+<p>Measure useful committed decisions, retries per success, wait-time distribution, transaction duration, and fairness under the same arrival pattern. A guard might cause unacceptable waits behind a slow holder, or optimistic retries might waste more time than waiting. Neither protocol proves a latency bound. The real database’s conflict handling, recovery, and all write paths need validation before deployment.</p>
+<p><strong>Assessment criteria.</strong> A useful response supplies a concrete violating history, checks the aggregate invariant, identifies a protocol that excludes the history, and states the boundary of that protocol. It distinguishes serializability, causal order, wall-clock time, stale request validity, and external effects. Artifact checks do not establish learner mastery.</p>
+<h2 id="reproduce-the-finite-checks">Reproduce the finite checks</h2>
+<p>Run the following block under Python 3. Each two-candidate history contains three ordered operations per transaction. <code>R</code> takes a snapshot and decides, <code>W</code> stages that candidate’s bit, and <code>C</code> commits the staged value. There are 20 interleavings preserving each transaction’s order. In 18, both snapshots precede the other candidate’s commit, so the model permits both acceptances. The two serial histories accept only one. These counts describe enumerated histories, not their probability in a real scheduler.</p>
+<p>The guarded model uses a single indivisible current-state transition, representing the contract the implementation must supply. Its finite tests cannot prove a database implements that contract. The separate invariant argument is in the core pack.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations, permutations</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># All interleavings of R,W,C for each of two candidates.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>histories <span class="op">=</span> []</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> positions_a <span class="kw">in</span> combinations(<span class="bu">range</span>(<span class="dv">6</span>), <span class="dv">3</span>):</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    aset <span class="op">=</span> <span class="bu">set</span>(positions_a)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    actors <span class="op">=</span> [<span class="st">'A'</span> <span class="cf">if</span> i <span class="kw">in</span> aset <span class="cf">else</span> <span class="st">'B'</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">6</span>)]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    pc <span class="op">=</span> <span class="bu">dict</span>(A<span class="op">=</span><span class="dv">0</span>, B<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    history <span class="op">=</span> []</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> actor <span class="kw">in</span> actors:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        history.append((actor, (<span class="st">'R'</span>,<span class="st">'W'</span>,<span class="st">'C'</span>)[pc[actor]]))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        pc[actor] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    histories.append(history)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> snapshot_run(history):</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    state <span class="op">=</span> <span class="bu">dict</span>(A<span class="op">=</span><span class="dv">0</span>, B<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    decisions, staged <span class="op">=</span> {}, {}</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> actor, operation <span class="kw">in</span> history:</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> operation <span class="op">==</span> <span class="st">'R'</span>:</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            decisions[actor] <span class="op">=</span> <span class="bu">sum</span>(state.values()) <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> operation <span class="op">==</span> <span class="st">'W'</span>:</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            staged[actor] <span class="op">=</span> <span class="bu">int</span>(decisions[actor])</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>            state[actor] <span class="op">=</span> staged[actor]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> state</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(histories) <span class="op">==</span> <span class="dv">20</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>bad <span class="op">=</span> <span class="bu">sum</span>(<span class="bu">sum</span>(snapshot_run(h).values()) <span class="op">&gt;</span> <span class="dv">1</span> <span class="cf">for</span> h <span class="kw">in</span> histories)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bad <span class="op">==</span> <span class="dv">18</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>serial_a <span class="op">=</span> [(a,s) <span class="cf">for</span> a <span class="kw">in</span> (<span class="st">'A'</span>,<span class="st">'B'</span>) <span class="cf">for</span> s <span class="kw">in</span> (<span class="st">'R'</span>,<span class="st">'W'</span>,<span class="st">'C'</span>)]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>serial_b <span class="op">=</span> [(a,s) <span class="cf">for</span> a <span class="kw">in</span> (<span class="st">'B'</span>,<span class="st">'A'</span>) <span class="cf">for</span> s <span class="kw">in</span> (<span class="st">'R'</span>,<span class="st">'W'</span>,<span class="st">'C'</span>)]</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> snapshot_run(serial_a) <span class="op">==</span> <span class="bu">dict</span>(A<span class="op">=</span><span class="dv">1</span>, B<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> snapshot_run(serial_b) <span class="op">==</span> <span class="bu">dict</span>(A<span class="op">=</span><span class="dv">0</span>, B<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixed-object precedence graph for the expanded violating history.</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>rw <span class="op">=</span> [(<span class="st">'A'</span>,<span class="st">'R'</span>,<span class="st">'a'</span>), (<span class="st">'A'</span>,<span class="st">'R'</span>,<span class="st">'b'</span>), (<span class="st">'B'</span>,<span class="st">'R'</span>,<span class="st">'a'</span>),</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>      (<span class="st">'B'</span>,<span class="st">'R'</span>,<span class="st">'b'</span>), (<span class="st">'A'</span>,<span class="st">'W'</span>,<span class="st">'a'</span>), (<span class="st">'B'</span>,<span class="st">'W'</span>,<span class="st">'b'</span>)]</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>edges <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (t1,op1,x1) <span class="kw">in</span> <span class="bu">enumerate</span>(rw):</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t2,op2,x2 <span class="kw">in</span> rw[i<span class="op">+</span><span class="dv">1</span>:]:</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> t1 <span class="op">!=</span> t2 <span class="kw">and</span> x1 <span class="op">==</span> x2 <span class="kw">and</span> <span class="st">'W'</span> <span class="kw">in</span> (op1,op2):</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>            edges.add((t1,t2))</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> edges <span class="op">==</span> {(<span class="st">'A'</span>,<span class="st">'B'</span>), (<span class="st">'B'</span>,<span class="st">'A'</span>)}</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Single document. Each method is an assumed atomic guarded transaction.</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="co"># The receipt payload's rev stands for already-validated immutable evidence.</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Authority:</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.epoch, <span class="va">self</span>.rev, <span class="va">self</span>.owner <span class="op">=</span> <span class="dv">7</span>, <span class="dv">2</span>, <span class="va">None</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.receipts <span class="op">=</span> {}  <span class="co"># key -&gt; (actor, expected_epoch, expected_rev)</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> approve(<span class="va">self</span>, key, actor, epoch, rev):</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        payload <span class="op">=</span> (actor, epoch, rev)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> key <span class="kw">in</span> <span class="va">self</span>.receipts:</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.receipts[key] <span class="op">!=</span> payload:</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">'operation key reused for different inputs'</span>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">'replay'</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (epoch,rev) <span class="op">!=</span> (<span class="va">self</span>.epoch,<span class="va">self</span>.rev):</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">'stale'</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.owner <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">'occupied'</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.owner <span class="op">=</span> key</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.receipts[key] <span class="op">=</span> payload</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'accepted'</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> reopen(<span class="va">self</span>, rev):</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.epoch <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.rev, <span class="va">self</span>.owner <span class="op">=</span> rev, <span class="va">None</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> check(<span class="va">self</span>):</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>        per_epoch <span class="op">=</span> Counter(p[<span class="dv">1</span>] <span class="cf">for</span> p <span class="kw">in</span> <span class="va">self</span>.receipts.values())</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="bu">all</span>(n <span class="op">&lt;=</span> <span class="dv">1</span> <span class="cf">for</span> n <span class="kw">in</span> per_epoch.values())</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.owner <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> <span class="va">self</span>.receipts[<span class="va">self</span>.owner][<span class="dv">1</span>:] <span class="op">==</span> (<span class="va">self</span>.epoch,<span class="va">self</span>.rev)</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> order <span class="kw">in</span> permutations((<span class="st">'A'</span>,<span class="st">'B'</span>)):</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> Authority()</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> [d.approve(a,a,<span class="dv">7</span>,<span class="dv">2</span>) <span class="cf">for</span> a <span class="kw">in</span> order]</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> results <span class="op">==</span> [<span class="st">'accepted'</span>,<span class="st">'occupied'</span>]</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    d.check()</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="co"># A and B target epoch 7; C targets epoch 8. N reopens with the same revision.</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> order <span class="kw">in</span> permutations((<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>,<span class="st">'N'</span>)):</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> Authority()</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> op <span class="kw">in</span> order:</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> op <span class="op">==</span> <span class="st">'N'</span>:</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>            d.reopen(<span class="dv">2</span>)</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>            expected <span class="op">=</span> <span class="dv">8</span> <span class="cf">if</span> op <span class="op">==</span> <span class="st">'C'</span> <span class="cf">else</span> <span class="dv">7</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>            before <span class="op">=</span> <span class="bu">len</span>(d.receipts)</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>            result <span class="op">=</span> d.approve(op,op,expected,<span class="dv">2</span>)</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> result <span class="op">==</span> <span class="st">'accepted'</span>:</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>                <span class="cf">assert</span> d.epoch <span class="op">==</span> expected <span class="kw">and</span> d.rev <span class="op">==</span> <span class="dv">2</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>                <span class="cf">assert</span> <span class="bu">len</span>(d.receipts) <span class="op">==</span> before <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>                <span class="cf">assert</span> <span class="bu">len</span>(d.receipts) <span class="op">==</span> before</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>        d.check()</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> Authority()</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>d.reopen(<span class="dv">2</span>)</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> d.rev <span class="op">==</span> <span class="dv">2</span>  <span class="co"># revision-only check would pass an old request</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> d.approve(<span class="st">'old'</span>,<span class="st">'A'</span>,<span class="dv">7</span>,<span class="dv">2</span>) <span class="op">==</span> <span class="st">'stale'</span> <span class="kw">and</span> d.owner <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> d.approve(<span class="st">'new'</span>,<span class="st">'B'</span>,<span class="dv">8</span>,<span class="dv">2</span>) <span class="op">==</span> <span class="st">'accepted'</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> Authority()</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> d.approve(<span class="st">'k'</span>,<span class="st">'A'</span>,<span class="dv">7</span>,<span class="dv">2</span>) <span class="op">==</span> <span class="st">'accepted'</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Lost reply, retry, then reopen, and retry again.</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> d.approve(<span class="st">'k'</span>,<span class="st">'A'</span>,<span class="dv">7</span>,<span class="dv">2</span>) <span class="op">==</span> <span class="st">'replay'</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>d.reopen(<span class="dv">3</span>)</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> d.approve(<span class="st">'k'</span>,<span class="st">'A'</span>,<span class="dv">7</span>,<span class="dv">2</span>) <span class="op">==</span> <span class="st">'replay'</span> <span class="kw">and</span> d.owner <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(d.receipts) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>    d.approve(<span class="st">'k'</span>,<span class="st">'A'</span>,<span class="dv">8</span>,<span class="dv">3</span>)</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ValueError</span>:</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">AssertionError</span>(<span class="st">'key reuse was accepted'</span>)</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> d.approve(<span class="st">'wrongrev'</span>,<span class="st">'B'</span>,<span class="dv">8</span>,<span class="dv">2</span>) <span class="op">==</span> <span class="st">'stale'</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>d.check()</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="co"># Clock trace and transitive happened-before closure.</span></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>clock <span class="op">=</span> <span class="bu">dict</span>(P<span class="op">=</span><span class="dv">0</span>,Q<span class="op">=</span><span class="dv">0</span>,D<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>timestamps <span class="op">=</span> {}</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>events <span class="op">=</span> [(<span class="st">'p1'</span>,<span class="st">'P'</span>,<span class="va">None</span>), (<span class="st">'p2'</span>,<span class="st">'P'</span>,<span class="va">None</span>), (<span class="st">'q1'</span>,<span class="st">'Q'</span>,<span class="va">None</span>),</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>          (<span class="st">'d1'</span>,<span class="st">'D'</span>,<span class="st">'q1'</span>), (<span class="st">'d2'</span>,<span class="st">'D'</span>,<span class="va">None</span>),</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>          (<span class="st">'d3'</span>,<span class="st">'D'</span>,<span class="st">'p1'</span>), (<span class="st">'d4'</span>,<span class="st">'D'</span>,<span class="va">None</span>)]</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>hb, previous <span class="op">=</span> <span class="bu">set</span>(), {}</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> event,process,sent <span class="kw">in</span> events:</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> process <span class="kw">in</span> previous:</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>        hb.add((previous[process],event))</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sent <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>        hb.add((sent,event))</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>        clock[process] <span class="op">=</span> <span class="bu">max</span>(clock[process], timestamps[sent]) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>        clock[process] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>    timestamps[event] <span class="op">=</span> clock[process]</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>    previous[process] <span class="op">=</span> event</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>    closure <span class="op">=</span> hb <span class="op">|</span> {(a,d) <span class="cf">for</span> a,b <span class="kw">in</span> hb <span class="cf">for</span> c,d <span class="kw">in</span> hb <span class="cf">if</span> b <span class="op">==</span> c}</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> closure <span class="op">==</span> hb:</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>    hb <span class="op">=</span> closure</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [timestamps[e] <span class="cf">for</span> e,_,_ <span class="kw">in</span> events] <span class="op">==</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>]</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(timestamps[a] <span class="op">&lt;</span> timestamps[b] <span class="cf">for</span> a,b <span class="kw">in</span> hb)</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (<span class="st">'p2'</span>,<span class="st">'d2'</span>) <span class="kw">not</span> <span class="kw">in</span> hb <span class="kw">and</span> (<span class="st">'d2'</span>,<span class="st">'p2'</span>) <span class="kw">not</span> <span class="kw">in</span> hb</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> timestamps[<span class="st">'p2'</span>] <span class="op">&lt;</span> timestamps[<span class="st">'d2'</span>]</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (<span class="st">'p1'</span>,<span class="st">'d4'</span>) <span class="kw">in</span> hb</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'20 snapshot histories checked; 18 violate capacity.'</span>)</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'2 guarded orders and 24 reopen/request orders preserve capacity.'</span>)</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Stale epoch/revision, replay, payload binding, and clocks passed.'</span>)</span></code></pre></div>
+<p>The 24 orders enumerate all placements of four modeled atomic calls, including a future-epoch request arriving before reopening. Such a request fails rather than forcing the authority to advance. The tests also cover accepted-key replay after a round ends. They do not prove fairness, bound network delay, or establish crash durability of a production implementation. No learner answers have been inferred.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-06. Six worked answers and executable finite-history, epoch, replay, and logical-clock checks.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#read-dependencies-can-defeat-disjoint-writes">1. Read dependencies can defeat disjoint writes</a></li><li class="h2"><a href="#hold-the-guard-across-the-decision">2. Hold the guard across the decision</a></li><li class="h2"><a href="#reopening-with-unchanged-evidence">3. Reopening with unchanged evidence</a></li><li class="h2"><a href="#clock-values-and-missing-information">4. Clock values and missing information</a></li><li class="h2"><a href="#the-response-and-the-effect-are-separate-boundaries">5. The response and the effect are separate boundaries</a></li><li class="h2"><a href="#multi-document-scope-and-a-decision">6. Multi-document scope and a decision</a></li><li class="h2"><a href="#reproduce-the-finite-checks">Reproduce the finite checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

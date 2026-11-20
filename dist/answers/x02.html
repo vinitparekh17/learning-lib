@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X02 — Worked retry decisions and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X02</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/x02.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">X02 <span aria-hidden="true">/</span> Worked companion</p><h1 id="x02-worked-retry-decisions-and-checks">Worked retry decisions and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/x02.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#leave-capacity-for-recovery">1. Leave capacity for recovery</a></li><li class="h2"><a href="#use-the-users-deadline">2. Use the user’s deadline</a></li><li class="h2"><a href="#count-attempts-through-the-stack">3. Count attempts through the stack</a></li><li class="h2"><a href="#test-the-outcome-people-receive">4. Test the outcome people receive</a></li><li class="h2"><a href="#reproduce-the-arithmetic">Reproduce the arithmetic</a></li></ol></nav></details><article class="prose"><p><a href="/learn/x02.html">Return to the lesson</a>. Try drawing a single time axis for the user and a separate queue for the dependency. Each retry consumes space on both.</p>
+<h2 id="leave-capacity-for-recovery">1. Leave capacity for recovery</h2>
+<p>Five seconds to drain 40 attempts requires eight net completions per second beyond incoming work. With ten spare slots, at most two can go to retries. At two the queue follows 40, 32, 24, 16, 8, 0. At three it ends at five. A shared per-second limit assumes equally expensive requests and enforcement over all callers. A token bucket with accumulated burst tokens can briefly exceed that rate. Account for burst size when making a five-second guarantee.</p>
+<h2 id="use-the-users-deadline">2. Use the user’s deadline</h2>
+<p>Latest modeled retry start is 800 − 150 − 60 = 590 ms. At 560 ms, waiting exactly 30 ms consumes all slack. Waiting 31 misses the deadline. At 610 ms even immediate dispatch is 20 ms too late. If the caller can cheaply return a useful partial result, evaluate that separately under the same evidence requirement. Returning unsupported evidence would change the task.</p>
+<h2 id="count-attempts-through-the-stack">3. Count attempts through the stack</h2>
+<p>Each layer permits three attempts including the first. The worst case sends nine downstream calls for one logical request. If the gateway knows the user’s deadline, dependency budget and operation identity, it can own the retry and configure the SDK for one attempt. That reduces the modeled ceiling to three. A different layer can own it if that layer has equivalent information. Verify effective SDK and proxy settings by tracing a controlled failing request.</p>
+<h2 id="test-the-outcome-people-receive">4. Test the outcome people receive</h2>
+<p>Replay the same arrival trace against policies with zero retries and a bounded retry budget. Include a short transient disconnect and a sustained capacity loss, then restore capacity with a queue still present. Count logical requests that return valid evidence by their deadline divided by all eligible original requests. Alongside it record attempts per logical request, outstanding work after cancellation, peak queue and time to drain. Control model version, output requirements and cache state. A retry that rescues the disconnect but prolongs overload calls for different treatment of those failure classes. Stop admitting retries when the added load prevents the queue from draining within the recovery target. Production thresholds require measured service curves and an agreed recovery target.</p>
+<h2 id="reproduce-the-arithmetic">Reproduce the arithmetic</h2>
+<p>The following checks use a deterministic teaching model with a single queue and inclusive deadline.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> trace(retries, seconds):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    queue <span class="op">=</span> <span class="dv">40</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    history <span class="op">=</span> [queue]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(seconds):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        queue <span class="op">=</span> <span class="bu">max</span>(<span class="dv">0</span>, queue <span class="op">+</span> <span class="dv">90</span> <span class="op">+</span> retries <span class="op">-</span> <span class="dv">100</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        history.append(queue)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> history</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [trace(r, <span class="dv">4</span>)[<span class="op">-</span><span class="dv">1</span>] <span class="cf">for</span> r <span class="kw">in</span> (<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>)] <span class="op">==</span> [<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">40</span>, <span class="dv">60</span>]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> trace(<span class="dv">2</span>, <span class="dv">5</span>) <span class="op">==</span> [<span class="dv">40</span>, <span class="dv">32</span>, <span class="dv">24</span>, <span class="dv">16</span>, <span class="dv">8</span>, <span class="dv">0</span>]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> trace(<span class="dv">3</span>, <span class="dv">5</span>)[<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="dv">5</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">max</span>(r <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">101</span>) <span class="cf">if</span> trace(r, <span class="dv">8</span>)[<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="dv">0</span>) <span class="op">==</span> <span class="dv">5</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">560</span> <span class="op">+</span> <span class="dv">30</span> <span class="op">+</span> <span class="dv">150</span> <span class="op">+</span> <span class="dv">60</span> <span class="op">==</span> <span class="dv">800</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">560</span> <span class="op">+</span> <span class="dv">31</span> <span class="op">+</span> <span class="dv">150</span> <span class="op">+</span> <span class="dv">60</span> <span class="op">&gt;</span> <span class="dv">800</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">610</span> <span class="op">+</span> <span class="dv">150</span> <span class="op">+</span> <span class="dv">60</span> <span class="op">==</span> <span class="dv">820</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">**</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">9</span></span></code></pre></div>
+<p>A complete answer explains both limits on another attempt, shows where the time goes, and states which real measurements would change the decision.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#leave-capacity-for-recovery">1. Leave capacity for recovery</a></li><li class="h2"><a href="#use-the-users-deadline">2. Use the user’s deadline</a></li><li class="h2"><a href="#count-attempts-through-the-stack">3. Count attempts through the stack</a></li><li class="h2"><a href="#test-the-outcome-people-receive">4. Test the outcome people receive</a></li><li class="h2"><a href="#reproduce-the-arithmetic">Reproduce the arithmetic</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

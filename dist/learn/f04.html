@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>F04 — Vectors, transformations, and optimization | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="F04">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">F04</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=F#track-F"><span aria-hidden="true">←</span> Foundations</a><p class="eyebrow">Foundations <span aria-hidden="true">/</span> F04</p><h1 id="f04-vectors-transformations-and-optimization">Vectors, transformations, and optimization</h1><p class="article-description"></p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f02.html" data-chip="F02">F02</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice-on-paper" >Jump to practice</a><a class="button secondary" href="#reference-card-and-evidence" >Evidence</a><a class="button secondary" href="/answers/f04.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#which-document-should-the-reviewer-see-first">Which document should the reviewer see first?</a></li><li class="h2"><a href="#write-the-shape-beside-each-quantity">Write the shape beside each quantity</a></li><li class="h2"><a href="#compare-raw-overlap-with-direction">Compare raw overlap with direction</a></li><li class="h2"><a href="#fit-one-parameter-and-inspect-its-units">Fit one parameter and inspect its units</a></li><li class="h2"><a href="#derive-the-slope-before-choosing-a-step">Derive the slope before choosing a step</a></li><li class="h2"><a href="#decide-whether-the-fit-earns-a-trial">Decide whether the fit earns a trial</a></li><li class="h2"><a href="#practice-on-paper">Practice on paper</a></li><li class="h2"><a href="#reference-card-and-evidence">Reference card and evidence</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID, revision, date</td>
+<td>F04 · 1.0 · 2026-11-05</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>Arithmetic and elementary algebra. The slope derivation starts from subtraction and division. F02 supplies the distinction between a score and an event probability.</td>
+</tr>
+<tr class="odd">
+<td>Capability</td>
+<td>Trace a similarity score to its inputs, check a model update by hand, and decide what evidence would justify using it.</td>
+</tr>
+<tr class="even">
+<td>Source check</td>
+<td>Selected passages of the authors’ January 2024 draft of <em>Mathematics for Machine Learning</em> (R02), listed below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Original hypothetical cases. Exact arithmetic and ranking checks executed.</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/f04.html">Hints, worked solutions, and executable checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="which-document-should-the-reviewer-see-first">Which document should the reviewer see first?</h2>
+<p>A reviewer needs a delivery reference to verify an invoice. Suppose each passage is represented by two counts in a fixed order: delivery references first, payment references second. Passage A contains two delivery references and no payment references. Passage B contains three delivery references and four payment references. If the reviewer can open just one passage, should the service show A or B?</p>
+<p>Two plausible requirements lead to different answers. A reviewer assembling every available delivery reference might prefer the passage with the larger raw count. A reviewer trying to find a passage <em>devoted</em> to delivery might prefer one whose references all concern delivery. The arithmetic below makes each choice explicit. A real reviewer’s success would also depend on whether the references were correct, distinct, and from the right invoice. The counts are invented so we can inspect what the calculation preserves.</p>
+<h2 id="write-the-shape-beside-each-quantity">Write the shape beside each quantity</h2>
+<p>A <strong>scalar</strong> is a single number. A <strong>vector</strong> is an ordered collection of coordinates. Here a document vector has two coordinates. Write vectors as columns, so A = (2, 0)ᵀ has shape 2 × 1. The superscript T means transpose, which swaps rows and columns. Put documents in rows of a matrix D. Its first row is [2, 0], its second is [3, 4], and its third is [0, 2] for a payment-only passage C. The column vector q = (1, 0)ᵀ describes the delivery query.</p>
+<p>To calculate Dq, take one row at a time. Multiply corresponding coordinates by the query weights and add. The first row gives 2 × 1 + 0 × 0 = 2. The second gives 3 and the third gives 0. This row-by-column calculation is a <strong>dot product</strong>. In one multiplication we have a score for each passage.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Quantity</th>
+<th>Shape</th>
+<th>Meaning of one entry</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D</td>
+<td>3 × 2</td>
+<td>Count for one passage and one reference type</td>
+</tr>
+<tr class="even">
+<td>q</td>
+<td>2 × 1</td>
+<td>Query weight for one reference type</td>
+</tr>
+<tr class="odd">
+<td>Dq</td>
+<td>3 × 1</td>
+<td>Score for one passage</td>
+</tr>
+<tr class="even">
+<td>DᵀD</td>
+<td>2 × 2</td>
+<td>Sum across passages of products of two feature counts</td>
+</tr>
+</tbody>
+</table>
+</div><p>The shared dimension tells you which coordinate you sum over. The dimensions that survive identify the output. Try writing qᵀD with the shapes above. Its inner dimensions are 2 and 3, so the intended multiplication fails a shape check. A subtler bug survives that check. If the query encoder puts payment first, q = (1, 0)ᵀ now describes a different request even though every multiplication still runs. A one-feature test query with a known result catches this disagreement. A production interface should record the feature order and the encoder version used on each side.</p>
+<p>A matrix can also <em>change the representation</em>. Apply the row matrix T = [1, 1] to each document column. The result is one scalar, the total number of references. Passages (2, 0)ᵀ and (0, 2)ᵀ both become 2. Once the service retains only that total, even a perfect downstream scoring function of the total must give those two passages the same score. Before accepting a compact representation, identify a pair of inputs your application must distinguish and take both through the transformation.</p>
+<h2 id="compare-raw-overlap-with-direction">Compare raw overlap with direction</h2>
+<p>The Euclidean norm is a vector’s length. Square its coordinates, add them, and take the square root. Passage B has length √(3² + 4²) = 5. Its unit vector is (3/5, 4/5)ᵀ. Dividing each coordinate by the same positive length preserves its proportions and makes its length one. For nonzero q and d, the dot product of their unit vectors is the cosine of the angle between them.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Passage</th>
+<th style="text-align: right;">Raw score against q</th>
+<th style="text-align: right;">Length</th>
+<th style="text-align: right;">Cosine against q</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A (2, 0)</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td>B (3, 4)</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3/5</td>
+</tr>
+<tr class="odd">
+<td>C (0, 2)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div><p>Raw overlap ranks B above A. Cosine ranks A above B. Which result is defensible depends on what makes evidence useful to the reviewer. Try duplicating every reference in B. Its raw score doubles. Its unit vector still has coordinates (3/5, 4/5). In general, multiplying a nonzero document by a positive scalar multiplies its dot product and norm by that same scalar, which cancels in the cosine. This invariance helps when document length is a nuisance. It discards information when the magnitude represents multiple independently verified pieces of evidence. Deduplication and verification are separate design choices.</p>
+<p>An empty passage maps to (0, 0)ᵀ. Its norm is zero, so cosine would require dividing by zero. Define what the application does here. One policy is to mark the passage unscorable, exclude it from ranking, and retain its ID in coverage reports. Silently dropping such cases from evaluation can flatter a system that struggles on empty or poorly parsed documents. F03’s denominator rule applies.</p>
+<p>The same shape arithmetic applies to learned embeddings, where coordinates are learned from training data and need not have names that a reviewer can interpret. A cosine of 0.6 expresses a geometric relationship under the chosen representation. Estimating a 60% chance that the passage answers a question would require a defined event and labeled outcomes, as in F02. A02 will reuse dot products when comparing queries and keys. A03 will return to ranking passages and checking whether the selected passage supports an answer.</p>
+<h2 id="fit-one-parameter-and-inspect-its-units">Fit one parameter and inspect its units</h2>
+<p>Suppose the same service wants to estimate active review time. Let x count pages and y measure review minutes. Choose the model ŷ = wx, where w is minutes per page. The model assumes proportionate time and a zero intercept. An intake task with a fixed setup cost could violate that assumption. Use two constructed training cases, (x, y) = (1, 2) and (2, 4). The design matrix now has shape 2 × 1, with rows [1] and [2]. Multiplying by the single weight gives two predictions.</p>
+<p>Start at w = 1. The predictions are 1 and 2 minutes. Subtract the targets to get residuals −1 and −2 minutes. Average their squares to obtain a <strong>mean squared error</strong> of (1 + 4)/2 = 2.5 minutes². Squaring prevents an underestimate from canceling an overestimate and makes a two-minute error contribute four times as much as a one-minute error. A stakeholder who cares mainly about missed deadlines may want a different evaluation measure.</p>
+<p>Keeping w symbolic exposes the whole loss curve:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mi>w</mi><mo>−</mo><mn>4</mn><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo stretchy="true" form="postfix">]</mo></mrow><mi>/</mi><mn>2</mn><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>5</mn><mi>/</mi><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">L(w) = [(w-2)^2+(2w-4)^2]/2 = (5/2)(w-2)^2.</annotation></semantics></math></p>
+<p>The square reaches zero at w = 2, so this dataset has an exact fit. Knowing that answer makes this an effective debugging case. We can check whether the update heads toward a known minimum and calculate how far it goes.</p>
+<h2 id="derive-the-slope-before-choosing-a-step">Derive the slope before choosing a step</h2>
+<p>Perturb w by a small nonzero amount h. Expanding the square gives</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>+</mo><mi>h</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>L</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>5</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>h</mi><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>5</mn><mi>/</mi><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><msup><mi>h</mi><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">L(w+h)-L(w) = 5(w-2)h+(5/2)h^2.</annotation></semantics></math></p>
+<p>Divide by h to get the change in loss per unit change in w. The quotient is 5(w−2) + (5/2)h. As h approaches zero the last term vanishes. The <strong>derivative</strong> is therefore L′(w) = 5(w−2). At w = 1 the slope is −5. Increasing w a little lowers the loss. After crossing w = 2 the slope becomes positive and a further increase raises the loss. With several weights, the gradient collects one partial derivative per weight, each calculated with the other weights fixed. Here one scalar gives the entire gradient.</p>
+<p>Gradient descent uses the update w_new = w − ηL′(w), with a positive step size η. For η = 0.1, the first step goes from 1 to 1.5. The two predictions become 1.5 and 3. Their residuals are −0.5 and −1, so the new mean squared error is (0.25 + 1)/2 = 0.625 minutes². Verify the loss both ways, from the predictions and from the simplified quadratic. Agreement catches mistakes such as missing the division by two.</p>
+<p>What makes this particular step safe? Subtract the optimum from both sides of the update:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub><mo>−</mo><mn>2</mn><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>5</mn><mi>η</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">w_{new}-2=(1-5η)(w-2).</annotation></semantics></math></p>
+<p>Each update scales the distance from the optimum by |1−5η|. Starting away from the optimum, the loss decreases exactly when that factor is less than one, or 0 &lt; η &lt; 0.4. At η = 0.2 the update lands on the optimum in one step. At η = 0.4 it bounces to the other side at the same distance. A larger step can increase the loss even though the slope was correct. This range comes from the curvature of this specific quadratic and the chosen units. Changing the loss scaling changes its derivative and the suitable step size.</p>
+<h2 id="decide-whether-the-fit-earns-a-trial">Decide whether the fit earns a trial</h2>
+<p>Consider one invented held-out two-page invoice that takes two minutes because its evidence is already assembled. At w = 1 the prediction is exact. After the training step, w = 1.5 predicts three minutes and the squared error rises from zero to one minute². That single case establishes a counterexample to the claim that every new case improves when training loss falls. Estimating an average effect across new invoices requires a representative evaluation set.</p>
+<p>For the retrieval choice, compare raw overlap and cosine on identical queries and passage collections. Have a reviewer judge whether each selected passage contains the required source evidence. Include duplicates, mixed-topic passages, and empty inputs. For time prediction, compare against a simple baseline on later invoices or held-out suppliers, according to the intended deployment. Record absolute errors in minutes alongside squared loss, and separate underestimates on deadline-sensitive cases. A01 will revisit how fitting, validation, and final evaluation answer different questions.</p>
+<h2 id="practice-on-paper">Practice on paper</h2>
+<ol type="1">
+<li>Calculate the three scores when q = (0, 1)ᵀ. Give the shape of Dq and explain a feature-order bug that this query could expose.</li>
+<li>Rank A, B, and C by raw and normalized overlap for the original delivery query. Repeat after tripling B. Give an explicit policy for a zero-vector query.</li>
+<li>Apply T = [1, 1] to A and C. Can any function of the resulting scalar alone recover which passage contains delivery evidence? Justify your answer.</li>
+<li>Starting at w = 1, calculate a second gradient step after the worked first step, using η = 0.1. Verify its loss from residuals and from the closed form.</li>
+<li>Try η = 0.5 from w = 1. Compare the new loss with the old loss. Explain why the sign of the gradient alone cannot select a step size.</li>
+<li>A teammate asks to deploy based on lower training loss and a higher average top-ranked cosine. Use the held-out counterexample and propose a separate acceptance check for each task.</li>
+</ol>
+<h2 id="reference-card-and-evidence">Reference card and evidence</h2>
+<p>Write the coordinate meaning and shape beside every input. For a score, test what happens when you duplicate a document or erase its features. For an update, write down the target, units, loss, slope, step size, and next loss. For a deployment decision, name the outcome on unseen cases that would change your choice.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Claim or calculation</th>
+<th>Source and inspected locator</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Product dimensions and row-by-column sum</td>
+<td>R02 §2.2, printed pp. 22–23, equations 2.13–2.14</td>
+<td>Matrix multiplication</td>
+</tr>
+<tr class="even">
+<td>Euclidean length, dot product, angle</td>
+<td>R02 §§3.1–3.2.1, p. 72, equations 3.4–3.5, and §3.4, p. 76, equations 3.24–3.25</td>
+<td>Cosine uses two nonzero vectors</td>
+</tr>
+<tr class="odd">
+<td>Derivative as limiting slope</td>
+<td>R02 §5.1, pp. 141–142, definitions 5.1–5.2</td>
+<td>Scalar differentiable function</td>
+</tr>
+<tr class="even">
+<td>Gradient descent update</td>
+<td>R02 §7.1, p. 228, equations 7.5–7.6</td>
+<td>Book uses a row gradient and transposes it for a column update. The scalar case has one component.</td>
+</tr>
+<tr class="odd">
+<td>Document ranking, loss curve, stable step interval, held-out case</td>
+<td>Original constructed examples above and checks in the companion</td>
+<td>Conditional arithmetic. Actual relevance labels, time distributions, and operating costs require application evidence.</td>
+</tr>
+</tbody>
+</table>
+</div><p>R02 is Deisenroth, Faisal, and Ong, <em>Mathematics for Machine Learning</em>, Cambridge University Press, 2020. Locators refer to the author-hosted draft dated 2024-01-15. <a href="https://mml-book.github.io/">Author site</a> · <a href="https://mml-book.github.io/book/mml-book.pdf">Author PDF</a></p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/f04.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#f04-passage-record-2026-11-05">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="F04"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/f03.html"><small>Previous module · F03</small><strong>Did the pipeline improve, or did the measurement change?</strong></a><a href="/learn/s01.html"><small>Next module · S01</small><strong>Resource models, locality, and abstraction costs</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#which-document-should-the-reviewer-see-first">Which document should the reviewer see first?</a></li><li class="h2"><a href="#write-the-shape-beside-each-quantity">Write the shape beside each quantity</a></li><li class="h2"><a href="#compare-raw-overlap-with-direction">Compare raw overlap with direction</a></li><li class="h2"><a href="#fit-one-parameter-and-inspect-its-units">Fit one parameter and inspect its units</a></li><li class="h2"><a href="#derive-the-slope-before-choosing-a-step">Derive the slope before choosing a step</a></li><li class="h2"><a href="#decide-whether-the-fit-earns-a-trial">Decide whether the fit earns a trial</a></li><li class="h2"><a href="#practice-on-paper">Practice on paper</a></li><li class="h2"><a href="#reference-card-and-evidence">Reference card and evidence</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

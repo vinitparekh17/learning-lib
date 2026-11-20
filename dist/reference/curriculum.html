@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>SDE Foundations Library — v1 | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link " href="/topics.html"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link active" href="/reference.html" aria-current="page"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Reference</span><span class="header-separator">/</span><span class="header-topic">Original curriculum</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/reference.html"><span aria-hidden="true">←</span> Reference</a><p class="eyebrow">Reference</p><h1 id="sde-foundations-library-v1">SDE Foundations Library — v1</h1></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#the-organizing-question">1. The organizing question</a></li><li class="h2"><a href="#four-connected-areas">2. Four connected areas</a></li><li class="h3"><a href="#repeated-concepts-that-make-the-areas-compound">Repeated concepts that make the areas compound</a></li><li class="h2"><a href="#scope-and-depth-controls">3. Scope and depth controls</a></li><li class="h3"><a href="#three-depths">Three depths</a></li><li class="h3"><a href="#defer-from-the-first-collection">Defer from the first collection</a></li><li class="h3"><a href="#prerequisite-bridge">Prerequisite bridge</a></li><li class="h2"><a href="#module-briefs">4. Module briefs</a></li><li class="h3"><a href="#f01-invariants-algorithms-and-the-cost-of-computation">F01 — Invariants, algorithms, and the cost of computation</a></li><li class="h3"><a href="#f02-probability-base-rates-and-decisions-under-uncertainty">F02 — Probability, base rates, and decisions under uncertainty</a></li><li class="h3"><a href="#f03-measurement-experiment-design-and-evidence-quality">F03 — Measurement, experiment design, and evidence quality</a></li><li class="h3"><a href="#f04-vectors-transformations-and-optimization">F04 — Vectors, transformations, and optimization</a></li><li class="h3"><a href="#s01-resource-models-locality-and-abstraction-costs">S01 — Resource models, locality, and abstraction costs</a></li><li class="h3"><a href="#s02-data-organization-indexes-and-recovery">S02 — Data organization, indexes, and recovery</a></li><li class="h3"><a href="#s03-concurrency-transactions-and-logical-time">S03 — Concurrency, transactions, and logical time</a></li><li class="h3"><a href="#s04-replication-consensus-and-partial-failure">S04 — Replication, consensus, and partial failure</a></li><li class="h3"><a href="#s05-queues-tail-latency-and-cloud-elasticity">S05 — Queues, tail latency, and cloud elasticity</a></li><li class="h3"><a href="#s06-reliability-isolation-and-authority-boundaries">S06 — Reliability, isolation, and authority boundaries</a></li><li class="h3"><a href="#a01-learning-generalization-and-distribution-change">A01 — Learning, generalization, and distribution change</a></li><li class="h3"><a href="#a02-attention-and-the-transformer-mechanism">A02 — Attention and the Transformer mechanism</a></li><li class="h3"><a href="#a03-retrieval-external-knowledge-and-provenance">A03 — Retrieval, external knowledge, and provenance</a></li><li class="h3"><a href="#a04-inference-serving-and-memory-economics">A04 — Inference serving and memory economics</a></li><li class="h3"><a href="#a05-evaluation-workflows-and-controlled-autonomy">A05 — Evaluation, workflows, and controlled autonomy</a></li><li class="h3"><a href="#b01-customer-problems-alternatives-and-evidence-of-demand">B01 — Customer problems, alternatives, and evidence of demand</a></li><li class="h3"><a href="#b02-unit-economics-pricing-units-and-sensitivity">B02 — Unit economics, pricing units, and sensitivity</a></li><li class="h3"><a href="#b03-distribution-product-boundaries-and-defensibility">B03 — Distribution, product boundaries, and defensibility</a></li><li class="h2"><a href="#curated-source-catalog">5. Curated source catalog</a></li><li class="h3"><a href="#how-to-read-a-paper">How to read a paper</a></li><li class="h2"><a href="#worked-seed-connect-performance-reliability-and-economics">6. Worked seed: connect performance, reliability, and economics</a></li><li class="h3"><a href="#a.-a-local-optimization-has-a-system-level-ceiling">A. A local optimization has a system-level ceiling</a></li><li class="h3"><a href="#b.-more-stages-can-impose-a-success-requirement">B. More stages can impose a success requirement</a></li><li class="h3"><a href="#c.-the-cheapest-attempt-need-not-produce-the-cheapest-useful-outcome">C. The cheapest attempt need not produce the cheapest useful outcome</a></li><li class="h3"><a href="#what-this-example-trains">What this example trains</a></li><li class="h2"><a href="#six-synthesis-assignments">7. Six synthesis assignments</a></li><li class="h2"><a href="#finite-production-plan-for-the-subscription-period">8. Finite production plan for the subscription period</a></li><li class="h3"><a href="#durable-execution-state">Durable execution state</a></li><li class="h2"><a href="#learning-pack-format">9. Learning-pack format</a></li><li class="h2"><a href="#reusable-production-prompt">10. Reusable production prompt</a></li><li class="h2"><a href="#reusable-audit-prompt">11. Reusable audit prompt</a></li><li class="h2"><a href="#use-the-library-at-your-own-pace">12. Use the library at your own pace</a></li></ol></nav></details><article class="prose"><p><strong>Prepared for Vinit · 1 November 2026</strong></p>
+<p><strong>Purpose:</strong> Develop the ability to reason about, design, evaluate, and economically justify reliable software and AI systems. Build transferable engineering judgment that survives changes in languages, frameworks, vendors, and models.</p>
+<p><strong>What this edition contains:</strong> a curated source catalog, 18 connected module briefs, six synthesis assignments, a worked example, a finite 30-run production plan, and reusable production/audit prompts. It is the foundation and specification for the deeper library; the 18 full learning packs have not yet been generated. Original papers remain at their linked sources; this file is not an offline collection of those papers.</p>
+<p><strong>Evidence status:</strong> Source pages were opened on 1 November 2026. The catalog distinguishes full-text access, abstract access, and course/book indexes. Those statuses establish source identity and relevance, not an exhaustive technical audit of each work. Read the actual supporting passage before citing a paper’s detailed result. Pedagogical choices, sequencing, exercises, and workload sizes below are recommendations, not empirically optimal prescriptions.</p>
+<h2 id="the-organizing-question">1. The organizing question</h2>
+<blockquote>
+<p>How do I turn an uncertain customer problem into a system whose behavior, reliability, and economics I can defend?</p>
+</blockquote>
+<p>This question creates a useful intersection of software engineering, cloud, AI, and business. It allows breadth while requiring the same ideas to recur.</p>
+<p>The desired capabilities are to:</p>
+<ul>
+<li>Formulate a problem, define an invariant, and reason from a baseline to a better solution.</li>
+<li>Predict important resource and failure constraints before selecting a technology.</li>
+<li>Separate measurements from assumptions, and evidence from plausible explanations.</li>
+<li>Read a paper and identify its mechanism, experimental scope, and limitations.</li>
+<li>Evaluate an AI system at the level of the complete customer task.</li>
+<li>Explain how architecture changes cost, risk, maintenance, and the offer a customer buys.</li>
+<li>Write a clear decision memo, including what evidence would reverse the recommendation.</li>
+</ul>
+<p>Framework fluency still matters when building and debugging a real system. In this library, implementation is a way to test a principle. It does not define the curriculum.</p>
+<h2 id="four-connected-areas">2. Four connected areas</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Area</th>
+<th>Core question</th>
+<th>Modules</th>
+<th>Tangible evidence of progress</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Reasoning and mathematical models</td>
+<td>What follows from the assumptions, and how would I find out whether they hold?</td>
+<td>F01–F04</td>
+<td>Proof sketches, counterexamples, estimates, experiment designs</td>
+</tr>
+<tr class="even">
+<td>Systems and cloud</td>
+<td>What state exists, where can it fail, and which resource limits the design?</td>
+<td>S01–S06</td>
+<td>Execution traces, failure models, capacity estimates, isolation boundaries</td>
+</tr>
+<tr class="odd">
+<td>AI systems</td>
+<td>What does the model learn, what can the surrounding system guarantee, and how is quality measured?</td>
+<td>A01–A05</td>
+<td>Evaluation sets, baseline comparisons, retrieval diagnoses, serving estimates</td>
+</tr>
+<tr class="even">
+<td>Product and business judgment</td>
+<td>Who benefits, what will they change, and can the economics support delivery?</td>
+<td>B01–B03</td>
+<td>Customer evidence plans, unit models, pricing hypotheses, distribution choices</td>
+</tr>
+</tbody>
+</table>
+</div><p>The business area is intentionally smaller. Its role is to shape engineering decisions, not to start a second general MBA curriculum.</p>
+<h3 id="repeated-concepts-that-make-the-areas-compound">Repeated concepts that make the areas compound</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Concept</th>
+<th>First use</th>
+<th>Later reuse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Invariants and contracts</td>
+<td>Algorithm correctness</td>
+<td>Transactions, replicated logs, agent permissions, billing rules</td>
+</tr>
+<tr class="even">
+<td>State and information</td>
+<td>Data structures and representations</td>
+<td>Caches, indexes, model parameters, external knowledge, audit trails</td>
+</tr>
+<tr class="odd">
+<td>Uncertainty and expected loss</td>
+<td>Probability</td>
+<td>Evaluation, incident diagnosis, customer research, economic sensitivity</td>
+</tr>
+<tr class="even">
+<td>Scarce resources</td>
+<td>Time and memory</td>
+<td>Queues, network bandwidth, GPU memory, engineer time, support effort</td>
+</tr>
+<tr class="odd">
+<td>Measurement and feedback</td>
+<td>Experiments</td>
+<td>Model selection, deployment, product adoption, pricing changes</td>
+</tr>
+<tr class="even">
+<td>Boundaries and incentives</td>
+<td>Abstraction and ownership</td>
+<td>Security, organizational handoffs, supplier dependence, customer switching</td>
+</tr>
+</tbody>
+</table>
+</div><p>Each new pack should name an earlier concept it reuses and a later decision it enables. A source earns its place through that connection, not through fame alone.</p>
+<h2 id="scope-and-depth-controls">3. Scope and depth controls</h2>
+<p>Use one recurring fictional case: a business service that receives documents, extracts evidence, proposes an action, and requires approval for consequential changes. The case is only a study vehicle. It is not a product recommendation, a commitment to document AI, or evidence of market demand. Use other examples to test transfer.</p>
+<h3 id="three-depths">Three depths</h3>
+<ol type="1">
+<li><strong>Core:</strong> Understand the mechanism; reproduce a small example; explain one failure condition.</li>
+<li><strong>Application:</strong> Apply it under changed constraints and defend a decision.</li>
+<li><strong>Research extension:</strong> Read a difficult proof, reproduce a published experiment, or compare recent methods when a real question justifies it.</li>
+</ol>
+<p>Complete Core and Application before collecting additional papers on the same subject. A historical paper teaches a mechanism or argument; it does not establish the best current implementation.</p>
+<h3 id="defer-from-the-first-collection">Defer from the first collection</h3>
+<p>Vendor certification paths, framework surveys, daily AI news, broad lists of tools, exhaustive distributed-system algorithms, training a frontier model, unrelated scientific fields, general investing, and startup biographies. Add one only when it resolves a concrete gap in an existing module.</p>
+<h3 id="prerequisite-bridge">Prerequisite bridge</h3>
+<p>Do not infer mathematical readiness from years of employment. Begin with a small diagnostic:</p>
+<ul>
+<li>Given a duplicate-detection loop, state its invariant and count its work.</li>
+<li>Calculate a conditional probability from a small contingency table.</li>
+<li>Multiply a small matrix by a vector and explain the shape of the result.</li>
+<li>Explain why a benchmark with more successes can still be a worse comparison.</li>
+</ul>
+<p>Use the result to generate short bridges in logic, algebra, probability, and derivatives. These are preparation, not a pass/fail judgment about engineering ability. The MIT algorithms course explicitly lists discrete mathematics as a prerequisite [R01]. The mathematical reference is a shelf of selected chapters, not a cover-to-cover assignment [R02].</p>
+<h2 id="module-briefs">4. Module briefs</h2>
+<p>The questions and exercises below are original curriculum designs. Source labels point to the catalog in section 5. Each exercise includes a criterion for a useful answer; the later learning pack should supply a separate worked solution.</p>
+<h3 id="f01-invariants-algorithms-and-the-cost-of-computation">F01 — Invariants, algorithms, and the cost of computation</h3>
+<p><strong>Question:</strong> How do I improve a brute-force solution while preserving its correctness?</p>
+<p><strong>Starting scope:</strong> One problem, a correct baseline, repeated work, a useful representation, and an invariant. Introduce asymptotic analysis alongside the specific operation being counted. Add hashing or a monotonic two-pointer example only after deriving why the operation is safe.</p>
+<p><strong>Sources:</strong> R01, beginning with algorithms/computation, data structures, and hashing. Return to dynamic programming later rather than treating every pattern as required first reading.</p>
+<p><strong>Exercise:</strong> Solve duplicate detection by pairwise comparison, then with remembered state. Give a loop invariant. Explain the assumptions behind the time and memory claims. Change the task to bounded memory or a stream.</p>
+<p><strong>Exit criterion:</strong> Derive the improvement, identify what information must be retained, and give a case where a stated performance assumption fails.</p>
+<p><strong>Connections:</strong> S02 indexes, S04 safety properties, A03 retrieval representations. <strong>Prerequisites:</strong> basic loops; a bridge in sets and induction if needed.</p>
+<h3 id="f02-probability-base-rates-and-decisions-under-uncertainty">F02 — Probability, base rates, and decisions under uncertainty</h3>
+<p><strong>Question:</strong> When should a system act, abstain, or ask a person?</p>
+<p><strong>Starting scope:</strong> Conditional probability, expected value, base rates, and unequal error costs. Use small count tables before symbolic notation. Distinguish a probability estimate from a calibrated estimate and from a decision threshold.</p>
+<p><strong>Source:</strong> R02, probability and distributions. Use R13 for later connections to classification.</p>
+<p><strong>Exercise:</strong> Construct two populations with different event prevalence. Apply the same detector characteristics to both. Compare the proportion of alerts that are correct. Then change the cost of a missed event versus an unnecessary intervention.</p>
+<p><strong>Exit criterion:</strong> Explain why the action rule can change without changing the detector, and list the assumptions that would make the calculation misleading.</p>
+<p><strong>Connections:</strong> F03 experiment interpretation, A05 evaluation, B02 expected cost. <strong>Prerequisites:</strong> fractions and elementary algebra.</p>
+<h3 id="f03-measurement-experiment-design-and-evidence-quality">F03 — Measurement, experiment design, and evidence quality</h3>
+<p><strong>Question:</strong> Did the change improve the system, or did the measurement change?</p>
+<p><strong>Starting scope:</strong> Sampling, distributions, uncertainty, confounding, randomization, and metric definitions. Keep a performance benchmark distinct from a causal product experiment. Record workload and population boundaries.</p>
+<p><strong>Sources:</strong> R03 for experiment design checks; R13 for resampling and model assessment.</p>
+<p><strong>Exercise:</strong> Design a comparison between two document-processing pipelines. Specify the experimental unit, dataset, outcomes, important subgroups, cost metric, exclusions, and a stopping/analysis plan before observing results. Explain when randomizing individual requests would be inappropriate.</p>
+<p><strong>Exit criterion:</strong> Identify plausible leakage, selection bias, or interference, and explain what the experiment can and cannot conclude.</p>
+<p><strong>Connections:</strong> S05 latency measurement, A01 generalization, A05 evaluations, B01 demand evidence. <strong>Prerequisites:</strong> F02.</p>
+<h3 id="f04-vectors-transformations-and-optimization">F04 — Vectors, transformations, and optimization</h3>
+<p><strong>Question:</strong> What computation sits underneath embeddings and learning?</p>
+<p><strong>Starting scope:</strong> Vectors, dot products, norms, matrix shapes, derivatives, and a small gradient update. This is a bridge to later AI mechanisms, not a survey of all linear algebra.</p>
+<p><strong>Source:</strong> R02, selected material from linear algebra, analytic geometry, vector calculus, and continuous optimization.</p>
+<p><strong>Exercise:</strong> Compute similarity for a few small vectors; show how normalization changes the comparison. Fit a one-parameter linear model using a tiny dataset and calculate a gradient step by hand.</p>
+<p><strong>Exit criterion:</strong> Track dimensions, explain what the loss measures, and describe why lowering training loss alone does not establish usefulness on new inputs.</p>
+<p><strong>Connections:</strong> A01 learning, A02 attention, A03 retrieval. <strong>Prerequisites:</strong> algebra and a short derivative bridge; F02 for probabilistic interpretation.</p>
+<h3 id="s01-resource-models-locality-and-abstraction-costs">S01 — Resource models, locality, and abstraction costs</h3>
+<p><strong>Question:</strong> Why can two implementations of the same algorithm have very different costs?</p>
+<p><strong>Starting scope:</strong> CPU work, data movement, working sets, memory representation, virtualization, and locality. Separate an abstract cost model from an implementation measurement. Never transfer an unsourced latency table between machines.</p>
+<p><strong>Source:</strong> R04, selected CPU scheduling, address-space, paging, and translation material. The later GPU connection is supplied by R16.</p>
+<p><strong>Exercise:</strong> Compare contiguous scanning, pointer traversal, and batched work. Predict the dominant resource for a stated workload, then specify a benchmark that could disprove the prediction.</p>
+<p><strong>Exit criterion:</strong> State machine/workload assumptions and distinguish algorithmic complexity, wall-clock time, and throughput.</p>
+<p><strong>Connections:</strong> S02 storage, S05 capacity, A04 inference. <strong>Prerequisites:</strong> F01.</p>
+<h3 id="s02-data-organization-indexes-and-recovery">S02 — Data organization, indexes, and recovery</h3>
+<p><strong>Question:</strong> What must be stored so reads are useful and acknowledged changes survive the stated failures?</p>
+<p><strong>Starting scope:</strong> Logical data versus physical layout, access paths, write cost, and recovery records. Study a small index and a small recovery trace. Relational reasoning is a durable model, not allegiance to a database product.</p>
+<p><strong>Sources:</strong> R05, storage, indexes/filters, logging, and recovery; R04 persistence as a bridge.</p>
+<p><strong>Exercise:</strong> Design storage for facts extracted from documents, preserving source identity and revisions. List two important queries and estimate which records each access path touches. Trace a crash between successive writes.</p>
+<p><strong>Exit criterion:</strong> Explain the read/write/storage trade-off and identify what the acknowledgement actually promises.</p>
+<p><strong>Connections:</strong> S03 transactions, S04 replication, A03 evidence provenance. <strong>Prerequisites:</strong> F01, S01.</p>
+<h3 id="s03-concurrency-transactions-and-logical-time">S03 — Concurrency, transactions, and logical time</h3>
+<p><strong>Question:</strong> Which interleavings can violate the application’s invariant?</p>
+<p><strong>Starting scope:</strong> Shared state, histories, concurrency control, and causal ordering. Keep transaction isolation, wall-clock order, and logical time as distinct concepts.</p>
+<p><strong>Sources:</strong> R05 concurrency-control theory and selected mechanisms; R06 for event ordering.</p>
+<p><strong>Exercise:</strong> Draw two concurrent attempts to consume the same limited resource. Produce one violating history, then explain which constraint or protocol excludes it. Add a delayed message from another process.</p>
+<p><strong>Exit criterion:</strong> Show the history explicitly and explain what is guaranteed across the boundary of each mechanism.</p>
+<p><strong>Connections:</strong> S04 consensus, S06 permission changes, A05 tool side effects. <strong>Prerequisites:</strong> F01, S02.</p>
+<h3 id="s04-replication-consensus-and-partial-failure">S04 — Replication, consensus, and partial failure</h3>
+<p><strong>Question:</strong> What can a group of machines safely agree on when some communication fails?</p>
+<p><strong>Starting scope:</strong> Replicated state machines, logs, leader election, safety versus liveness, and the declared failure model. Use Raft as one worked design. Avoid treating it as a universal answer to all consistency problems.</p>
+<p><strong>Sources:</strong> R07, sections 2 and 5 and the state/transition summary; R06 as prerequisite context. R10 helps separate transport behavior from application guarantees.</p>
+<p><strong>Exercise:</strong> Trace a leader failure during an update and a later retry from a client. Identify the distinct questions of log commitment, client knowledge, and duplicate business effects.</p>
+<p><strong>Exit criterion:</strong> State a safety property, show why a naive alternative violates it, and identify a failure outside the model.</p>
+<p><strong>Connections:</strong> S06 reliability, A05 workflows, B02 reliability expense. <strong>Prerequisites:</strong> S03.</p>
+<h3 id="s05-queues-tail-latency-and-cloud-elasticity">S05 — Queues, tail latency, and cloud elasticity</h3>
+<p><strong>Question:</strong> What happens when demand varies and work waits for a scarce resource?</p>
+<p><strong>Starting scope:</strong> Arrival/service rates, concurrency, latency distributions, admission control, and provisioning. Connect workload shape to the decision to reserve, share, or elastically obtain capacity.</p>
+<p><strong>Sources:</strong> R08 for latency tails; R09 handling overload; R12 for the original cloud economics argument. Read R12 as a historical model, not a current price guide.</p>
+<p><strong>Exercise:</strong> Specify a bursty workload and a service-time distribution. Draw what happens to waiting work when offered load exceeds processing capacity. Compare rejecting, queueing, batching, and adding capacity under the same objective.</p>
+<p><strong>Exit criterion:</strong> Explain why an average alone is insufficient; define the population and percentile; identify a constraint autoscaling cannot remove instantly.</p>
+<p><strong>Connections:</strong> A04 serving, B02 unit economics, B03 offer design. <strong>Prerequisites:</strong> F02, F03, S01.</p>
+<h3 id="s06-reliability-isolation-and-authority-boundaries">S06 — Reliability, isolation, and authority boundaries</h3>
+<p><strong>Question:</strong> What limits damage when a component fails, lies, or acts with too much authority?</p>
+<p><strong>Starting scope:</strong> Service objectives, error budgets, observability, isolation, least privilege, and complete mediation. Keep an availability failure distinct from an authorization failure.</p>
+<p><strong>Sources:</strong> R09 embracing risk and service-level objectives; R11 introductory protection principles; R10 for function placement.</p>
+<p><strong>Exercise:</strong> For the recurring case, draw principals, data boundaries, and permitted actions. Identify which checks belong outside the language model. Define an observable service objective and an explicit trade-off between additional safeguards and operating cost.</p>
+<p><strong>Exit criterion:</strong> Identify a failure that retries cannot fix, and explain what remains true if the model proposes an unauthorized action.</p>
+<p><strong>Connections:</strong> A05 agents, B02 cost of failures, B03 customer trust. <strong>Prerequisites:</strong> S03–S05.</p>
+<h3 id="a01-learning-generalization-and-distribution-change">A01 — Learning, generalization, and distribution change</h3>
+<p><strong>Question:</strong> What does evidence on past examples justify about future examples?</p>
+<p><strong>Starting scope:</strong> Objectives, baselines, fitting, validation, overfitting, leakage, and distribution change. Begin with a small conventional predictor before reasoning about a language model.</p>
+<p><strong>Source:</strong> R13, statistical learning, resampling, and regularization; R02 as mathematical support.</p>
+<p><strong>Exercise:</strong> Design a split for documents with repeated organizations, templates, and revisions. Compare it with a random row split. Specify a simple baseline and explain what each comparison would establish.</p>
+<p><strong>Exit criterion:</strong> Explain a high-scoring but invalid evaluation and describe an alternative that matches the intended deployment.</p>
+<p><strong>Connections:</strong> F03 evidence, A03 retrieval, A05 monitoring. <strong>Prerequisites:</strong> F02–F04.</p>
+<h3 id="a02-attention-and-the-transformer-mechanism">A02 — Attention and the Transformer mechanism</h3>
+<p><strong>Question:</strong> How does a representation of one token incorporate information from other tokens?</p>
+<p><strong>Starting scope:</strong> Queries, keys, values, shapes, attention weights, masking, and the distinction between training and inference. Trace one small operation before studying a full architecture.</p>
+<p><strong>Source:</strong> R14. The original architecture and experiments are historical; do not infer that every current model has all of its design choices.</p>
+<p><strong>Exercise:</strong> Calculate a tiny attention operation with explicit matrices. Change a mask and identify which outputs may change. Describe where sequence length enters the chosen computation.</p>
+<p><strong>Exit criterion:</strong> Explain the operation and its assumptions without relying on an API or an anthropomorphic explanation.</p>
+<p><strong>Connections:</strong> F04 transformations, A03 representations, A04 memory cost. <strong>Prerequisites:</strong> F04, A01.</p>
+<h3 id="a03-retrieval-external-knowledge-and-provenance">A03 — Retrieval, external knowledge, and provenance</h3>
+<p><strong>Question:</strong> When should information live in stored evidence rather than only in a model’s parameters?</p>
+<p><strong>Starting scope:</strong> Candidate retrieval, ranking, evidence selection, freshness, access control, and answer support. Separate retrieval quality from generation quality.</p>
+<p><strong>Source:</strong> R15 for a concrete retrieval-augmented model. Use S02 concepts for storage and S06 for access boundaries. The paper’s design is not interchangeable with every product called RAG.</p>
+<p><strong>Exercise:</strong> Construct cases where the correct document is missing, present but not retrieved, retrieved but ignored, and cited without supporting the answer. Design a check for each failure.</p>
+<p><strong>Exit criterion:</strong> Localize the failure stage and explain what a citation verifies and what it does not.</p>
+<p><strong>Connections:</strong> S02 indexes, F03 measurement, A05 evaluation. <strong>Prerequisites:</strong> S02, A01, A02.</p>
+<h3 id="a04-inference-serving-and-memory-economics">A04 — Inference serving and memory economics</h3>
+<p><strong>Question:</strong> How do memory management and scheduling change the cost of serving a model?</p>
+<p><strong>Starting scope:</strong> Model storage, per-request state, batching, throughput/latency constraints, and memory fragmentation. Derive estimates only for a stated architecture and numeric precision.</p>
+<p><strong>Source:</strong> R16, PagedAttention. Reuse R04 and R08 for the systems connection. Treat published speedups as workload-specific results, not a prediction for a current provider.</p>
+<p><strong>Exercise:</strong> Write a symbolic memory budget for model state plus active requests. Vary sequence length and concurrency. Compare two serving policies under a fixed latency objective and an explicitly assumed workload.</p>
+<p><strong>Exit criterion:</strong> Identify the limiting resource and list what must be measured before claiming a cost improvement.</p>
+<p><strong>Connections:</strong> S01 locality/virtualization, S05 queues, B02 unit economics. <strong>Prerequisites:</strong> S01, S05, A02.</p>
+<h3 id="a05-evaluation-workflows-and-controlled-autonomy">A05 — Evaluation, workflows, and controlled autonomy</h3>
+<p><strong>Question:</strong> When is a system capable enough, and constrained enough, to perform the intended task?</p>
+<p><strong>Starting scope:</strong> End-to-end success, baselines, failure categories, repeated trials, tool contracts, action budgets, and authority. Distinguish a fixed workflow from model-directed action selection.</p>
+<p><strong>Sources:</strong> R18 as one early tool-interaction design; R17 for system-level dependencies; R03 for evidence discipline. S06 supplies the authority model.</p>
+<p><strong>Exercise:</strong> Compare a deterministic workflow, a single model call, and a tool-using loop on the same task set. Include explicit failure cases, costs, and side-effect rules. Explain how you would investigate disagreement between an automated judge and a person.</p>
+<p><strong>Exit criterion:</strong> Defend the simplest design supported by the evidence and identify what an offline evaluation misses.</p>
+<p><strong>Connections:</strong> F02/F03 uncertainty and measurement, S03 retries, S06 permissions, B02 cost. <strong>Prerequisites:</strong> A01, A03, S06; A04 for serving estimates.</p>
+<h3 id="b01-customer-problems-alternatives-and-evidence-of-demand">B01 — Customer problems, alternatives, and evidence of demand</h3>
+<p><strong>Question:</strong> What problem is costly enough that someone will change their behavior?</p>
+<p><strong>Starting scope:</strong> User versus buyer, current workaround, frequency, consequences, adoption friction, and observed commitments. Keep customer observations separate from founder interpretations.</p>
+<p><strong>Source:</strong> R19, the customer-interview segment. This is practitioner guidance, not experimental evidence that a given business will succeed.</p>
+<p><strong>Exercise:</strong> Choose a business workflow you can observe. Prepare questions about a recent real instance, its costs, alternatives, and decision process. Define stronger and weaker forms of evidence before speaking with anyone. No outreach is performed by this library.</p>
+<p><strong>Exit criterion:</strong> State a falsifiable demand hypothesis and distinguish politeness, stated interest, trials, payment, and repeated use.</p>
+<p><strong>Connections:</strong> F03 measurement, A05 success definitions, B03 distribution. <strong>Prerequisites:</strong> none; revisit after F03.</p>
+<h3 id="b02-unit-economics-pricing-units-and-sensitivity">B02 — Unit economics, pricing units, and sensitivity</h3>
+<p><strong>Question:</strong> Which unit of useful work creates value, and what does delivering it actually cost?</p>
+<p><strong>Starting scope:</strong> Revenue, variable cost, fixed cost, support and review effort, contribution, and uncertain demand. Separate technical units such as tokens from business outcomes such as resolved cases.</p>
+<p><strong>Sources:</strong> R20 for unit metrics; R21 for pricing/packaging hypotheses. Reuse R12 for capacity assumptions.</p>
+<p><strong>Exercise:</strong> Model a service per attempted job and per verified successful job. Include failures and human review. Vary success probability, workload size, customer price, and support burden. State what is hypothetical versus observed.</p>
+<p><strong>Exit criterion:</strong> Explain why a lower model price can still yield a worse overall service, and why positive contribution is not the same as company profitability.</p>
+<p><strong>Connections:</strong> S05 capacity, A04 inference, A05 outcomes, B03 customer offer. <strong>Prerequisites:</strong> F02, B01, A05.</p>
+<h3 id="b03-distribution-product-boundaries-and-defensibility">B03 — Distribution, product boundaries, and defensibility</h3>
+<p><strong>Question:</strong> Why would a customer find, adopt, keep, and pay for this offering when alternatives improve?</p>
+<p><strong>Starting scope:</strong> A narrow initial customer, acquisition path, onboarding, workflow fit, switching friction, supplier dependence, and maintenance burden. Treat a claimed moat as a hypothesis requiring evidence.</p>
+<p><strong>Sources:</strong> R22 on early manual recruitment and service; R21 on segmentation/packaging; R19 on problem evidence.</p>
+<p><strong>Exercise:</strong> Compare a self-serve tool, a managed service, and an internal deployment for the same customer job. Specify the buyer, distribution route, required trust, variable labor, and effect of a supplier bundling your main feature.</p>
+<p><strong>Exit criterion:</strong> Explain which assumptions make an option attractive and identify evidence that would overturn the recommendation.</p>
+<p><strong>Connections:</strong> S06 reliability commitments, A05 evaluation, B01 demand, B02 economics. <strong>Prerequisites:</strong> B01, B02.</p>
+<h2 id="curated-source-catalog">5. Curated source catalog</h2>
+<p><strong>Read modes:</strong> “Read” means a selected passage is an initial assignment; “Reference” means consult only to resolve a question. A course link is not an instruction to finish the course.</p>
+<p><strong>Access labels:</strong> “Full text opened” means the text was accessible to the retrieval tool and relevant portions were inspected, not that every page was exhaustively reviewed. “Index opened” means the host’s description/contents were verified, with chapter-level verification left to pack production. “Abstract opened” supports source selection, not detailed experimental claims.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Source and primary link</th>
+<th>First reading and role</th>
+<th>Access checked / limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R01</td>
+<td><a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/">MIT 6.006: Introduction to Algorithms, Spring 2020</a> — Demaine, Ku, Solomon</td>
+<td>Selected opening lectures and hashing; use problems to practice proof and cost analysis</td>
+<td>Course index/syllabus opened. Prerequisite mathematics may need a bridge.</td>
+</tr>
+<tr class="even">
+<td>R02</td>
+<td><a href="https://mml-book.github.io/">Mathematics for Machine Learning</a> — Deisenroth, Faisal, Ong, 2020</td>
+<td>Reference: chapters on linear algebra, geometry, calculus, probability, optimization</td>
+<td>Author index/contents opened; free PDF linked. Not a beginner-first cover-to-cover assignment.</td>
+</tr>
+<tr class="odd">
+<td>R03</td>
+<td><a href="https://www.microsoft.com/en-us/research/articles/patterns-of-trustworthy-experimentation-pre-experiment-stage/">Patterns of Trustworthy Experimentation: Pre-Experiment Stage</a> — Microsoft Research, 2020</td>
+<td>Read experiment-design patterns; ask which apply to the chosen unit of analysis</td>
+<td>Primary practitioner article opened. Platform experience is contextual evidence.</td>
+</tr>
+<tr class="even">
+<td>R04</td>
+<td><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a> — Remzi and Andrea Arpaci-Dusseau</td>
+<td>Reference: scheduling, address spaces/paging, concurrency, persistence</td>
+<td>Author index opened; free chapters available. Implementation exercises may use C without making C the learning goal.</td>
+</tr>
+<tr class="odd">
+<td>R05</td>
+<td><a href="https://15445.courses.cs.cmu.edu/fall2025/schedule.html">CMU 15-445/645, Fall 2025 schedule</a> — Andy Pavlo</td>
+<td>Reference: storage, indexes, concurrency theory, logging/recovery</td>
+<td>Course index/schedule opened with lecture-note links. Use the archived edition consistently.</td>
+</tr>
+<tr class="even">
+<td>R06</td>
+<td><a href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Time, Clocks, and the Ordering of Events in a Distributed System</a> — Leslie Lamport, 1978</td>
+<td>Read event ordering and logical clocks before distributed histories</td>
+<td>Full-text PDF opened. Scope is the paper’s formal model, not all modern distributed-system behavior.</td>
+</tr>
+<tr class="odd">
+<td>R07</td>
+<td><a href="https://raft.github.io/raft.pdf">In Search of an Understandable Consensus Algorithm, extended version</a> — Ongaro and Ousterhout, 2014</td>
+<td>Read replicated state machines and core Raft sections; trace the state summary</td>
+<td>Full-text PDF opened. Defer membership changes and full proofs until the core trace is clear.</td>
+</tr>
+<tr class="even">
+<td>R08</td>
+<td><a href="https://research.google/pubs/the-tail-at-scale/">The Tail at Scale</a> — Dean and Barroso, 2013</td>
+<td>Read the motivation and mechanism of latency tails; compare with workload measurements</td>
+<td>Publisher record/abstract opened. Linked ACM full text returned an access error during this session; detailed claims need a verified accessible copy.</td>
+</tr>
+<tr class="odd">
+<td>R09</td>
+<td><a href="https://sre.google/sre-book/table-of-contents/">Site Reliability Engineering</a> — Google, 2016</td>
+<td>Selected chapters: <a href="https://sre.google/sre-book/embracing-risk/">Embracing Risk</a>, Service Level Objectives, <a href="https://sre.google/sre-book/handling-overload/">Handling Overload</a></td>
+<td>Contents and selected full chapters opened. Adapt practices to scale and context.</td>
+</tr>
+<tr class="even">
+<td>R10</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/endtoend/endtoend.pdf">End-to-End Arguments in System Design</a> — Saltzer, Reed, Clark, 1984</td>
+<td>Read argument and examples; use it to locate correctness responsibilities</td>
+<td>Full-text PDF opened. An architectural argument, not a mechanical prohibition on lower-layer functionality.</td>
+</tr>
+<tr class="odd">
+<td>R11</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/protection/">The Protection of Information in Computer Systems</a> — Saltzer and Schroeder, 1975</td>
+<td>Selected introductory protection/design principles</td>
+<td>Author-hosted entry/overview opened. Historical mechanisms require contextual reading; principles are the intended focus.</td>
+</tr>
+<tr class="even">
+<td>R12</td>
+<td><a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2009/EECS-2009-28.html">Above the Clouds: A Berkeley View of Cloud Computing</a> — Armbrust et al., 2009</td>
+<td>Read the elasticity/economics argument and assumptions</td>
+<td>University record/abstract opened. Its prices, market picture, and provider details are historical.</td>
+</tr>
+<tr class="odd">
+<td>R13</td>
+<td><a href="https://www.statlearning.com/">An Introduction to Statistical Learning</a> — James, Witten, Hastie, Tibshirani; Python edition also Taylor</td>
+<td>Selected statistical-learning, resampling, and regularization material</td>
+<td>Author index/contents opened; free book PDFs linked. Choose one edition consistently.</td>
+</tr>
+<tr class="even">
+<td>R14</td>
+<td><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a> — Vaswani et al., 2017</td>
+<td>Read model architecture after F04; reproduce one attention calculation</td>
+<td>Author-submitted abstract/metadata opened; full paper linked. Historical translation results do not establish present product quality.</td>
+</tr>
+<tr class="odd">
+<td>R15</td>
+<td><a href="https://arxiv.org/abs/2005.11401">Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</a> — Lewis et al., 2020</td>
+<td>Read model formulation and evidence evaluation</td>
+<td>Author-submitted abstract/metadata opened; full paper linked. Original training/model formulation differs from many later RAG workflows.</td>
+</tr>
+<tr class="even">
+<td>R16</td>
+<td><a href="https://arxiv.org/abs/2309.06180">Efficient Memory Management for Large Language Model Serving with PagedAttention</a> — Kwon et al., 2023</td>
+<td>Read memory problem, mechanism, and evaluation conditions</td>
+<td>Author-submitted abstract/metadata opened; full paper linked. Published speedups are not universal serving guarantees.</td>
+</tr>
+<tr class="odd">
+<td>R17</td>
+<td><a href="https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf">Hidden Technical Debt in Machine Learning Systems</a> — Sculley et al., 2015</td>
+<td>Read system boundaries, dependencies, and feedback risks</td>
+<td>Conference full-text PDF opened. Systems analysis, not a new model algorithm or current agent benchmark.</td>
+</tr>
+<tr class="even">
+<td>R18</td>
+<td><a href="https://arxiv.org/abs/2210.03629">ReAct: Synergizing Reasoning and Acting in Language Models</a> — Yao et al., 2022/2023</td>
+<td>Read the action/observation approach and evaluation setup</td>
+<td>Author-submitted abstract/metadata opened; full paper linked. Treat as one research design, not proof of general agent reliability.</td>
+</tr>
+<tr class="odd">
+<td>R19</td>
+<td><a href="https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/">Startup School Week 1: evaluating ideas and talking to users</a> — YC / Hale / Migicovsky, 2019</td>
+<td>Start with the user-interview segment, then evaluate its fit to a local customer</td>
+<td>Primary transcript opened. Practitioner advice with a startup-selection context.</td>
+</tr>
+<tr class="even">
+<td>R20</td>
+<td><a href="https://www.finops.org/framework/capabilities/unit-economics/">FinOps Framework: Unit Economics</a> — FinOps Foundation</td>
+<td>Read distinctions between resource units and business outcomes</td>
+<td>Current framework page opened. A living practice framework, not a causal study of profitability.</td>
+</tr>
+<tr class="odd">
+<td>R21</td>
+<td><a href="https://stripe.com/guides/atlas/saas-pricing">Pricing low-touch SaaS</a> — Patrick McKenzie / Stripe</td>
+<td>Read segmentation and packaging examples; turn them into testable hypotheses</td>
+<td>Primary practitioner guide opened. Historical case prices are not current market recommendations.</td>
+</tr>
+<tr class="even">
+<td>R22</td>
+<td><a href="https://paulgraham.com/ds.html">Do Things that Don’t Scale</a> — Paul Graham, 2013</td>
+<td>Read manual recruitment and early customer-service argument</td>
+<td>Author essay opened. Anecdotal founder guidance; assess survivorship and context.</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="how-to-read-a-paper">How to read a paper</h3>
+<p>Create a short card with: problem; assumptions; mechanism; evidence; limitations; one derivation or trace; and a decision it informs. Read the actual relevant section before promoting a claim from “author says” to “supported within this setup.”</p>
+<p>For empirical papers, record dataset, baseline, metric, compute/workload, and uncertainty where reported. For formal papers, record the model and statement proved. For practitioner essays, record the experience and possible selection bias. These are different kinds of evidence.</p>
+<p>When a paper is too hard, write down the precise missing concept. Request a bridge on that concept and return to the same passage. Avoid generating an unrelated beginner course.</p>
+<h2 id="worked-seed-connect-performance-reliability-and-economics">6. Worked seed: connect performance, reliability, and economics</h2>
+<p>This example is original and hypothetical. Every input below is chosen for teaching, not measured in production. Arithmetic has been checked; no system benchmark was run.</p>
+<h3 id="a.-a-local-optimization-has-a-system-level-ceiling">A. A local optimization has a system-level ceiling</h3>
+<p>Assume a request takes one normalized unit of serial time. A stage uses fraction f of that time. Everything else is unchanged. If that stage becomes s times faster:</p>
+<p>T_new = (1 − f) + f/s</p>
+<p>Speedup = 1 / ((1 − f) + f/s)</p>
+<p>For f = 0.30 and s = 4, T_new = 0.775 and the total speedup is about 1.29. The fourfold stage improvement is not a fourfold request improvement.</p>
+<p><strong>Derivation:</strong> Split the original time into improved and unchanged portions; divide only the improved portion by s; compare old to new time.</p>
+<p><strong>Boundary:</strong> This model excludes overlap, changes in queueing, different request mixes, and resource contention. Optimizing the stage may change those factors, so measurements can differ. Do not present this calculation as a p99 forecast.</p>
+<h3 id="b.-more-stages-can-impose-a-success-requirement">B. More stages can impose a success requirement</h3>
+<p>Assume eight stages must all succeed. Let each stage succeed with probability 0.97 and assume independent outcomes. Then:</p>
+<p>P(all succeed) = 0.97^8 ≈ 0.7837</p>
+<p>This is a consequence of the assumed probability model. It is not a measured success rate for any agent.</p>
+<p>Without independence, use conditional probabilities:</p>
+<p>P(all succeed) = P(S1) × P(S2 | S1) × … × P(S8 | S1,…,S7)</p>
+<p><strong>Boundary:</strong> Shared bad inputs, common dependencies, retries, and recovery can invalidate the simple independent-stage model. An extra verification stage can improve the full outcome even while adding another component. Evaluate the complete task.</p>
+<h3 id="c.-the-cheapest-attempt-need-not-produce-the-cheapest-useful-outcome">C. The cheapest attempt need not produce the cheapest useful outcome</h3>
+<p>Assume each attempted job has the stated variable cost, and a “success” is an actually correct, usable, billable result. There are no retries, review costs, refunds, or fixed costs in this toy model.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hypothetical pipeline</th>
+<th style="text-align: right;">Variable cost per attempt</th>
+<th style="text-align: right;">Success probability</th>
+<th style="text-align: right;">Expected variable cost per success over many comparable attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td style="text-align: right;">₹1.00</td>
+<td style="text-align: right;">0.70</td>
+<td style="text-align: right;">₹1.00 / 0.70 ≈ ₹1.43</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td style="text-align: right;">₹1.30</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">₹1.30 / 0.95 ≈ ₹1.37</td>
+</tr>
+</tbody>
+</table>
+</div><p>For N comparable attempts, expected cost is Nc and expected successes are Np; their ratio is c/p. This ratio of expectations is a planning metric, not a guarantee about a small batch’s realized ratio.</p>
+<p>If revenue is hypothetically ₹3 per successful job, expected contribution per attempt is p×₹3−c: ₹1.10 for A and ₹1.55 for B. Neither figure is profit after fixed costs, and neither establishes customer willingness to pay ₹3.</p>
+<p><strong>Boundary:</strong> Review labor, correlated failures, accepted-but-wrong outputs, usage distribution, and pricing rules can change the result. Replace assumptions with evidence before a real decision.</p>
+<h3 id="what-this-example-trains">What this example trains</h3>
+<p>F01 supplies decomposition; F02 supplies probability; S05 forces workload assumptions; A05 defines success; B02 makes the denominator economically meaningful. The same case is examined through several connected ideas rather than through several unrelated tutorials.</p>
+<p><strong>Transfer exercise:</strong> Introduce an optional human-review stage. State which inputs you need to decide whether it improves the offer. A useful answer includes its effect on false acceptance, completion rate, turnaround time, variable labor, and what customers will pay—not just model accuracy.</p>
+<h2 id="six-synthesis-assignments">7. Six synthesis assignments</h2>
+<p>These assignments connect modules after their prerequisites have been produced. They are proposed future work, not completed experiments.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Decision</th>
+<th>Inputs to reuse</th>
+<th>Required output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>C01</td>
+<td>Where must duplicate-effect prevention live?</td>
+<td>F01, S02–S04, R10</td>
+<td>A failure timeline; invariant; responsibility boundary; counterexample to an inadequate fix</td>
+</tr>
+<tr class="even">
+<td>C02</td>
+<td>Does better model performance improve the customer outcome?</td>
+<td>F02/F03, A01/A03/A05, B01</td>
+<td>An evaluation design separating component quality, whole-task quality, user value, and unsupported assumptions</td>
+</tr>
+<tr class="odd">
+<td>C03</td>
+<td>Which optimization buys useful capacity?</td>
+<td>S01/S05, A04, B02</td>
+<td>Resource model; workload sensitivity; effect on latency and cost per successful task</td>
+</tr>
+<tr class="even">
+<td>C04</td>
+<td>Which product boundary makes the service viable?</td>
+<td>B01–B03, S06</td>
+<td>Compare self-serve software, managed service, and internal deployment; name evidence that would change the choice</td>
+</tr>
+<tr class="odd">
+<td>C05</td>
+<td>How far should autonomy go?</td>
+<td>F02/F03, S03/S06, A05</td>
+<td>Compare fixed workflow, suggestion-only assistant, and action-taking agent under the same task, authority, and cost model</td>
+</tr>
+<tr class="even">
+<td>C06</td>
+<td>How should architecture respond when a supplier changes?</td>
+<td>S02/S06, A03–A05, B02/B03</td>
+<td>A decision memo on switching costs, evaluation portability, data/control boundaries, and whether a claimed advantage survives bundling</td>
+</tr>
+</tbody>
+</table>
+</div><p>Each memo should defend a choice under stated assumptions, then revise it after one constraint changes. A polished architecture drawing alone does not complete the assignment.</p>
+<h2 id="finite-production-plan-for-the-subscription-period">8. Finite production plan for the subscription period</h2>
+<p><strong>Production and learning are separate schedules.</strong> The runs below commission and check future study assets. They do not assert that the learner can master this material in a month. A run is a unit of work, not a guaranteed daily quota or an enabled automation.</p>
+<p>There are 18 core packs, six synthesis assignments, four audits, one map/diagnostic run, and one final packaging run. If fewer runs fit the actual allowance or remaining subscription period, preserve prerequisite packs and audits, and defer additional synthesis. Verify the real expiration date before setting a schedule.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 40%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Run</th>
+<th>Work item</th>
+<th>Deliverable / stopping point</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">01</td>
+<td>Map and diagnostic</td>
+<td>This architecture, source registry, prerequisite questions, stable IDs</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">02</td>
+<td>F01</td>
+<td>Invariant and algorithm-improvement pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">03</td>
+<td>B01</td>
+<td>Customer-evidence pack; no invented interviews</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">04</td>
+<td>F02</td>
+<td>Probability and expected-loss pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">05</td>
+<td>F03</td>
+<td>Measurement and experimental-design pack</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">06</td>
+<td>S01</td>
+<td>Resource-model pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">07</td>
+<td>Audit A</td>
+<td>Check sources, derivations, prerequisite gaps in runs 02–06</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">08</td>
+<td>F04</td>
+<td>Mathematical bridge pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">09</td>
+<td>S02</td>
+<td>Storage/index/recovery pack</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td>S03</td>
+<td>Concurrency and ordering pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td>S04</td>
+<td>Replication and failure pack</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td>S05</td>
+<td>Queues/cloud elasticity pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td>C01</td>
+<td>Duplicate-effect decision memo</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td>S06</td>
+<td>Reliability and authority pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td>Audit B</td>
+<td>Check systems traces, failure assumptions, and cross-links</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">16</td>
+<td>A01</td>
+<td>Learning/generalization pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td>A02</td>
+<td>Attention mechanism pack</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td>A03</td>
+<td>Retrieval/provenance pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td>A04</td>
+<td>Inference-serving pack</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td>A05</td>
+<td>Evaluation/autonomy pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">21</td>
+<td>C02</td>
+<td>Customer-outcome evaluation memo</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">22</td>
+<td>Audit C</td>
+<td>Check AI evidence, math, benchmark scope, and unsupported generalizations</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">23</td>
+<td>B02</td>
+<td>Economics and sensitivity pack</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">24</td>
+<td>B03</td>
+<td>Distribution/product-boundary pack</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">25</td>
+<td>C03</td>
+<td>Capacity and cost memo</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26</td>
+<td>C04</td>
+<td>Product-boundary memo</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">27</td>
+<td>C05</td>
+<td>Autonomy decision memo</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">28</td>
+<td>C06</td>
+<td>Supplier-change decision memo</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">29</td>
+<td>Audit D</td>
+<td>Cross-library contradictions, broken prerequisites, missing answers, missing sources</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">30</td>
+<td>Package and handoff</td>
+<td>Index, consolidated notes, separate solutions, reference cards, open-questions ledger, export</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="durable-execution-state">Durable execution state</h3>
+<p>Maintain a simple index with: run ID, module ID, status, artifact path, source-verification date, unresolved issues, and prerequisites. Suggested states are queued, drafted, checked, and needs-revision. These track artifact production, not the learner’s mastery.</p>
+<p>The worker must inspect this index at each run. If a prerequisite or earlier artifact is unavailable, repair the missing link or report the block; do not fabricate continuity. If a run fails, retry that run before advancing. Use a finite run count and an end date matching the actual subscription window when configuring an automation.</p>
+<p>Store original explanations, source metadata, derivations, exercises, and answers in downloadable formats. Keep references to originals and make lawful local copies only where access and rights allow. Public links and a list of paper titles alone do not satisfy deferred offline study.</p>
+<h2 id="learning-pack-format">9. Learning-pack format</h2>
+<p>Each core pack should be independently usable later:</p>
+<ol type="1">
+<li><strong>Orientation:</strong> Decision it enables, prerequisites, notation, and a short entry route.</li>
+<li><strong>Mechanism:</strong> A concrete example, explicit assumptions, and a trace, derivation, or useful diagram.</li>
+<li><strong>Boundary:</strong> An invariant or claim, a counterexample, and the conditions where the model stops applying.</li>
+<li><strong>Evidence:</strong> Primary sources with exact supporting locations; distinguish proofs, experiments, and practitioner judgment.</li>
+<li><strong>Transfer:</strong> One prior concept reused, one future use, and one changed-constraint question.</li>
+<li><strong>Practice:</strong> A bounded task with setup, success criteria, and separate hints/solutions.</li>
+<li><strong>Reference:</strong> Compact recall card, assumptions, and unresolved questions.</li>
+</ol>
+<p>Use a short orientation, a moderate core explanation, and optional deeper material. Avoid a mandatory length floor. Depth should follow the question. Give mathematical bridges before derivations that require them.</p>
+<p>For each important source claim, keep a ledger row containing claim, source, locator, evidence type, and applicability limit. A citation title alone is not evidence. A second review by the same model is useful but is not independent verification; grounding still comes from source inspection, valid derivations, tests, or external measurements.</p>
+<h2 id="reusable-production-prompt">10. Reusable production prompt</h2>
+<blockquote>
+<p>Act as a research editor and engineering tutor building a durable foundation for an individual SDE with roughly two years of experience. The goal is transferable judgment in software systems, cloud, AI, and technology business. The user’s current languages and frameworks are not curriculum boundaries.</p>
+<p>Read the supplied library index, the assigned module brief, and the prerequisite packs before writing. Work on exactly the assigned run ID: [RUN_ID]. Topic/module: [MODULE_ID]. If required material is unavailable, identify the gap and produce the smallest useful repair rather than inventing prior state.</p>
+<p>Optimize for understanding mechanisms, testing claims, and making decisions. Start with the concrete question in the module brief. Explain necessary prerequisites and notation; do not infer mathematical proficiency from years of experience.</p>
+<p>Browse and open the relevant primary sources. Use original papers, author textbooks, university materials, original postmortems, and first-party technical documentation. For business, distinguish practitioner experience from empirical evidence. Record source title, authors, date/version, URL, relevant location, and access limitations. Cite only inspected material. An abstract is insufficient support for a detailed experimental claim.</p>
+<p>Produce one self-contained learning pack: orientation; mechanism with a worked example; assumptions and failure boundary; evidence; a trade-off that changes a decision; connections to earlier modules; a bounded exercise; and separate hints/solutions. Add a concise reference card. Use the lowest level of explanation necessary for the question—bytes, execution traces, mathematical models, or incentive/cost models as appropriate.</p>
+<p>Prefer one primary anchor and at most two necessary supplements per pack. Use one illustrative implementation or pseudocode when useful. Compare additional implementations only when they reveal a meaningful design trade-off. A source count or engine count is not a quality target.</p>
+<p>Distinguish sourced facts, derivations with explicit premises, hypothetical inputs, observed experimental results, and unresolved claims. Source empirical numbers and implementation constants. Show derivations for calculated results. State versions/workloads for implementation-dependent facts. Mark code as executed or untested accurately.</p>
+<p>Include a production incident only if a primary account supports its relevance. Otherwise use a clearly labeled hypothetical counterexample. Keep historical research results separate from current product claims. For current technical claims, verify current primary documentation.</p>
+<p>Audit consequential claims and calculations before finalizing. Correct discovered errors. List remaining uncertainties with specific verification steps; do not manufacture a quota of questionable claims. Evidence gaps must not silently become core facts.</p>
+<p>Keep the core readable without repeated claim labels on every sentence. Put detailed provenance in a claim ledger. Do not pad to a word count. Preserve the chosen scope and stop when this run’s deliverable is complete.</p>
+<p>Save the pack and separate solutions in durable, downloadable form using the environment’s supported storage. Update the index with actual artifact locations, source-check date, prerequisite links, checks performed, and unresolved issues. Never claim a save or test that did not succeed.</p>
+</blockquote>
+<h2 id="reusable-audit-prompt">11. Reusable audit prompt</h2>
+<blockquote>
+<p>Audit the supplied packs [IDS] against their original sources and stated assumptions. Treat the drafts as claims to check, not as authority.</p>
+<p>Prioritize claims that affect correctness, causal interpretation, security boundaries, performance, or economic decisions. Open the cited passage; verify that it supports the wording. Check mathematical premises and arithmetic. Where feasible, run the relevant small experiment. Distinguish source existence, source support, reproducibility, and applicability to a different setting.</p>
+<p>Look for invented precision, mixed versions, missing prerequisites, inconsistent terminology, benchmark generalization, undefined success metrics, and solutions that contradict the exercises. For business claims, separate assumptions and anecdotes from observed demand. Do not invent an independent reviewer or claim independent validation merely because this is another model pass.</p>
+<p>Return a correction log with location, issue, evidence, change, and residual uncertainty. Apply supported corrections, preserve source provenance, and update cross-links. Record checks not possible in this environment. Finish with a corrected pack and an honest verification status.</p>
+</blockquote>
+<h2 id="use-the-library-at-your-own-pace">12. Use the library at your own pace</h2>
+<p>Pick one question relevant to your curiosity or a real decision. Follow its prerequisite links rather than reading in a rigid calendar. Begin with the short orientation. Attempt the example or exercise before opening the solution. On a later visit, change one assumption and see whether your explanation still works.</p>
+<p>Track learning separately from production: can recognize, can explain, can derive/trace, can transfer. A packet can be checked while your own understanding is still at the recognition stage. Neither a large archive nor a completed reading count establishes skill.</p>
+<p>When time is scarce, favor revisiting one useful decision and its supporting mechanisms. Expand the library when a concrete question exposes a missing concept. This keeps a versatile foundation connected to increasingly capable reasoning.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#the-organizing-question">1. The organizing question</a></li><li class="h2"><a href="#four-connected-areas">2. Four connected areas</a></li><li class="h3"><a href="#repeated-concepts-that-make-the-areas-compound">Repeated concepts that make the areas compound</a></li><li class="h2"><a href="#scope-and-depth-controls">3. Scope and depth controls</a></li><li class="h3"><a href="#three-depths">Three depths</a></li><li class="h3"><a href="#defer-from-the-first-collection">Defer from the first collection</a></li><li class="h3"><a href="#prerequisite-bridge">Prerequisite bridge</a></li><li class="h2"><a href="#module-briefs">4. Module briefs</a></li><li class="h3"><a href="#f01-invariants-algorithms-and-the-cost-of-computation">F01 — Invariants, algorithms, and the cost of computation</a></li><li class="h3"><a href="#f02-probability-base-rates-and-decisions-under-uncertainty">F02 — Probability, base rates, and decisions under uncertainty</a></li><li class="h3"><a href="#f03-measurement-experiment-design-and-evidence-quality">F03 — Measurement, experiment design, and evidence quality</a></li><li class="h3"><a href="#f04-vectors-transformations-and-optimization">F04 — Vectors, transformations, and optimization</a></li><li class="h3"><a href="#s01-resource-models-locality-and-abstraction-costs">S01 — Resource models, locality, and abstraction costs</a></li><li class="h3"><a href="#s02-data-organization-indexes-and-recovery">S02 — Data organization, indexes, and recovery</a></li><li class="h3"><a href="#s03-concurrency-transactions-and-logical-time">S03 — Concurrency, transactions, and logical time</a></li><li class="h3"><a href="#s04-replication-consensus-and-partial-failure">S04 — Replication, consensus, and partial failure</a></li><li class="h3"><a href="#s05-queues-tail-latency-and-cloud-elasticity">S05 — Queues, tail latency, and cloud elasticity</a></li><li class="h3"><a href="#s06-reliability-isolation-and-authority-boundaries">S06 — Reliability, isolation, and authority boundaries</a></li><li class="h3"><a href="#a01-learning-generalization-and-distribution-change">A01 — Learning, generalization, and distribution change</a></li><li class="h3"><a href="#a02-attention-and-the-transformer-mechanism">A02 — Attention and the Transformer mechanism</a></li><li class="h3"><a href="#a03-retrieval-external-knowledge-and-provenance">A03 — Retrieval, external knowledge, and provenance</a></li><li class="h3"><a href="#a04-inference-serving-and-memory-economics">A04 — Inference serving and memory economics</a></li><li class="h3"><a href="#a05-evaluation-workflows-and-controlled-autonomy">A05 — Evaluation, workflows, and controlled autonomy</a></li><li class="h3"><a href="#b01-customer-problems-alternatives-and-evidence-of-demand">B01 — Customer problems, alternatives, and evidence of demand</a></li><li class="h3"><a href="#b02-unit-economics-pricing-units-and-sensitivity">B02 — Unit economics, pricing units, and sensitivity</a></li><li class="h3"><a href="#b03-distribution-product-boundaries-and-defensibility">B03 — Distribution, product boundaries, and defensibility</a></li><li class="h2"><a href="#curated-source-catalog">5. Curated source catalog</a></li><li class="h3"><a href="#how-to-read-a-paper">How to read a paper</a></li><li class="h2"><a href="#worked-seed-connect-performance-reliability-and-economics">6. Worked seed: connect performance, reliability, and economics</a></li><li class="h3"><a href="#a.-a-local-optimization-has-a-system-level-ceiling">A. A local optimization has a system-level ceiling</a></li><li class="h3"><a href="#b.-more-stages-can-impose-a-success-requirement">B. More stages can impose a success requirement</a></li><li class="h3"><a href="#c.-the-cheapest-attempt-need-not-produce-the-cheapest-useful-outcome">C. The cheapest attempt need not produce the cheapest useful outcome</a></li><li class="h3"><a href="#what-this-example-trains">What this example trains</a></li><li class="h2"><a href="#six-synthesis-assignments">7. Six synthesis assignments</a></li><li class="h2"><a href="#finite-production-plan-for-the-subscription-period">8. Finite production plan for the subscription period</a></li><li class="h3"><a href="#durable-execution-state">Durable execution state</a></li><li class="h2"><a href="#learning-pack-format">9. Learning-pack format</a></li><li class="h2"><a href="#reusable-production-prompt">10. Reusable production prompt</a></li><li class="h2"><a href="#reusable-audit-prompt">11. Reusable audit prompt</a></li><li class="h2"><a href="#use-the-library-at-your-own-pace">12. Use the library at your own pace</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

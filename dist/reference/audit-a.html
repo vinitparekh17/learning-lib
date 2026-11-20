@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>Audit A — Foundation packs and resource reasoning | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link " href="/topics.html"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link active" href="/reference.html" aria-current="page"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Reference</span><span class="header-separator">/</span><span class="header-topic">Audit A</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/reference.html"><span aria-hidden="true">←</span> Reference</a><p class="eyebrow">Reference</p><h1 id="audit-a-foundation-packs-and-resource-reasoning">Audit A — Foundation packs and resource reasoning</h1></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#findings-and-repairs">Findings and repairs</a></li><li class="h2"><a href="#results-by-pack">Results by pack</a></li><li class="h2"><a href="#primary-passages-rechecked">Primary passages rechecked</a></li><li class="h2"><a href="#prerequisites-exercises-and-continuity">Prerequisites, exercises, and continuity</a></li><li class="h2"><a href="#residual-questions-and-next-work">Residual questions and next work</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>Audit A / 1.0 / 2026-11-04</td>
+</tr>
+<tr class="even">
+<td>Scope</td>
+<td>Runs 02–06, F01, B01, F02, F03, S01 and all five answer companions</td>
+</tr>
+<tr class="odd">
+<td>Authority</td>
+<td>SDE_Foundations_Scheduled_Prompt.md and SDE_Foundations_Library_v1.md, latest saved copies</td>
+</tr>
+<tr class="even">
+<td>Method</td>
+<td>Primary-passage rechecks, derivation review, executed reproduction blocks, exercise and prerequisite review</td>
+</tr>
+<tr class="odd">
+<td>Outcome</td>
+<td>Two explanatory repairs applied. No remaining blocker to F04.</td>
+</tr>
+<tr class="even">
+<td>Boundary</td>
+<td>Artifact review, not learner assessment or independent external certification</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="findings-and-repairs">Findings and repairs</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Original issue</th>
+<th>Evidence and correction</th>
+<th>Affected artifact</th>
+<th>Remaining uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A-01</td>
+<td>The t-interval paragraph used “appropriate t multiplier” and “reasonably well-behaved differences” without a usable prerequisite bridge or precise supporting reference. It could encourage treating randomization as sufficient for the interval’s sampling model.</td>
+<td>Added definitions of pair differences, standard deviation, standard error, degrees of freedom, and repeated-sampling coverage. Added R24, NIST §1.3.5.2. Distinguished the normal independent-difference model from an approximation for bounded team rates, and a randomization test of the sharp null from an average-effect interval.</td>
+<td>SDE_F03.md, 1.0 → 1.1; SDE_SOURCES.md, 1.5 → 1.6</td>
+<td>Real pair count, dependence, heterogeneity, and variance must be examined before using the proposed interval. No interval is estimated from real teams.</td>
+</tr>
+<tr class="even">
+<td>A-02</td>
+<td>S01 defined r as an operation rate and b as sustained bandwidth before asserting a runtime lower bound. A reader could substitute measured throughput from a different workload and mistake a planning estimate for a bound.</td>
+<td>Made r and b explicit upper bounds on available rates for the task. Required D to count necessary traffic across the specified boundary. The argument is W ≤ rT and D ≤ bT, hence T ≥ max(W/r,D/b).</td>
+<td>SDE_S01.md, 1.0 → 1.1</td>
+<td>Real sustained rates and required traffic remain unmeasured. The cache simulator supplies no wall-clock prediction.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Both repairs preserve the original exercise contracts and numerical answers. No core pack was regenerated. The unchanged companions remain revision 1.0 and are compatible with their revised cores. Earlier “Audit A pending” phrases in unchanged files are historical status notes; this report and the current index are authoritative for audit status.</p>
+<h2 id="results-by-pack">Results by pack</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pack</th>
+<th>Review and counterexample</th>
+<th>Executed checks</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>F01</td>
+<td>Check-before-insert invariant, finite termination, expected versus amortized bounds, key-size assumptions, exact-history limits, and concurrency boundary. Constant hashing and forgetting old keys still defeat unconditional claims.</td>
+<td>All 3,280 sequences of lengths 0–7 over three values; witness checks; formula counts through n=2,000; collision, ordering, and forgetting examples.</td>
+<td>Pass within the stated abstract model. Tests are bounded and do not replace the proof.</td>
+</tr>
+<tr class="even">
+<td>B01</td>
+<td>Episodes versus independent customers, operator versus budget authority, released capacity versus cash savings, and custom payment versus repeatable demand. Four-minute baseline reverses the apparent benefit.</td>
+<td>Both labor scenarios, onboarding allocation, and values ₹1,950 and −₹450 per week.</td>
+<td>Pass. Interview quotas and decision gates remain original teaching choices, not validated market thresholds.</td>
+</tr>
+<tr class="odd">
+<td>F02</td>
+<td>Conditional denominators, unchanged detector-rate premise, expected-loss threshold, perfect/imperfect review, and aggregate-versus-subgroup calibration.</td>
+<td>Three 10,000-record tables, Bayes reconstruction, 1,001 probability-grid points, and exact review-boundary ties.</td>
+<td>Pass. No real prevalence, reviewer performance, or calibration claim.</td>
+</tr>
+<tr class="even">
+<td>F03</td>
+<td>Workload-mix reversal, paired outcomes, team versus case units, leakage, missing outcomes, stopping rule, and inference scope.</td>
+<td>−13-point dashboard difference; +5-point standardized difference at two mixes; 21 discordant cases; cost/budget and deadline examples.</td>
+<td>Pass after A-01. The live protocol remains a proposal requiring design-specific validation.</td>
+</tr>
+<tr class="odd">
+<td>S01</td>
+<td>Virtual versus physical placement, translation versus data caching, cache capacity, field versus fill bytes, and throughput versus latency.</td>
+<td>Three layouts over two passes, two-line-cache variant, finite pointer traversal, sums, translation to address 456, batch cost/latency and k=8 deadline boundary.</td>
+<td>Pass after A-02. Counts establish the hypothetical model only.</td>
+</tr>
+</tbody>
+</table>
+</div><p>All five embedded Python reproduction blocks ran successfully during this audit. They were executed in separate namespaces to avoid cross-file variable contamination. Existing tests were rerun because this is the scheduled audit, not because a new hardware experiment was conducted.</p>
+<h2 id="primary-passages-rechecked">Primary passages rechecked</h2>
+<p>These are targeted checks of consequential claims. They are not exhaustive rereadings of every cited book or paper. Prior detailed locators remain in the packs and source register.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Reopened passage</th>
+<th>Audit use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R01</td>
+<td><a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/477c78e0af2df61fa205bcc6cb613ceb_MIT6_006S20_lec1.pdf">MIT 6.006 lecture 1</a>, p. 2 correctness/efficiency; <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/ce9e94705b914598ce78a00a70a1f734_MIT6_006S20_lec4.pdf">lecture 4</a>, pp. 3–4 chaining/universal/dynamic</td>
+<td>Checked model qualifications and worst-case collision counterexample. Historical timing examples were not adopted.</td>
+</tr>
+<tr class="even">
+<td>R19</td>
+<td><a href="https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/">YC primary transcript</a>, Migicovsky 17:03–20:25 and 30:31–33:44</td>
+<td>Checked past-specific questions, listening, cost, frequency, budget, and authority. Practitioner scope retained.</td>
+</tr>
+<tr class="odd">
+<td>R02</td>
+<td><a href="https://mml-book.github.io/book/mml-book.pdf">Author PDF</a>, draft 2024-01-15, §§6.2.1 pp. 178–180, 6.3 pp. 184–185, 6.4.1 p. 187</td>
+<td>Inspected conditional-count definitions, product/Bayes rules, and discrete expectation. Web size failure repaired by author-URL download and text extraction.</td>
+</tr>
+<tr class="even">
+<td>R23</td>
+<td><a href="https://proceedings.mlr.press/v70/guo17a/guo17a.pdf">Guo et al.</a>, §2 PDF p. 2, equation 1 and reliability diagrams</td>
+<td>F02 explicitly distinguishes predicted-class confidence from its analogous binary-event formulation. No benchmark extrapolation.</td>
+</tr>
+<tr class="odd">
+<td>R03</td>
+<td><a href="https://www.microsoft.com/en-us/research/articles/patterns-of-trustworthy-experimentation-pre-experiment-stage/">Microsoft pre-experiment article</a>, hypothesis/metrics and randomization-unit sections</td>
+<td>Rechecked interference and unit-selection rationale. Does not itself justify every inferential formula.</td>
+</tr>
+<tr class="even">
+<td>R13</td>
+<td><a href="https://github.com/intro-stat-learning/ISLP_labs/blob/stable/Ch05-resample-lab.ipynb">Author Python notebook</a>, Validation Set Approach and boot_SE</td>
+<td>Inspected split construction and sampling with replacement in the raw notebook. Supplier resampling remains an explicitly labeled application.</td>
+</tr>
+<tr class="odd">
+<td>R04</td>
+<td><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf">Chapter 19</a>, §19.2 pp. 3–5; <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-beyondphys.pdf">chapter 21</a>, §21.2 p. 3</td>
+<td>Rechecked translation reuse and resident-page TLB-miss handling. S01 preserves its separate invented machine assumptions and updated-chapter version caveat.</td>
+</tr>
+<tr class="even">
+<td>R24, added</td>
+<td><a href="https://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm">NIST/SEMATECH §1.3.5.2</a>, interval definition and interpretation</td>
+<td>Supports the mean-interval formula and coverage explanation added in A-01.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="prerequisites-exercises-and-continuity">Prerequisites, exercises, and continuity</h2>
+<p>The five packs each contain six exercises with matching hints and worked answers, for 30 reviewed exercise–answer pairs. The questions ask for explanations or decisions as well as calculations. Their criteria describe useful future answers and do not imply that the learner has answered them.</p>
+<p>F01 introduces sets, prefix notation, induction, and growth notation before using them. B01 defines segment, hypothesis, and commitments and separates unit conversions from business evidence. F02 introduces events and conditional denominators before Bayes and expected loss. F03 reuses those denominators and now gives the missing uncertainty bridge. S01 introduces bytes, lines, pages, units, and machine assumptions before tracing accesses. F04 remains the next planned mathematical bridge, rather than an assumed completed prerequisite.</p>
+<p>The recurring document-service examples remain fictional. No interviews, live team trial, measured hardware speedup, or learner mastery was introduced during the audit. The paired replay and the observational dashboard in F03 are separate constructed datasets; their compatible totals do not establish a causal connection.</p>
+<p>Latest copies of the operating prompt, curriculum, index, source register, ten pack/answer files were retrieved. Exact-title lookup found no existing audit report. Companion Markdown links resolve to the retrieved files. Index IDs match the retrieved identities. Corrections replace the existing F03 and S01 identities. The audit and corrected files are saved before the index advances.</p>
+<h2 id="residual-questions-and-next-work">Residual questions and next work</h2>
+<p>No blocking mathematical or continuity issue remains in this audit’s scope. Production decisions still need workload distributions, reliable labels, actual costs, independent teams, customer commitments, and machine measurements. Those application unknowns are preserved rather than filled with invented observations.</p>
+<p>Next is Run 08, F04 — Linear algebra, calculus, and optimization as working tools. Inspect the appropriate R02 passages afresh, explain shapes and derivatives, and produce the core pack and separate answers. The program remains in progress.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-04. Targeted source and derivation audit of five foundation packs, two explanatory repairs, successful reproduction checks, and continuity review.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#findings-and-repairs">Findings and repairs</a></li><li class="h2"><a href="#results-by-pack">Results by pack</a></li><li class="h2"><a href="#primary-passages-rechecked">Primary passages rechecked</a></li><li class="h2"><a href="#prerequisites-exercises-and-continuity">Prerequisites, exercises, and continuity</a></li><li class="h2"><a href="#residual-questions-and-next-work">Residual questions and next work</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

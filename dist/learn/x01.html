@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X01 — Cache correctness, invalidation, and stale fills | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="X01">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X01</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=X#track-X"><span aria-hidden="true">←</span> Extensions</a><p class="eyebrow">Extensions <span aria-hidden="true">/</span> X01</p><h1 id="x01-cache-correctness-invalidation-and-stale-fills">Cache correctness, invalidation, and stale fills</h1><p class="article-description">Find a stale-fill race, choose a cache consistency contract, and identify the assumptions a generation guard cannot enforce.</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f01.html" data-chip="F01">F01</a><a class="module-chip" href="/learn/s02.html" data-chip="S02">S02</a><a class="module-chip" href="/learn/s03.html" data-chip="S03">S03</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-open-questions" >Evidence</a><a class="button secondary" href="/answers/x01.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#the-decision">The decision</a></li><li class="h2"><a href="#a-successful-invalidation-that-still-fails">A successful invalidation that still fails</a></li><li class="h2"><a href="#remember-enough-to-reject-a-late-fill">Remember enough to reject a late fill</a></li><li class="h2"><a href="#what-this-guard-does-not-prove">What this guard does not prove</a></li><li class="h2"><a href="#ttl-measures-a-different-thing">TTL measures a different thing</a></li><li class="h2"><a href="#choose-a-contract-before-choosing-a-cache">Choose a contract before choosing a cache</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card">Reference card</a></li><li class="h2"><a href="#evidence-and-open-questions">Evidence and open questions</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X01 · 1.0 · 2026-11-20</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>F01 invariants; S02 revision identity; S03 interleavings. S06 and A03 are useful follow-ups.</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Find a stale-fill race, choose a cache consistency contract, and identify the assumptions a generation guard cannot enforce.</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>XR01, original USENIX paper §3.2.1; XR02, RFC 9111 §§4.2, 4.4 and 6. Passages inspected 2026-11-20.</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Finite interleaving and boundary checks executed in the companion. No distributed cache or production workload tested.</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/x01.html">Hints, worked answers, and executable checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><section class="cache-lab panel" aria-labelledby="cache-lab-title">
+<h2 id="cache-lab-title">Explore the stale-fill race</h2>
+<p>Compare the same events with and without a generation guard. Each step is atomic in this teaching model.</p>
+<label for="cache-scenario">Scenario</label>
+<select id="cache-scenario"><option value="race">Delayed fill after invalidation</option><option value="replica">Valid token, lagging replica</option><option value="reset">Guard metadata forgotten</option></select>
+<div class="hero-actions"><button class="button secondary" type="button" data-cache-prev>Previous step</button><button class="button primary" type="button" data-cache-next>Next step</button><button class="button secondary" type="button" data-cache-reset>Restart trace</button></div>
+<div data-cache-output aria-live="polite" aria-atomic="true"></div>
+<noscript><p>The scripted explorer needs JavaScript. The complete trace and boundaries are explained in the lesson below.</p></noscript>
+</section><h2 id="the-decision">The decision</h2>
+<p>You have a correct database and an expensive read. A cache seems like a performance decision: retain the answer and reuse it. But it adds a second place where a previous answer can outlive the assumptions that made it valid.</p>
+<p>Our question is specific: <strong>after an update has invalidated a cached object, can an earlier reader put the previous revision back?</strong> If yes, reducing database latency may have increased the duration of an incorrect result.</p>
+<p>This extension uses a fictional document D17. Revision 7 is replaced by revision 8. All times, rates and histories below are constructed teaching inputs. The cache is an application cache; its rules are ours to specify, not automatic consequences of an HTTP header or a particular product.</p>
+<p>If concurrency is unfamiliar, think of each row in a history as one indivisible step. Different requests can take turns between rows. A request that started first need not finish first. A revision identifies data; a generation identifies a period in which a cache fill is permitted. They are different counters with different owners.</p>
+<h2 id="a-successful-invalidation-that-still-fails">A successful invalidation that still fails</h2>
+<p>The initial cache is empty. The database holds revision 7. A reader uses the familiar sequence: check cache, read database on a miss, store the result. A writer commits to the database and then deletes the cache entry.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Reader A</th>
+<th>Writer B</th>
+<th>Database</th>
+<th>Cache</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Cache miss</td>
+<td></td>
+<td>7</td>
+<td>empty</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Read revision 7 into local memory</td>
+<td></td>
+<td>7</td>
+<td>empty</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Paused before cache fill</td>
+<td>Commit revision 8</td>
+<td>8</td>
+<td>empty</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td></td>
+<td>Delete cached D17; report success</td>
+<td>8</td>
+<td>empty</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Store local revision 7</td>
+<td></td>
+<td>8</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>New reader C uses cached revision 7</td>
+<td></td>
+<td>8</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+</div><p>No failed delete is needed. No dirty database read is needed. The delete worked on the state that existed at step 4. The late fill is a <em>new mutation after the delete</em>.</p>
+<p>Moving the delete before the database commit also admits a counterexample: delete, reader misses and reads 7, reader fills 7, writer commits 8. Changing the order of two separately coordinated systems does not by itself close every gap.</p>
+<p>The invariant we want for this lesson is deliberately limited:</p>
+<blockquote>
+<p>Once invalidation advances this key’s generation, a fill carrying an older generation must not become a usable cache entry.</p>
+</blockquote>
+<p>This is a cache-publication property. It does not yet say that every response after a database commit returns the latest revision.</p>
+<h2 id="remember-enough-to-reject-a-late-fill">Remember enough to reject a late fill</h2>
+<p>Give the cache a per-key generation, initially 0. On a miss, A obtains token 0 <strong>before</strong> reading the database. Invalidation atomically increments the generation and clears the value. Filling atomically checks the token and writes only if it still matches.</p>
+<pre class="text" tabindex="0" aria-label="Code example"><code>miss:        return current generation as token
+invalidate:  generation = generation + 1; value = empty
+fill(t, v):  if t == generation, store v; otherwise reject</code></pre>
+<p>Each line describes an atomic cache-side operation in our model. Separate network calls to read the generation and later set the value do not implement the final line: invalidation could occur between them. A lock, transaction or equivalent conditional operation must actually enforce the boundary.</p>
+<p>Now step 4 advances the generation from 0 to 1. Step 5 presents token 0. The cache rejects it and stays empty. The next reader can fetch revision 8. If A fills before invalidation instead, invalidation clears its entry. Both orderings protect the stated publication invariant.</p>
+<p>The original Facebook memcache paper describes a related lease mechanism: a miss can return a key-bound token that is checked on a subsequent fill, and a delete can invalidate that token. The same section discusses regulating lease issuance to reduce competing fills. <a href="https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf">XR01, §3.2.1, printed p.388</a>. Our generation model is an original simplified exercise, not a reproduction of that production protocol or its performance results.</p>
+<p>The order of token acquisition matters. Reading revision 7, then observing generation 1 after invalidation, and presenting that new token with the old data defeats the guard. A token is evidence about a particular operation’s ordering, not a stamp you can attach after the fact.</p>
+<h2 id="what-this-guard-does-not-prove">What this guard does not prove</h2>
+<p>Consider three changes to the premises.</p>
+<p><strong>Delayed invalidation.</strong> The database commits revision 8, but the invalidation arrives later. During that interval, an old cache entry can still be served. Even after a fill is rejected, the initiating reader might return its local revision 7 to its caller. Protecting cache publication alone does not repair that response path. A requirement such as “every read beginning after a successful write sees at least that write” needs an acknowledgement/read protocol that enforces that relationship. One option is to return a required revision to the writing client and validate or bypass entries below it; the authority used for that validation must itself meet the contract.</p>
+<p><strong>A lagging database replica.</strong> A reader obtains generation 1 after invalidation but reads revision 7 from a replica that has not applied revision 8. The token matches, so the fill is accepted. The guard has not been violated; its premises were weaker than the application’s freshness goal. A version floor carried with invalidation could reject revisions below 8, but only if that floor is trustworthy, available and atomically checked with publication. Waiting, bypassing or failing must be specified when no suitable read is available.</p>
+<p><strong>Evicted guard metadata.</strong> An old reader holds token 0. Invalidation advances to 1. The cache loses its generation record and recreates the key at 0. The old token now matches again: an ABA-style reuse of identity. Keeping a generation only as long as its value is cached is insufficient. Use a design that prevents old tokens from becoming valid after eviction or restart—for example, an incarnation identity that cannot be reused within the outstanding-token lifetime. Prove the lifetime and recovery assumptions rather than assuming a counter is durable.</p>
+<p>These are reasons to state the contract precisely. A mechanism can correctly enforce its own invariant while the whole application remains incorrect.</p>
+<h2 id="ttl-measures-a-different-thing">TTL measures a different thing</h2>
+<p>Suppose A reads revision 7 at time 0. Revision 8 commits at time 1. A fills the cache at time 100 with a 60-second TTL measured from insertion. The entry expires at time 160. It has a full remaining TTL at insertion although its source observation is already 100 seconds old. In this constructed history, the old revision can be served during [100, 160), including almost 159 seconds after the update. That is a 60-second serving interval, not 159 seconds of continuous cached service.</p>
+<p>For an insertion-based application TTL, if an observation happens at time r, fill is delayed by d and the TTL is T, expiry is r + d + T. At time t, observation age is t − r, while cache residence is t − (r + d). The difference is d. A bounded TTL alone therefore does not bound observation age without a bound on fill delay and the age of the source read.</p>
+<p>Do not apply that insertion-only formula to HTTP caches. RFC 9111 defines freshness using response age and freshness lifetime; its age accounting includes transit and residence. It also limits the scope of invalidation and distinguishes HTTP caching from an application’s later reuse of data. <a href="https://www.rfc-editor.org/rfc/rfc9111.html">XR02, §§4.2–4.2.3, 4.4 and 6</a>. HTTP freshness still should not be mistaken for a proof that the underlying business object has never changed.</p>
+<h2 id="choose-a-contract-before-choosing-a-cache">Choose a contract before choosing a cache</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Use</th>
+<th>Acceptable contract to investigate</th>
+<th>Evidence that could change the choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Public descriptive text</td>
+<td>Explicitly bounded age may be acceptable</td>
+<td>Actual update frequency and cost of stale text</td>
+</tr>
+<tr class="even">
+<td>A document revision selected by ID</td>
+<td>Immutable revision content may be reusable</td>
+<td>Whether identity is immutable and all dependencies are included</td>
+</tr>
+<tr class="odd">
+<td>Current “latest revision” pointer</td>
+<td>Needs its own freshness/ordering contract</td>
+<td>Writer acknowledgement, invalidation delay and replica lag</td>
+</tr>
+<tr class="even">
+<td>Approval permission</td>
+<td>Must match the declared revocation boundary</td>
+<td>Whether permission is checked at the protected action</td>
+</tr>
+<tr class="odd">
+<td>Generated answer from documents</td>
+<td>Reuse only under the required evidence and access context</td>
+<td>Source revisions, principal scope, retrieval/model configuration and current permission</td>
+</tr>
+</tbody>
+</table>
+</div><p>The last two rows connect to <a href="/learn/s06.html">S06</a> and <a href="/learn/a03.html">A03</a>. A cache key containing a user or policy version does not discover that permission has changed. The serving path still needs a valid authority decision. Likewise, immutable document content does not make the mutable pointer “latest” immutable.</p>
+<p>There is a cost trade-off. In a hypothetical workload of 1,000 reads per second, one source query per miss and a 95% hit rate imply 50 source queries per second. At 80%, that becomes 200: four times the source demand despite a 15-percentage-point change in hit rate. This arithmetic assumes no retries, coalescing or refresh traffic. It is not a latency prediction.</p>
+<p>For a burst of 100 simultaneous misses on the same key, ideal coalescing could use one fetch if that result is valid for all callers and the leader finishes in time. A stalled leader needs bounded waiting and recovery. If every timeout triggers an independent fetch, the database can receive the original burst after a delay. A generation guard alone neither coalesces requests nor limits backend load. This is the link to <a href="/learn/s05.html">S05</a>: enforce the source’s capacity budget even when the cache is cold or unavailable.</p>
+<h2 id="practice">Practice</h2>
+<p>Attempt these before opening the <a href="/answers/x01.html">worked companion</a>.</p>
+<ol type="1">
+<li>Reconstruct the stale-fill history from an empty cache. State why a successful delete is insufficient. Criterion: the database read precedes commit, while fill follows invalidation.</li>
+<li>Interleave the reader’s token/read/fill steps with the writer’s commit/invalidate steps while preserving each actor’s order. Compare unguarded and guarded publication. Criterion: distinguish the invariant after invalidation from freshness after commit.</li>
+<li>Make generation checking fail by changing either token acquisition order, source-read consistency or metadata retention. Criterion: give a complete history and identify the violated premise.</li>
+<li>Recompute the TTL example with fill at time 120 and TTL 30. Criterion: give expiry, observation age at fill and the possible stale-serving interval after the update; label the TTL convention.</li>
+<li>Compare source demand at 95% and 80% hit rates. Then give a case where coalescing is unsafe. Criterion: preserve denominators and identify differing keys or permission contexts.</li>
+<li>Choose a cache policy for “latest document” and a separate policy for “may approve.” Criterion: name authority, invalidation/validation boundary, failure behavior and a measurement that could reverse your design.</li>
+</ol>
+<h2 id="reference-card">Reference card</h2>
+<ul>
+<li>A delete removes a value; it does not automatically cancel a reader already in flight.</li>
+<li>Acquire the fill token before the source observation; validate it atomically with publication.</li>
+<li>Generation fencing protects an ordering boundary. Source freshness, response freshness and authority need additional contracts.</li>
+<li>Cache residence, source observation age and business revision age are different quantities.</li>
+<li>Treat a cold cache, lost invalidation and forgotten guard metadata as explicit cases.</li>
+<li>Measure useful outcomes and source load, not hit rate alone.</li>
+</ul>
+<h2 id="evidence-and-open-questions">Evidence and open questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID / type</th>
+<th>Inspected support</th>
+<th>Boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XR01 · primary historical paper</td>
+<td>Nishtala et al., <em>Scaling Memcache at Facebook</em>, NSDI 2013, §3.2.1, printed p.388: <a href="https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf">original PDF</a></td>
+<td>Token-check and delete-invalidation mechanism; no current implementation claim or reused benchmark</td>
+</tr>
+<tr class="even">
+<td>XR02 · primary standard</td>
+<td>RFC 9111, §§4.2–4.2.3, 4.4, 6: <a href="https://www.rfc-editor.org/rfc/rfc9111.html">full text</a></td>
+<td>HTTP age/freshness and invalidation scope; not a specification for our application cache</td>
+</tr>
+<tr class="odd">
+<td>Original derivation</td>
+<td>Histories, generation proof, TTL arithmetic and hit-rate arithmetic in this lesson and companion</td>
+<td>Finite atomic model with stated assumptions; not a distributed correctness proof</td>
+</tr>
+<tr class="even">
+<td>Continuity</td>
+<td>F01, S02, S03, S05, S06 and A03</td>
+<td>Existing mechanisms reused; no learner mastery assumed</td>
+</tr>
+</tbody>
+</table>
+</div><p>Before implementing this in a real system, determine maximum read/fill delay, which replica serves misses, how invalidation survives process failure, how generation state survives eviction and restart, and what the caller receives after a rejected fill. Those inputs remain unknown here.</p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/x01.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/extensions.html#extension-evidence-register">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="X01"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/c06.html"><small>Previous module · C06</small><strong>How should architecture respond when a supplier changes?</strong></a><a href="/learn/x02.html"><small>Next module · X02</small><strong>When does a retry prevent recovery?</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#the-decision">The decision</a></li><li class="h2"><a href="#a-successful-invalidation-that-still-fails">A successful invalidation that still fails</a></li><li class="h2"><a href="#remember-enough-to-reject-a-late-fill">Remember enough to reject a late fill</a></li><li class="h2"><a href="#what-this-guard-does-not-prove">What this guard does not prove</a></li><li class="h2"><a href="#ttl-measures-a-different-thing">TTL measures a different thing</a></li><li class="h2"><a href="#choose-a-contract-before-choosing-a-cache">Choose a contract before choosing a cache</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card">Reference card</a></li><li class="h2"><a href="#evidence-and-open-questions">Evidence and open questions</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

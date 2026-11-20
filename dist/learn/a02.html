@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>A02 — Attention and the Transformer mechanism | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="A02">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">A02</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=A#track-A"><span aria-hidden="true">←</span> AI systems</a><p class="eyebrow">AI systems <span aria-hidden="true">/</span> A02</p><h1 id="a02-attention-and-the-transformer-mechanism">Attention and the Transformer mechanism</h1><p class="article-description">Calculate attention, identify allowed information flow and distinguish an operation check from a model-quality claim</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f04.html" data-chip="F04">F04</a><a class="module-chip" href="/learn/a01.html" data-chip="A01">A01</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#reference-card-evidence-and-open-questions" >Evidence</a><a class="button secondary" href="/answers/a02.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#what-changes-a-tokens-representation">What changes a token’s representation?</a></li><li class="h2"><a href="#the-contract-and-shapes">The contract and shapes</a></li><li class="h2"><a href="#trace-three-positions-by-hand">Trace three positions by hand</a></li><li class="h2"><a href="#a-mask-changes-what-information-may-flow">A mask changes what information may flow</a></li><li class="h2"><a href="#position-multiple-heads-and-the-surrounding-network">Position, multiple heads and the surrounding network</a></li><li class="h2"><a href="#training-and-inference-use-different-available-inputs">Training and inference use different available inputs</a></li><li class="h2"><a href="#where-sequence-length-enters-the-cost">Where sequence length enters the cost</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card-evidence-and-open-questions">Reference card, evidence and open questions</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>A02 · 1.0 · 2026-11-09</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>F04 vectors, matrix products and fitted parameters; A01 information boundaries and evaluation</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Calculate attention, identify allowed information flow and distinguish an operation check from a model-quality claim</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R14, author-submitted arXiv v7: §§3.1–3.5 and §4 inspected; precise locators below</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Constructed matrices and executed standard-library numerical checks; no training run or model benchmark</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/a02.html">Hints, worked answers and checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="what-changes-a-tokens-representation">What changes a token’s representation?</h2>
+<p>Suppose a document system represents each token occurrence with a vector. A token is an item in the model’s input sequence; it need not coincide with a word. The same text fragment in two positions can need different representations because its surrounding information differs. Our question is narrower than whether a generated answer is correct: how can one row of numbers incorporate information from other rows?</p>
+<p>We will implement a deliberately tiny operation. The numbers below are assigned, not learned from invoices. They have no calibrated meaning such as confidence or probability that a document is correct. That distinction follows F04’s warning about interpreting geometric scores and A01’s distinction between passing a constructed check and demonstrating generalization.</p>
+<p>Use rows for token vectors. A matrix with n rows and d columns represents n positions with d features each. Multiplying a row by a projection matrix changes its coordinates. The projection parameters are shared across positions, but the resulting vectors depend on the input row. No diagnostic answer or prior familiarity with neural networks is assumed.</p>
+<h2 id="the-contract-and-shapes">The contract and shapes</h2>
+<p>For input X of shape n×d, define Q=XWQ, K=XWK and V=XWV. Queries Q and keys K have width dk; values V have width dv. We use the scaled dot-product rule from R14 §3.2.1, eq. 1, extended with an explicit allowed-position mask:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup><mi>/</mi><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt><mo>,</mo><mspace width="2.0em"></mspace><mi>A</mi><mo>=</mo><msub><mo>softmax</mo><mrow><mi>r</mi><mi>o</mi><mi>w</mi><mi>s</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>S</mi><mo>+</mo><mi>M</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>O</mi><mo>=</mo><mi>A</mi><mi>V</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+S=QK^T/\sqrt{d_k},\qquad A=\operatorname{softmax}_{rows}(S+M),\qquad O=AV.
+</annotation></semantics></math></p>
+<p>M is zero for allowed pairs and negative infinity for forbidden ones. In the executable version we omit forbidden entries from the denominator instead of representing infinity. Each query must have at least one permitted key. An all-forbidden row is rejected as invalid input in our contract.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Quantity</th>
+<th>Shape</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>WQ, WK</td>
+<td>d×dk</td>
+<td>Shared query/key projections</td>
+</tr>
+<tr class="even">
+<td>WV</td>
+<td>d×dv</td>
+<td>Shared value projection</td>
+</tr>
+<tr class="odd">
+<td>Q, K</td>
+<td>n×dk</td>
+<td>One query/key per position</td>
+</tr>
+<tr class="even">
+<td>V</td>
+<td>n×dv</td>
+<td>One value per position</td>
+</tr>
+<tr class="odd">
+<td>S, M, A</td>
+<td>n×n</td>
+<td>Row i refers to query i; column j to key/value j</td>
+</tr>
+<tr class="even">
+<td>O</td>
+<td>n×dv</td>
+<td>One weighted result per query</td>
+</tr>
+</tbody>
+</table>
+</div><p>The transpose in QKᵀ aligns the feature coordinates. Entry Sij is the dot product of query i and key j, divided by √dk. These scores determine mixing weights; the corresponding value vectors supply what is mixed. Query, key and value are computational roles, not a claim that a token consciously asks a question.</p>
+<p>For allowed scores s1,…,sm, softmax returns exp(sj)/Σ exp(sk). Exponentials are positive and normalization makes the row sum one. Equal scores produce equal weights. Adding the same constant to every allowed score changes neither the ratios nor the output. Subtracting the row maximum before exponentiating therefore avoids unnecessarily large exponentials without changing the mathematical result.</p>
+<p>For this operation, each output is a convex combination of permitted values: each coordinate lies between their minimum and maximum. This property applies to AV before later projections, residual additions or other transformations. It is not a bound on the final model’s output.</p>
+<h2 id="trace-three-positions-by-hand">Trace three positions by hand</h2>
+<p>Choose n=3, d=2, dk=1 and dv=2:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>W</mi><mi>Q</mi></msub><mo>=</mo><msub><mi>W</mi><mi>K</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>W</mi><mi>V</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+X=\begin{bmatrix}1&amp;0\\0&amp;2\\1&amp;1\end{bmatrix},\quad
+W_Q=W_K=\begin{bmatrix}1\\0\end{bmatrix},\quad
+W_V=\begin{bmatrix}1&amp;0\\0&amp;1\end{bmatrix}.
+</annotation></semantics></math></p>
+<p>Consequently Q=K=[1,0,1]ᵀ and V=X. Because dk=1, the scaling divisor is one. With all positions allowed,</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+S=\begin{bmatrix}1&amp;0&amp;1\\0&amp;0&amp;0\\1&amp;0&amp;1\end{bmatrix}.
+</annotation></semantics></math></p>
+<p>Let e=exp(1) and Z=2e+1. The first row’s weights are [e/Z,1/Z,e/Z], approximately [0.4223,0.1554,0.4223]. Its output is</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>e</mi><mi>Z</mi></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mn>1</mn><mi>Z</mi></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mi>e</mi><mi>Z</mi></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mn>2</mn><mi>e</mi></mrow><mi>Z</mi></mfrac><mo>,</mo><mfrac><mrow><mn>2</mn><mo>+</mo><mi>e</mi></mrow><mi>Z</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>≈</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.8446</mn><mo>,</mo><mn>0.7330</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\frac eZ(1,0)+\frac1Z(0,2)+\frac eZ(1,1)
+=\left(\frac{2e}Z,\frac{2+e}Z\right)
+\approx(0.8446,0.7330).
+</annotation></semantics></math></p>
+<p>The second query is zero. All its scores are zero, so its weights are thirds and its output is the mean (2/3,1). The third query equals the first, so its output also equals the first. Different original rows can receive the same attention output; the operation does not guarantee that every position remains distinguishable.</p>
+<p>Now change only the last value from (1,1) to (1,7), leaving Q and K fixed. The first and third output’s second coordinate each increases by 6e/Z; the second output’s second coordinate increases by 2. We can realize this change by altering X’s last second coordinate: our chosen WQ and WK ignore that coordinate. This test isolates value flow from score changes. With other projections, the same input change could alter Q and K too.</p>
+<h2 id="a-mask-changes-what-information-may-flow">A mask changes what information may flow</h2>
+<p>For a causal version allow key j only when j≤i. The first query can use only position 1. The second can use positions 1 and 2. The third can use all three.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Query row</th>
+<th>Permitted keys</th>
+<th>Weights across all three columns</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>[1,0,0]</td>
+<td>(1,0)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>1,2</td>
+<td>[1/2,1/2,0]</td>
+<td>(1/2,1)</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>1,2,3</td>
+<td>[e/Z,1/Z,e/Z]</td>
+<td>(2e/Z,(2+e)/Z)</td>
+</tr>
+</tbody>
+</table>
+</div><p>The mask is applied before normalization. If you normalize all three scores and merely zero forbidden weights afterward, a row may sum to less than one. For row 2 that faulty procedure produces (1/3,2/3), not (1/2,1). It has silently changed the operation.</p>
+<p>Under the causal mask, the last-value perturbation leaves outputs 1 and 2 unchanged, while output 3 changes. This follows because their allowed terms contain neither K3 nor V3, and their own queries are unchanged. It is a local guarantee of this layer with fixed projections. In a larger network, earlier input representations must themselves have been computed without future leakage. A causal final layer cannot repair representations that already incorporated future targets.</p>
+<p>For another test, remove the connection from query 3 to key 2. Its remaining equal scores yield [1/2,0,1/2] and output (1,1/2). Only row 3 changes in this one operation. In later layers, its changed representation may affect any positions permitted to use it.</p>
+<p>Padding and causality are different constraints. Padding marks absent sequence items; causal masking marks future positions relative to a prediction. A combined mask must preserve a valid key for every real query or specify another explicit policy. Do not silently interpret an undefined all-masked row as a useful representation.</p>
+<h2 id="position-multiple-heads-and-the-surrounding-network">Position, multiple heads and the surrounding network</h2>
+<p>R14’s architecture places attention within encoder/decoder stacks with residual connections, normalization and position-wise feed-forward layers. It projects multiple attention heads, concatenates them and applies an output projection. Its decoder combines causal self-attention with attention to encoder outputs. It adds positional information to embeddings and maps decoder representations to token probabilities. These are properties of the cited historical architecture, not a specification of every current model.</p>
+<p>Here is a shape-level extension of our own example. With two heads, each producing a 3×2 matrix, concatenate across features to obtain 3×4. A 4×2 output projection returns 3×2, which could be added to the original X. Concatenating across rows would produce 6×2 and would not preserve one output per input position. Different heads need not correspond to named human concepts, and more heads do not guarantee better task performance.</p>
+<p>Without positional inputs or an order-sensitive mask, our operation cannot distinguish a permutation of the sequence from the corresponding permutation of its outputs. If P permutes rows, then X becomes PX, the score matrix becomes PSPᵀ, and row softmax followed by the permuted values produces PO. This is an algebraic property, checked over all six permutations of our three rows. It explains what position information must change: the computation needs a way to represent order when order matters to the task. It does not imply that an orderless set-processing task always needs positional inputs.</p>
+<p>For cross-attention, query and memory lengths can differ. Three query rows attending to five key/value rows produce a 3×5 weight matrix and three output rows. The number of keys must equal the number of values; dk must match between queries and keys. The output width is dv, not the number of memory items. These shape checks catch interface errors before any semantic interpretation.</p>
+<h2 id="training-and-inference-use-different-available-inputs">Training and inference use different available inputs</h2>
+<p>Consider a separate next-token task whose desired output is [A,B,C]. A shifted training input is [START,A,B], paired with targets [A,B,C]. A causal row can use its current shifted input and earlier rows without seeing its own target through that input path. All these known training-input rows can be evaluated together under the mask. Supplying [A,B,C] unshifted as input for predicting [A,B,C] would instead expose the answer at each diagonal connection.</p>
+<p>Parameter fitting adjusts projection and other model weights using a loss and an update rule, as F04 introduced. During the inference procedure considered here, weights are fixed: begin with START, obtain a token, append it, and use that actual prefix for the next prediction. The correct next token is not supplied by a teacher. Evaluating against known prefixes and generating from one’s own prefixes answer different questions; A01’s evaluation discipline still applies. No training or decoding implementation was executed in this pack.</p>
+<p>Attention weights normalize over available positions. Output token probabilities normalize over a vocabulary after another transformation. Neither normalization alone establishes factual correctness, permission to act or supporting evidence. Our numeric operation would mix values from fabricated text just as readily as from verified text. A03 will separately evaluate retrieval and answer support.</p>
+<h2 id="where-sequence-length-enters-the-cost">Where sequence length enters the cost</h2>
+<p>Count the explicit dense algorithm, one head and one sequence, ignoring batch size and datatype overhead. QKᵀ performs n² dot products of width dk, costing order n²dk multiply/add work. AV costs order n²dv. An explicitly stored score or weight matrix contains n² scalars. Doubling n at fixed widths quadruples those pair counts: n=3 has 9 positions, n=6 has 36. The causal mask has n(n+1)/2 allowed pairs, but computing a full matrix and masking it afterward still does dense work.</p>
+<p>The projections additionally depend on n and feature widths. These counts do not establish runtime, memory traffic, optimizer storage or the allocation strategy of an optimized implementation. They also do not describe the cost of one incremental generation step automatically. A04 will examine serving and retained state in more detail.</p>
+<p>Choose a full-context or causal operation according to what information the task may use, not just which scores look better. Restricting context can reduce candidate interactions but can remove needed dependencies. To justify a change, compare complete task outcomes under the same information contract and measure actual resources. A faster result obtained by leaking future labels is not an improvement for that contract.</p>
+<h2 id="practice">Practice</h2>
+<ol type="1">
+<li>Derive Q, K, V, S and every unmasked output from the supplied X and projections. Explain what the softmax axis means.</li>
+<li>Derive the causal outputs. Remove only row 3’s connection to key 2, then compare with the erroneous mask-after-softmax procedure for row 2.</li>
+<li>Change X3 from (1,1) to (1,7). Identify which unmasked and causal outputs change and by how much. State why the claim needs the chosen projections.</li>
+<li>Give shapes for three queries attending to five values with dk=4 and dv=2. Then describe the two-head concatenation/projection example and a residual shape error.</li>
+<li>Explain the [START,A,B] input/target arrangement, what goes wrong with unshifted targets, and why a later causal mask cannot undo earlier leakage. Distinguish fitting from fixed-weight generation.</li>
+<li>Derive dense and allowed-pair counts for n=3 and n=6. Explain the permutation test, then propose a task evaluation that could reject a cheaper context restriction despite passing all arithmetic checks.</li>
+</ol>
+<h2 id="reference-card-evidence-and-open-questions">Reference card, evidence and open questions</h2>
+<p>Write shapes → score query/key pairs → exclude forbidden pairs → normalize each query row → mix values → check the downstream shape. Specify whether inputs already contain future information. Separate weights over positions from probabilities over tokens and from verified truth.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Inspected locator</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R14, Vaswani et al., 2017; inspected arXiv v7 dated 2023-08-02</td>
+<td><a href="https://arxiv.org/html/1706.03762v7">Versioned text</a>, §3.2.1 eq. 1; §§3.2.2–3.2.3</td>
+<td>Scaled attention, learned projections and masking</td>
+</tr>
+<tr class="even">
+<td>R14, same version</td>
+<td>§§3.1, 3.3–3.5; §3 opening and §4</td>
+<td>Architecture context, shifted decoder inputs, position information and complexity discussion. No reported benchmark result adopted.</td>
+</tr>
+<tr class="odd">
+<td>Original derivations and constructed inputs</td>
+<td>This pack and companion executable checks</td>
+<td>Numeric trace, mask counterexamples, perturbations, permutation property, shape/count calculations and proposed tests</td>
+</tr>
+<tr class="even">
+<td>Continuity</td>
+<td>F04 matrix/parameter bridge; A01 leakage/evaluation boundaries</td>
+<td>Previously saved prerequisites, not new measurements</td>
+</tr>
+</tbody>
+</table>
+</div><p>R14’s detailed mechanism is now passage-checked beyond the original catalog entry. The toy projections are not trained weights and the three vectors are not a tokenizer or language model. The checks cover a single deterministic attention operation without dropout, normalization, feed-forward layers or optimization. Real tokenization, positional scheme, masks, precision, architecture, resource use and task quality require application evidence. No learner mastery is inferred. Next is A03: retrieval, external knowledge and provenance.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-09. Three-position attention trace, mask and leakage counterexamples, architecture context and six exercises with separate checks.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/a02.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#a02-passage-record-2026-11-09">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="A02"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/a01.html"><small>Previous module · A01</small><strong>Learning, generalization, and distribution change</strong></a><a href="/learn/a03.html"><small>Next module · A03</small><strong>Retrieval, external knowledge, and provenance</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#what-changes-a-tokens-representation">What changes a token’s representation?</a></li><li class="h2"><a href="#the-contract-and-shapes">The contract and shapes</a></li><li class="h2"><a href="#trace-three-positions-by-hand">Trace three positions by hand</a></li><li class="h2"><a href="#a-mask-changes-what-information-may-flow">A mask changes what information may flow</a></li><li class="h2"><a href="#position-multiple-heads-and-the-surrounding-network">Position, multiple heads and the surrounding network</a></li><li class="h2"><a href="#training-and-inference-use-different-available-inputs">Training and inference use different available inputs</a></li><li class="h2"><a href="#where-sequence-length-enters-the-cost">Where sequence length enters the cost</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card-evidence-and-open-questions">Reference card, evidence and open questions</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

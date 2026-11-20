@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>F02 — Hints, worked answers, and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">F02</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/f02.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">F02 <span aria-hidden="true">/</span> Worked companion</p><h1 id="f02-hints-worked-answers-and-checks">Hints, worked answers, and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/f02.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#two-populations">1. Two populations</a></li><li class="h2"><a href="#third-population">2. Third population</a></li><li class="h2"><a href="#different-costs-same-probability">3. Different costs, same probability</a></li><li class="h2"><a href="#review-boundaries">4. Review boundaries</a></li><li class="h2"><a href="#calibration-and-subgroups">5. Calibration and subgroups</a></li><li class="h2"><a href="#balanced-evaluation-versus-deployment">6. Balanced evaluation versus deployment</a></li><li class="h2"><a href="#assessment-criteria">Assessment criteria</a></li><li class="h2"><a href="#reproducible-checks-executed">Reproducible checks — executed</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision</td>
+<td>F02 answers / 1.0</td>
+</tr>
+<tr class="even">
+<td>Date</td>
+<td>2026-11-02</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td><a href="/learn/f02.html">F02 core</a></td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Reconstruct conditional probabilities and audit an action rule</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>Same R02 and R23 passages as core §9; solutions are original derivations</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Exact rational arithmetic and boundary checks executed; no empirical experiment</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="hints">Hints</h2>
+<ol type="1">
+<li>Split the population into error and clean groups first, then split each by alert status.</li>
+<li>Divide true alerts by all alerts, including clean-record alerts.</li>
+<li>Write both expected losses before rearranging an inequality.</li>
+<li>Review must beat both alternatives. For imperfect review, include the fee and residual errors.</li>
+<li>Average the equally sized groups, then inspect them separately.</li>
+<li>A deliberately balanced test set has an assigned prevalence, not necessarily the deployment prevalence.</li>
+</ol>
+<h2 id="two-populations">1. Two populations</h2>
+<p>For L, true alerts=100×0.9=90; missed errors=10; false alerts=9,900×0.05=495; correct non-alerts=9,405. Precision is 90/585=2/13≈15.3846%. Non-alert error probability is 10/9,415=2/1,883≈0.1062%.</p>
+<p>For H, true alerts=2,000×0.9=1,800; missed errors=200; false alerts=8,000×0.05=400; correct non-alerts=7,600. Precision is 1,800/2,200=9/11≈81.8182%. Non-alert error probability is 200/7,800=1/39≈2.5641%.</p>
+<p>Each table sums to 10,000. Sensitivity divides true alerts by all erroneous records; precision divides them by all alerted records. Their equal numerator does not make the ratios interchangeable. Recover the base rate by weighting each row’s error probability by its share of the population.</p>
+<h2 id="third-population">2. Third population</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Outcome</th>
+<th style="text-align: right;">Error</th>
+<th style="text-align: right;">Clean</th>
+<th style="text-align: right;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Alert</td>
+<td style="text-align: right;">800</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">980</td>
+</tr>
+<tr class="even">
+<td>No alert</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">8,820</td>
+<td style="text-align: right;">9,020</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">9,000</td>
+<td style="text-align: right;">10,000</td>
+</tr>
+</tbody>
+</table>
+</div><p>P(E|A)=800/980=40/49≈81.6327%. The no-alert error probability, if needed, is 200/9,020=10/451≈2.2173%. The table is a designed scenario. Observing exactly these counts in a future sample is not guaranteed merely by specifying rates.</p>
+<h2 id="different-costs-same-probability">3. Different costs, same probability</h2>
+<p>At p=0.2, with missed-error cost 100 and unnecessary-pause cost 20: pass loss=20; pause loss=16. Pause wins. Threshold=20/(100+20)=1/6.</p>
+<p>Raise only the unnecessary-pause cost to 40: pass loss remains 20; pause loss becomes 32. Pass wins. Threshold=40/140=2/7≈28.5714%. The probability estimate and detector evidence stayed fixed. The loss of interrupting a clean case changed the decision. At either threshold, the alternatives tie; state a tie policy rather than claim a strict preference.</p>
+<p>More generally, if correct actions also have nonzero costs, compute each action’s full expected loss. Do not insert the old threshold formula without checking its premises.</p>
+<h2 id="review-boundaries">4. Review boundaries</h2>
+<p>Perfect review at cost 4 beats passing when 4&lt;100p, so p&gt;1/25=0.04. It beats pausing when 4&lt;20(1−p), so p&lt;4/5=0.8. Review is strictly best inside that interval. Outside it, the relevant automatic action is cheaper; endpoints are ties.</p>
+<p>Imperfect review has loss 6+3p. Against passing:</p>
+<p>6+3p&lt;100p ⇒ p&gt;6/97≈0.061856.</p>
+<p>Against pausing:</p>
+<p>6+3p&lt;20−20p ⇒ p&lt;14/23≈0.608696.</p>
+<p>The review region narrows to (6/97,14/23). Below its lower endpoint, pass is best; above its upper endpoint, pause is best. The two automatic losses cross at 1/6, which lies inside this review region, so there is no overlooked interval where one of them defeats review. At p=0.2, review loss is 6.6, less than both 20 and 16.</p>
+<p>This calculation assumes reviewer error rates conditional on true status remain the stated values among routed records. Selection can change those rates: difficult cases sent to review may not resemble cases in a general reviewer assessment.</p>
+<h2 id="calibration-and-subgroups">5. Calibration and subgroups</h2>
+<p>With equal-sized groups, (0.1+0.9)/2=0.5. All predictions have score 0.5, so aggregate event frequency agrees with that score. Within the first group it overstates risk by 0.4; within the second it understates risk by 0.4. This is an exact hypothetical construction, not a sampled finding.</p>
+<p>Check event frequencies by relevant subgroup and score range on suitable labeled cases. Record sample sizes, label definitions, uncertainty, and whether the data represent deployment. A common action threshold may still be appropriate when losses match, but the input probabilities need to represent the information used. Apparent aggregate calibration cannot certify that property for subgroups.</p>
+<h2 id="balanced-evaluation-versus-deployment">6. Balanced evaluation versus deployment</h2>
+<p>Precision computed on a 50%-error evaluation set uses that set’s prevalence. It cannot simply be reported as deployment precision at 1%. If sensitivity and false-positive rate transfer unchanged, substitute the deployment base rate in Bayes’ expression. That transfer assumption itself needs checking across document types, sources, and time.</p>
+<p>Before automatic decisions, measure or otherwise justify at least: deployment prevalence with an appropriate sampling design; conditional detector rates on relevant labeled inputs; and the losses and operational consequences of permitted actions. Review accuracy, queue capacity, and subgroup calibration are further relevant measurements. Do not label only alerted cases if you also need to estimate missed errors: that selection leaves an important denominator unobserved. F03 develops the sampling and experimental design needed to investigate these questions.</p>
+<h2 id="assessment-criteria">Assessment criteria</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Capability</th>
+<th>Evidence in an answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Conditional reasoning</td>
+<td>Names the population after “among” and uses the correct denominator</td>
+</tr>
+<tr class="even">
+<td>Mechanism</td>
+<td>Builds joint counts and derives the Bayesian update</td>
+</tr>
+<tr class="odd">
+<td>Decision analysis</td>
+<td>Includes every modeled action/state loss and treats ties explicitly</td>
+</tr>
+<tr class="even">
+<td>Transfer</td>
+<td>Explains how changed prevalence, losses, or reviewer errors affect policy</td>
+</tr>
+<tr class="odd">
+<td>Evidence discipline</td>
+<td>Distinguishes hypothetical rates, measured estimates, calibration, and decisions</td>
+</tr>
+</tbody>
+</table>
+</div><p>No learner score or readiness judgment is recorded.</p>
+<h2 id="reproducible-checks-executed">Reproducible checks — executed</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> F</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> table(b, s, f):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    errors, clean <span class="op">=</span> <span class="dv">10000</span><span class="op">*</span>b, <span class="dv">10000</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>b)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> errors<span class="op">*</span>s, clean<span class="op">*</span>f, errors<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>s), clean<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>f)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>cases <span class="op">=</span> [</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    (F(<span class="dv">1</span>,<span class="dv">100</span>),F(<span class="dv">9</span>,<span class="dv">10</span>),F(<span class="dv">1</span>,<span class="dv">20</span>),(<span class="dv">90</span>,<span class="dv">495</span>,<span class="dv">10</span>,<span class="dv">9405</span>),F(<span class="dv">2</span>,<span class="dv">13</span>)),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    (F(<span class="dv">1</span>,<span class="dv">5</span>),F(<span class="dv">9</span>,<span class="dv">10</span>),F(<span class="dv">1</span>,<span class="dv">20</span>),(<span class="dv">1800</span>,<span class="dv">400</span>,<span class="dv">200</span>,<span class="dv">7600</span>),F(<span class="dv">9</span>,<span class="dv">11</span>)),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    (F(<span class="dv">1</span>,<span class="dv">10</span>),F(<span class="dv">4</span>,<span class="dv">5</span>),F(<span class="dv">1</span>,<span class="dv">50</span>),(<span class="dv">800</span>,<span class="dv">180</span>,<span class="dv">200</span>,<span class="dv">8820</span>),F(<span class="dv">40</span>,<span class="dv">49</span>)),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> b,s,f,expected,precision <span class="kw">in</span> cases:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    tp,fp,fn,tn <span class="op">=</span> table(b,s,f)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (tp,fp,fn,tn) <span class="op">==</span> expected</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> tp<span class="op">+</span>fp<span class="op">+</span>fn<span class="op">+</span>tn <span class="op">==</span> <span class="dv">10000</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> tp<span class="op">/</span>(tp<span class="op">+</span>fn) <span class="op">==</span> s <span class="kw">and</span> fp<span class="op">/</span>(fp<span class="op">+</span>tn) <span class="op">==</span> f</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> tp<span class="op">/</span>(tp<span class="op">+</span>fp) <span class="op">==</span> precision <span class="op">==</span> s<span class="op">*</span>b<span class="op">/</span>(s<span class="op">*</span>b<span class="op">+</span>f<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>b))</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (tp<span class="op">+</span>fp)<span class="op">/</span><span class="dv">10000</span><span class="op">*</span>precision <span class="op">+</span> (fn<span class="op">+</span>tn)<span class="op">/</span><span class="dv">10000</span><span class="op">*</span>fn<span class="op">/</span>(fn<span class="op">+</span>tn) <span class="op">==</span> b</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">10</span>,<span class="dv">9415</span>) <span class="op">==</span> F(<span class="dv">2</span>,<span class="dv">1883</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">200</span>,<span class="dv">7800</span>) <span class="op">==</span> F(<span class="dv">1</span>,<span class="dv">39</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">200</span>,<span class="dv">9020</span>) <span class="op">==</span> F(<span class="dv">10</span>,<span class="dv">451</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>p<span class="op">=</span>F(<span class="dv">1</span>,<span class="dv">5</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (<span class="dv">100</span><span class="op">*</span>p,<span class="dv">20</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>p),<span class="dv">40</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>p)) <span class="op">==</span> (<span class="dv">20</span>,<span class="dv">16</span>,<span class="dv">32</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">20</span>,<span class="dv">120</span>)<span class="op">==</span>F(<span class="dv">1</span>,<span class="dv">6</span>) <span class="kw">and</span> F(<span class="dv">20</span>,<span class="dv">220</span>)<span class="op">==</span>F(<span class="dv">1</span>,<span class="dv">11</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">40</span>,<span class="dv">140</span>)<span class="op">==</span>F(<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">4</span><span class="op">+</span>F(<span class="dv">1</span>,<span class="dv">20</span>)<span class="op">*</span>p<span class="op">*</span><span class="dv">100</span><span class="op">+</span>F(<span class="dv">1</span>,<span class="dv">10</span>)<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>p)<span class="op">*</span><span class="dv">20</span> <span class="op">==</span> F(<span class="dv">33</span>,<span class="dv">5</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1001</span>):</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    p<span class="op">=</span>F(k,<span class="dv">1000</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    automatic <span class="op">=</span> (<span class="dv">20</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>p) <span class="op">&lt;</span> <span class="dv">100</span><span class="op">*</span>p)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> automatic <span class="op">==</span> (p <span class="op">&gt;</span> F(<span class="dv">1</span>,<span class="dv">6</span>))</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> review,lower,upper <span class="kw">in</span> [(F(<span class="dv">4</span>),F(<span class="dv">1</span>,<span class="dv">25</span>),F(<span class="dv">4</span>,<span class="dv">5</span>)),</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                                (<span class="dv">6</span><span class="op">+</span><span class="dv">3</span><span class="op">*</span>p,F(<span class="dv">6</span>,<span class="dv">97</span>),F(<span class="dv">14</span>,<span class="dv">23</span>))]:</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> (review <span class="op">&lt;</span> <span class="bu">min</span>(<span class="dv">100</span><span class="op">*</span>p,<span class="dv">20</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>p))) <span class="op">==</span> (lower <span class="op">&lt;</span> p <span class="op">&lt;</span> upper)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> [F(<span class="dv">1</span>,<span class="dv">25</span>),F(<span class="dv">4</span>,<span class="dv">5</span>)]:</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">min</span>(<span class="dv">100</span><span class="op">*</span>p,<span class="dv">20</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>p)) <span class="op">==</span> <span class="dv">4</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> [F(<span class="dv">6</span>,<span class="dv">97</span>),F(<span class="dv">14</span>,<span class="dv">23</span>)]:</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">min</span>(<span class="dv">100</span><span class="op">*</span>p,<span class="dv">20</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>p)) <span class="op">==</span> <span class="dv">6</span><span class="op">+</span><span class="dv">3</span><span class="op">*</span>p</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (F(<span class="dv">1</span>,<span class="dv">10</span>)<span class="op">+</span>F(<span class="dv">9</span>,<span class="dv">10</span>))<span class="op">/</span><span class="dv">2</span> <span class="op">==</span> F(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: three tables; Bayes reconstruction; losses; 1001 grid points; exact boundary ties'</span>)</span></code></pre></div>
+<p>These assertions check arithmetic and the derived rule on the stated examples and a finite grid. Algebra establishes the continuous boundary under the model. No experiment establishes that the invented rates or costs hold in a real system. Audit A is pending.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#two-populations">1. Two populations</a></li><li class="h2"><a href="#third-population">2. Third population</a></li><li class="h2"><a href="#different-costs-same-probability">3. Different costs, same probability</a></li><li class="h2"><a href="#review-boundaries">4. Review boundaries</a></li><li class="h2"><a href="#calibration-and-subgroups">5. Calibration and subgroups</a></li><li class="h2"><a href="#balanced-evaluation-versus-deployment">6. Balanced evaluation versus deployment</a></li><li class="h2"><a href="#assessment-criteria">Assessment criteria</a></li><li class="h2"><a href="#reproducible-checks-executed">Reproducible checks — executed</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

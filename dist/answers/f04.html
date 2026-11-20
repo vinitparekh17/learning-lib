@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>F04 — Hints, worked answers, and reproducible checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">F04</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/f04.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">F04 <span aria-hidden="true">/</span> Worked companion</p><h1 id="f04-hints-worked-answers-and-reproducible-checks">Hints, worked answers, and reproducible checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/f04.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#shape-and-coordinate-order">1. Shape and coordinate order</a></li><li class="h2"><a href="#ranking-and-missing-direction">2. Ranking and missing direction</a></li><li class="h2"><a href="#a-transformation-that-loses-information">3. A transformation that loses information</a></li><li class="h2"><a href="#a-second-update">4. A second update</a></li><li class="h2"><a href="#an-overshoot">5. An overshoot</a></li><li class="h2"><a href="#two-separate-acceptance-checks">6. Two separate acceptance checks</a></li><li class="h2"><a href="#reproduction">Reproduction</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID, revision, date</td>
+<td>F04 answers · 1.0 · 2026-11-05</td>
+</tr>
+<tr class="even">
+<td>Prerequisite</td>
+<td><a href="/learn/f04.html">F04 learning pack</a></td>
+</tr>
+<tr class="odd">
+<td>Capability</td>
+<td>Check the feature contract, ranking, update direction, step size, and evaluation boundary</td>
+</tr>
+<tr class="even">
+<td>Source check</td>
+<td>R02 passage locators in the core pack. Numerical cases and derivations are original.</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Executed the Python 3 checks below on the constructed inputs.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="hints">Hints</h2>
+<ol type="1">
+<li>The query assigns one unit of weight to the second coordinate.</li>
+<li>A positive scaling factor appears in both the numerator and the denominator of cosine.</li>
+<li>A deterministic function returns the same output when given the same input.</li>
+<li>Evaluate the derivative at the <em>current</em> weight before taking the second step.</li>
+<li>Compare distances to the optimum on both sides of the step.</li>
+<li>Separate the task of finding supporting evidence from the task of estimating minutes.</li>
+</ol>
+<h2 id="shape-and-coordinate-order">1. Shape and coordinate order</h2>
+<p>Multiplying each document row by (0, 1)ᵀ returns its payment-reference count. The output is (0, 4, 2)ᵀ, a 3 × 1 column indexed by passage. If a caller says it requested payment evidence but receives (2, 3, 0)ᵀ, it may have emitted (1, 0)ᵀ. Check the encoded query, the stored column order, and the expected output for a passage with only payment references. Shape validation alone accepts both query vectors.</p>
+<h2 id="ranking-and-missing-direction">2. Ranking and missing direction</h2>
+<p>For delivery q = (1, 0)ᵀ, the raw scores in document order are 2, 3, 0. Their descending order is B, A, C. Divide each by its document length and by the unit query length to obtain 1, 3/5, 0. Cosine orders them A, B, C. After tripling B its vector is (9, 12)ᵀ, its length is 15, and its raw score is 9. Its normalized score is 9/15 = 3/5. Both rankings retain their respective orders, although B’s raw lead grows.</p>
+<p>A zero query provides no direction. One defensible policy is to return an explicit “insufficient query features” status and ask for a usable reference type. Include that outcome when computing the fraction of all queries served successfully. Assigning a numerical score to every passage would require a separate fallback rule and a way to evaluate its relevance.</p>
+<h2 id="a-transformation-that-loses-information">3. A transformation that loses information</h2>
+<p>T times A gives 1 × 2 + 1 × 0 = 2. T times C gives 1 × 0 + 1 × 2 = 2. For any function g using only the transformed count, g(2) must serve both passages. Delivery evidence occurs in A and is absent from C. Consequently at least one answer must be wrong if g always chooses present or absent. Keep the delivery coordinate or the original reference data if this distinction is part of the contract. The total still answers a question about overall volume.</p>
+<h2 id="a-second-update">4. A second update</h2>
+<p>After the first step w = 3/2. The current derivative is 5(3/2 − 2) = −5/2. With η = 1/10 the next weight is 3/2 + 1/4 = 7/4. Predictions of 7/4 and 7/2 minutes have residuals −1/4 and −1/2. The mean of their squared residuals is (1/16 + 1/4)/2 = 5/32 minutes². Substituting in (5/2)(7/4 − 2)² gives the same result. A fresh gradient matters because the remaining error shrinks at each step.</p>
+<h2 id="an-overshoot">5. An overshoot</h2>
+<p>From w = 1 the slope is −5. A step size of 1/2 sends the weight to 7/2, which lies 3/2 from the optimum. The new loss is (5/2)(3/2)² = 45/8 minutes², larger than the initial 5/2. Increasing w from 1 initially moves downhill. The step travels past the minimum far enough to lose the whole gain. Under repeated updates the error multiplier is 1−5η = −3/2, so the weight alternates sides and its distance grows. In the worked convention, dividing the entire loss by two would also halve each gradient and double the corresponding stable step-size interval.</p>
+<h2 id="two-separate-acceptance-checks">6. Two separate acceptance checks</h2>
+<p>In the constructed holdout, a two-page invoice took two minutes. Training reduced squared loss from 5/2 to 5/8, yet held-out squared error went from 0 to 1. For a workload claim, freeze a representative test population before selecting weights. Compare predictions with independently recorded active minutes, report mean absolute error by supplier type, and check the fraction of critical cases underestimated beyond an agreed tolerance. Decide beforehand what improvement and tolerance the workflow requires.</p>
+<p>A higher top score can also reward repeated words without finding an applicable source. Use the same frozen queries, candidate passages, and eligibility rules for both rankers. Have blinded reviewers check the selected passage against the original invoice and required fact. Count cases with missing evidence and cases the ranker declines. A decision can then use the fraction of all eligible queries with verified supporting evidence and the observed cost of review.</p>
+<p><strong>Self-assessment.</strong> A complete solution preserves the document and feature axes, explains the scale invariance and zero case, derives the next weight using the current slope, and names a held-out outcome for each task. The numerical checks below can be run after attempting the exercises.</p>
+<h2 id="reproduction">Reproduction</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> F</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> isqrt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> [(<span class="dv">2</span>, <span class="dv">0</span>), (<span class="dv">3</span>, <span class="dv">4</span>), (<span class="dv">0</span>, <span class="dv">2</span>)]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dot(x, y):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(x) <span class="op">==</span> <span class="bu">len</span>(y)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> a, b <span class="kw">in</span> <span class="bu">zip</span>(x, y))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cosine(x, y):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    squared <span class="op">=</span> dot(x, x) <span class="op">*</span> dot(y, y)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> squared <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    root <span class="op">=</span> isqrt(squared)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> root<span class="op">*</span>root <span class="op">==</span> squared  <span class="co"># exact roots in these examples</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F(dot(x, y), root)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [dot(d, q) <span class="cf">for</span> d <span class="kw">in</span> docs] <span class="op">==</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">0</span>]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [dot(d, (<span class="dv">0</span>, <span class="dv">1</span>)) <span class="cf">for</span> d <span class="kw">in</span> docs] <span class="op">==</span> [<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">2</span>]</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [cosine(d, q) <span class="cf">for</span> d <span class="kw">in</span> docs] <span class="op">==</span> [<span class="dv">1</span>, F(<span class="dv">3</span>, <span class="dv">5</span>), <span class="dv">0</span>]</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> cosine((<span class="dv">9</span>, <span class="dv">12</span>), q) <span class="op">==</span> F(<span class="dv">3</span>, <span class="dv">5</span>) <span class="kw">and</span> dot((<span class="dv">9</span>, <span class="dv">12</span>), q) <span class="op">==</span> <span class="dv">9</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> cosine((<span class="dv">0</span>, <span class="dv">0</span>), q) <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> dot(docs[<span class="dv">0</span>], (<span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">==</span> dot(docs[<span class="dv">2</span>], (<span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">==</span> <span class="dv">2</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss(w):</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>((w<span class="op">*</span>x<span class="op">-</span>y)<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> x, y <span class="kw">in</span> [(<span class="dv">1</span>, <span class="dv">2</span>), (<span class="dv">2</span>, <span class="dv">4</span>)]) <span class="op">/</span> F(<span class="dv">2</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> step(w, eta):</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w <span class="op">-</span> eta <span class="op">*</span> <span class="dv">5</span><span class="op">*</span>(w<span class="op">-</span><span class="dv">2</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> step(F(<span class="dv">1</span>), F(<span class="dv">1</span>, <span class="dv">10</span>))</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>w2 <span class="op">=</span> step(w1, F(<span class="dv">1</span>, <span class="dv">10</span>))</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (w1, w2) <span class="op">==</span> (F(<span class="dv">3</span>, <span class="dv">2</span>), F(<span class="dv">7</span>, <span class="dv">4</span>))</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [loss(w) <span class="cf">for</span> w <span class="kw">in</span> (<span class="dv">1</span>, w1, w2, <span class="dv">2</span>)] <span class="op">==</span> [F(<span class="dv">5</span>, <span class="dv">2</span>), F(<span class="dv">5</span>, <span class="dv">8</span>), F(<span class="dv">5</span>, <span class="dv">32</span>), <span class="dv">0</span>]</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> loss(step(F(<span class="dv">1</span>), F(<span class="dv">1</span>, <span class="dv">2</span>))) <span class="op">==</span> F(<span class="dv">45</span>, <span class="dv">8</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (<span class="dv">1</span><span class="op">*</span><span class="dv">2</span><span class="op">-</span><span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span> <span class="kw">and</span> (w1<span class="op">*</span><span class="dv">2</span><span class="op">-</span><span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">51</span>):</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    eta <span class="op">=</span> F(k, <span class="dv">100</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> w <span class="kw">in</span> [F(<span class="op">-</span><span class="dv">1</span>), F(<span class="dv">1</span>), F(<span class="dv">3</span>)]:</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> loss(w) <span class="op">==</span> F(<span class="dv">5</span>, <span class="dv">2</span>)<span class="op">*</span>(w<span class="op">-</span><span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> (loss(step(w, eta)) <span class="op">&lt;</span> loss(w)) <span class="op">==</span> (<span class="dv">0</span> <span class="op">&lt;</span> eta <span class="op">&lt;</span> F(<span class="dv">2</span>, <span class="dv">5</span>))</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>        h <span class="op">=</span> F(<span class="dv">1</span>, <span class="dv">100</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> (loss(w<span class="op">+</span>h)<span class="op">-</span>loss(w<span class="op">-</span>h))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>h) <span class="op">==</span> <span class="dv">5</span><span class="op">*</span>(w<span class="op">-</span><span class="dv">2</span>)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'All F04 checks passed.'</span>)</span></code></pre></div>
+<p>The symmetric difference equals the derivative exactly here because the loss is quadratic. The algebra in the learning pack establishes the step-size interval for every starting weight away from the optimum. The finite sweep checks the implementation on both sides of each boundary.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#shape-and-coordinate-order">1. Shape and coordinate order</a></li><li class="h2"><a href="#ranking-and-missing-direction">2. Ranking and missing direction</a></li><li class="h2"><a href="#a-transformation-that-loses-information">3. A transformation that loses information</a></li><li class="h2"><a href="#a-second-update">4. A second update</a></li><li class="h2"><a href="#an-overshoot">5. An overshoot</a></li><li class="h2"><a href="#two-separate-acceptance-checks">6. Two separate acceptance checks</a></li><li class="h2"><a href="#reproduction">Reproduction</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

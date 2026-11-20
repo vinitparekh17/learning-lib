@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>C06 — Worked analysis | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">C06</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/c06.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">C06 <span aria-hidden="true">/</span> Worked companion</p><h1 id="c06-worked-analysis">Worked analysis</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/c06.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#complete-ledgers">1. Complete ledgers</a></li><li class="h2"><a href="#thresholds-and-omitted-inputs">2. Thresholds and omitted inputs</a></li><li class="h2"><a href="#paired-evidence">3. Paired evidence</a></li><li class="h2"><a href="#repair-evidence-continuity">4. Repair evidence continuity</a></li><li class="h2"><a href="#cutover-rollback-and-the-advantage-claim">5. Cutover, rollback and the advantage claim</a></li><li class="h2"><a href="#reproducible-checks">Reproducible checks</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID</td>
+<td>C06 answers</td>
+</tr>
+<tr class="even">
+<td>Title</td>
+<td>Supplier-change decision: hints and checks</td>
+</tr>
+<tr class="odd">
+<td>Revision</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td>Date</td>
+<td>2026-11-15</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>S02/S06, A03–A05, B02/B03; SDE_C06.md</td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Audit migration costs, evaluation claims and evidence continuity</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>Uses the primary passage locators and limitations in the core memo</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Embedded Python executed; synthetic accounting, paired counts and manifest validation only</td>
+</tr>
+</tbody>
+</table>
+</div><p>Read <a href="/learn/c06.html">SDE_C06.md</a> before these optional solutions. No response or score is attributed to the learner.</p>
+<h2 id="complete-ledgers">1. Complete ledgers</h2>
+<p>Hint: convert minutes into cost, then add setup once.</p>
+<p>At 1,000 cases and 0.50 U/minute, recurring labor is I=1,000, R=1,100 and B=1,750 U/month. Supplier plus labor plus incremental maintenance is therefore 1,500, 1,500 and 1,800 U/month. Six months plus setup gives <strong>9,000, 9,900 and 11,100 U</strong>. Retain I under the equal-adequacy premise.</p>
+<p>After only I’s fee becomes 700, its monthly total is 1,800 and horizon total 10,800. R becomes the cheaper adequate choice at 9,900. Savings are 900 U after setup. If R fails the authority or quality gate, the cost comparison cannot authorize migration. If I remains adequate, it stays available at its higher cost; if neither candidate is adequate, state that instead of weakening the task.</p>
+<p>Assessment criterion: include human work, maintenance and setup, state the horizon, and separate customer cost from supplier margin. These are new C06 inputs, not replacements for B03’s scenario.</p>
+<h2 id="thresholds-and-omitted-inputs">2. Thresholds and omitted inputs</h2>
+<p>Hint: solve equal total costs with just one variable free.</p>
+<p>For the fee, <code>6(x+1100)=9900</code> yields x=550 U/month. R is cheaper strictly above 550 at six months; at equality retain I. At x=700, compare <code>1800H</code> with <code>900+1500H</code>: equality is H=3. Only horizons longer than three months recover setup with a strict saving. Monthly payment timing and discounting are excluded from this simple model.</p>
+<p>For bundle handling, <code>300+6(500t+50)=9000</code> gives t=2.8. Below that B is cheaper at the original I fee, provided all gates hold. The threshold is not evidence that such handling time is achievable. A measured extra export fee, migration overlap, training effort or maintenance cost moves the threshold. Add each in the correct period and avoid double-counting effort already included in setup.</p>
+<p>Assessment criterion: name the fixed assumptions. Quoting a break-even number without its horizon or workload makes it unusable.</p>
+<h2 id="paired-evidence">3. Paired evidence</h2>
+<p>Hint: totals include successes shared by both arms.</p>
+<p>I has 92+4=96 successes and R has 92+3=95. There are seven discordant cases; R gains three and loses four. The paired sample difference is −1 percentage point for R. One shared failure is still in the denominator of 100. Both meet a 95% observed sample floor, but sampling uncertainty, representativeness and dependence remain unresolved.</p>
+<p>This fixture validates arithmetic only. It does not establish that either real supplier meets a 95% population service objective. Inspect the seven disagreements, preserve held-out evaluation, analyze the relevant sampling unit and test complete workflows under load. Identical evidence supplied directly to both generators is useful diagnosis but bypasses deployed retrieval and cannot replace the whole-system comparison.</p>
+<h2 id="repair-evidence-continuity">4. Repair evidence continuity</h2>
+<p>Hint: references identify revisions, not just logical documents.</p>
+<p>Suppose current D17/3 is exported but an old decision references D17/2. Exporting another unrelated revision to keep the total row count unchanged does not repair the missing historical reference. Recover the authorized immutable bytes and manifest for D17/2, validate its digest and locator interpretation, and rerun reference validation. If recovery is impossible, mark the historical evidence gap; do not relabel D17/3 as revision 2.</p>
+<p>A digest match verifies bytes relative to a trusted expected digest; it does not prove the trusted manifest itself is correct or that access was authorized. The following fixture checks exact keys, byte digests and reference closure. It uses tiny invented bytes, not an actual storage export or encryption/access-control implementation.</p>
+<h2 id="cutover-rollback-and-the-advantage-claim">5. Cutover, rollback and the advantage claim</h2>
+<p>Hint: the replaceable component and authoritative state have different lifecycles.</p>
+<p>Shadow execution writes no business effects. A new complete revision becomes current only at the atomic publication boundary. Before publication, a crash leaves the previous head; after publication, the new head must resolve to complete durable evidence. A rollback changes future execution or a valid head under the declared protocol; it never rewrites prior receipts or their evidence. Permission checks cover export, recovery and support paths as well as ordinary requests.</p>
+<p>The claimed advantage is disproved for this scenario if the bundle meets the same evidence, authority and deadline gates while reducing handling below 2.8 minutes at its assigned costs. Do not respond by counting only the incumbent’s successful cases or by trapping customer records. Usable exports and preserved evidence make the comparison more honest. An adapter’s syntactic compatibility alone does not prove semantic, operational or economic portability.</p>
+<h2 id="reproducible-checks">Reproducible checks</h2>
+<p>Run with Python 3. All money uses exact rational arithmetic. The fee sweep checks 1,001 choices; the horizon sweep checks 12 month values. The validator tests a good export, a missing revision, corrupted bytes and a same-count replacement that loses a referenced revision.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> F</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha256</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>N, wage <span class="op">=</span> <span class="dv">1000</span>, F(<span class="st">'.5'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> monthly(fee, minutes, maintenance):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fee <span class="op">+</span> N<span class="op">*</span>wage<span class="op">*</span>minutes <span class="op">+</span> maintenance</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>mI <span class="op">=</span> monthly(<span class="dv">400</span>, F(<span class="dv">2</span>), <span class="dv">100</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>mR <span class="op">=</span> monthly(<span class="dv">250</span>, F(<span class="st">'2.2'</span>), <span class="dv">150</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>mB <span class="op">=</span> monthly(<span class="dv">0</span>, F(<span class="st">'3.5'</span>), <span class="dv">50</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (mI,mR,mB) <span class="op">==</span> (<span class="dv">1500</span>,<span class="dv">1500</span>,<span class="dv">1800</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (<span class="dv">6</span><span class="op">*</span>mI,<span class="dv">900</span><span class="op">+</span><span class="dv">6</span><span class="op">*</span>mR,<span class="dv">300</span><span class="op">+</span><span class="dv">6</span><span class="op">*</span>mB) <span class="op">==</span> (<span class="dv">9000</span>,<span class="dv">9900</span>,<span class="dv">11100</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">6</span><span class="op">*</span>monthly(<span class="dv">700</span>,F(<span class="dv">2</span>),<span class="dv">100</span>) <span class="op">==</span> <span class="dv">10800</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>fee_threshold <span class="op">=</span> F(<span class="dv">9900</span>,<span class="dv">6</span>)<span class="op">-</span><span class="dv">1100</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> fee_threshold <span class="op">==</span> <span class="dv">550</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>bundle_threshold <span class="op">=</span> (F(<span class="dv">9000</span><span class="op">-</span><span class="dv">300</span>,<span class="dv">6</span>)<span class="op">-</span><span class="dv">50</span>)<span class="op">/</span>(N<span class="op">*</span>wage)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bundle_threshold <span class="op">==</span> F(<span class="st">'2.8'</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fee <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1001</span>):</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    totals <span class="op">=</span> {<span class="st">'I'</span>:<span class="dv">6</span><span class="op">*</span>(fee<span class="op">+</span><span class="dv">1100</span>), <span class="st">'R'</span>:<span class="dv">9900</span>, <span class="st">'B'</span>:<span class="dv">11100</span>}</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    winner <span class="op">=</span> <span class="bu">min</span>(totals, key<span class="op">=</span>totals.get)  <span class="co"># insertion order retains I at a tie</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> winner <span class="op">==</span> (<span class="st">'I'</span> <span class="cf">if</span> fee <span class="op">&lt;=</span> <span class="dv">550</span> <span class="cf">else</span> <span class="st">'R'</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> months <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">13</span>):</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    saving <span class="op">=</span> <span class="dv">1800</span><span class="op">*</span>months<span class="op">-</span>(<span class="dv">900</span><span class="op">+</span><span class="dv">1500</span><span class="op">*</span>months)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (saving<span class="op">&gt;</span><span class="dv">0</span>) <span class="op">==</span> (months<span class="op">&gt;</span><span class="dv">3</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (saving<span class="op">==</span><span class="dv">0</span>) <span class="op">==</span> (months<span class="op">==</span><span class="dv">3</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">300</span><span class="op">+</span><span class="dv">6</span><span class="op">*</span>monthly(<span class="dv">0</span>,bundle_threshold,<span class="dv">50</span>) <span class="op">==</span> <span class="dv">9000</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">300</span><span class="op">+</span><span class="dv">6</span><span class="op">*</span>monthly(<span class="dv">0</span>,bundle_threshold<span class="op">-</span>F(<span class="st">'.01'</span>),<span class="dv">50</span>) <span class="op">&lt;</span> <span class="dv">9000</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">300</span><span class="op">+</span><span class="dv">6</span><span class="op">*</span>monthly(<span class="dv">0</span>,bundle_threshold<span class="op">+</span>F(<span class="st">'.01'</span>),<span class="dv">50</span>) <span class="op">&gt;</span> <span class="dv">9000</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>both, only_i, only_r, neither <span class="op">=</span> <span class="dv">92</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">1</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> both<span class="op">+</span>only_i<span class="op">+</span>only_r<span class="op">+</span>neither <span class="op">==</span> <span class="dv">100</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (both<span class="op">+</span>only_i,both<span class="op">+</span>only_r) <span class="op">==</span> (<span class="dv">96</span>,<span class="dv">95</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(only_r<span class="op">-</span>only_i,<span class="dv">100</span>) <span class="op">==</span> F(<span class="st">'-0.01'</span>)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>key2, key3 <span class="op">=</span> (<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">2</span>), (<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">3</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>expected_bytes <span class="op">=</span> {key2:<span class="st">b'reference X'</span>,key3:<span class="st">b'reference Y'</span>}</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>trusted <span class="op">=</span> {k:sha256(v).hexdigest() <span class="cf">for</span> k,v <span class="kw">in</span> expected_bytes.items()}</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>references <span class="op">=</span> {key2,key3}</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> valid_export(export):</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="bu">set</span>(export)<span class="op">==</span><span class="bu">set</span>(trusted)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>            <span class="kw">and</span> references <span class="op">&lt;=</span> <span class="bu">set</span>(export)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>            <span class="kw">and</span> <span class="bu">all</span>(sha256(export[k]).hexdigest()<span class="op">==</span>trusted[k] <span class="cf">for</span> k <span class="kw">in</span> trusted))</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> valid_export(expected_bytes)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>missing <span class="op">=</span> {key3:expected_bytes[key3]}</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> valid_export(missing)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>corrupt <span class="op">=</span> <span class="bu">dict</span>(expected_bytes)<span class="op">;</span> corrupt[key2]<span class="op">=</span><span class="st">b'reference Z'</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> valid_export(corrupt)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>swapped <span class="op">=</span> <span class="bu">dict</span>(missing)<span class="op">;</span> swapped[(<span class="st">'A'</span>,<span class="st">'D99'</span>,<span class="dv">2</span>)]<span class="op">=</span><span class="st">b'reference X'</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(swapped)<span class="op">==</span><span class="bu">len</span>(expected_bytes) <span class="kw">and</span> <span class="kw">not</span> valid_export(swapped)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Recovery model: publication may point only to a complete revision.</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> committed <span class="kw">in</span> (<span class="va">False</span>,<span class="va">True</span>):</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    durable <span class="op">=</span> {key2,key3}</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    head <span class="op">=</span> key3 <span class="cf">if</span> committed <span class="cf">else</span> key2</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> head <span class="kw">in</span> durable <span class="kw">and</span> references <span class="op">&lt;=</span> durable</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: exact ledgers; 1001 fee cases; 12 horizons; paired counts; 4 export fixtures; 2 publication states'</span>)</span></code></pre></div>
+<p>Executed successfully on 2026-11-15. Metadata, five exercise/answer mappings, companion links, fences and placeholder checks also passed. These finite fixtures do not exercise a real supplier, concurrency protocol, recovery log, model or live migration. Actual export rights, service quality, costs and operational ownership require evidence before applying the recommendation.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#complete-ledgers">1. Complete ledgers</a></li><li class="h2"><a href="#thresholds-and-omitted-inputs">2. Thresholds and omitted inputs</a></li><li class="h2"><a href="#paired-evidence">3. Paired evidence</a></li><li class="h2"><a href="#repair-evidence-continuity">4. Repair evidence continuity</a></li><li class="h2"><a href="#cutover-rollback-and-the-advantage-claim">5. Cutover, rollback and the advantage claim</a></li><li class="h2"><a href="#reproducible-checks">Reproducible checks</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

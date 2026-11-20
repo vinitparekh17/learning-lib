@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>Audit B — Systems traces, failure assumptions and continuity | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link " href="/topics.html"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link active" href="/reference.html" aria-current="page"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Reference</span><span class="header-separator">/</span><span class="header-topic">Audit B</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/reference.html"><span aria-hidden="true">←</span> Reference</a><p class="eyebrow">Reference</p><h1 id="audit-b-systems-traces-failure-assumptions-and-continuity">Audit B — Systems traces, failure assumptions and continuity</h1></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#decision-and-scope">Decision and scope</a></li><li class="h2"><a href="#b-01-synthetic-predicate-inputs-were-described-too-strongly">B-01 — Synthetic predicate inputs were described too strongly</a></li><li class="h2"><a href="#results-by-pack">Results by pack</a></li><li class="h2"><a href="#cross-pack-contracts-and-teaching-continuity">Cross-pack contracts and teaching continuity</a></li><li class="h2"><a href="#primary-passages-inspected-for-this-audit">Primary passages inspected for this audit</a></li><li class="h2"><a href="#remaining-uncertainty-and-next-item">Remaining uncertainty and next item</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>Audit B · 1.0 · 2026-11-08</td>
+</tr>
+<tr class="even">
+<td>Scope</td>
+<td>S01–S06 and C01, including all seven answer companions</td>
+</tr>
+<tr class="odd">
+<td>Authority</td>
+<td>SDE_Foundations_Library_v1.md, Run 15; SDE_Foundations_Scheduled_Prompt.md</td>
+</tr>
+<tr class="even">
+<td>Basis</td>
+<td>Latest saved artifacts, targeted primary passages, manual trace review and rerun embedded Python checks</td>
+</tr>
+<tr class="odd">
+<td>Result</td>
+<td>One test-coverage wording correction in S04 answers; no remaining blocking finding in this scope</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Seven existing check blocks executed in separate Python processes; corrected S04 block rerun. No live hardware, distributed-system, provider or security test</td>
+</tr>
+<tr class="odd">
+<td>Learner status</td>
+<td>Unknown; artifact audit does not establish learner readiness or mastery</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="decision-and-scope">Decision and scope</h2>
+<p>The systems sequence is internally consistent within its declared models after correcting one coverage description. Continue to A01 once the corrected companion, this report and source register have saved successfully and the index records them. Preserve the existing S04 answer identity; do not regenerate the seven core packs.</p>
+<p>The review follows the curriculum’s Run 15 focus: execution traces, failure assumptions and cross-links. It reuses Audit A’s S01 rate-bound clarification and checks that later lessons do not turn modeled resource counts into hardware speed claims. It examines 14 core/companion files, 41 exercise-to-answer mappings and selected original passages. It is a targeted technical audit, not an exhaustive rereading of every source or an independent implementation certification. F04 is not newly audited here: none of these systems conclusions requires its matrix or gradient derivations. Its recorded availability remains relevant to the next A01 item.</p>
+<p>The latest index selected Audit B. Exact-title lookup and a shorter-name search found no existing Audit B report to reconcile; the latter returned other program artifacts, not an Audit B identity. Previously completed work was reused.</p>
+<h2 id="b-01-synthetic-predicate-inputs-were-described-too-strongly">B-01 — Synthetic predicate inputs were described too strongly</h2>
+<p><strong>Original issue.</strong> SDE_S04_answers.md revision 1.0 labeled its loop as exhausting truthful match-index combinations. The loop applies two term values and 27 index triples to the same six-entry log. That log contains a term-3 entry even when the supplied current term is 2. Some inputs therefore cannot be a valid Raft leader state. The assertions also check output conditions of one helper, not the reachability of inputs or the protocol’s state transitions.</p>
+<p><strong>Evidence.</strong> The actual loop is <code>term in (2,3)</code> and <code>product(range(4,7), repeat=3)</code>, giving 54 synthetic cases. R07 Figure 2, p. 4, specifies monotonic current terms and the leader commitment condition; §§5.1 and 5.4 explain their protocol context. This distinguishes an algebraic input sweep from legal distributed histories.</p>
+<p><strong>Correction.</strong> Revised the comment, introductory test boundary and closing explanation to identify synthetic cases, explicitly include unreachable states and limit the claim to the commitment predicate’s output conditions. The condition still requires trustworthy durable acknowledgements when used as a real commitment decision; the helper does not establish them. Added revision history and changed only this companion to revision 1.1. Executable assertions and all six exercise answers are unchanged, so S04 core revision 1.0 remains compatible.</p>
+<p><strong>Check.</strong> Extracted the corrected block again and executed it successfully. Its 109 quorum pairs, log operations, predicate checks and receipt checks still pass. This correction changes what the test demonstrates, not a numerical result. No claim of complete Raft simulation is justified.</p>
+<h2 id="results-by-pack">Results by pack</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pack</th>
+<th>Mechanism, counterexample and boundary reviewed</th>
+<th>Executed result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>S01</td>
+<td>Line/page counting, working-set retention, address translation and batching. The two-line cache defeats “second pass means hits.” Audit A’s rate bounds remain explicit; a miss count is not elapsed time.</td>
+<td>Array/packed/scattered first-pass fills: 64/128/256 bytes; second-pass behavior, traversal, translation to 456 and batch/deadline checks passed.</td>
+</tr>
+<tr class="even">
+<td>S02</td>
+<td>Immutable evidence versus current head, scan/index page accounting and atomic publication. Premature home-page installation defeats the stated NO-STEAL recovery model. Retaining a reference alone does not retain source bytes.</td>
+<td>SQLite query/publication results, page counts, three uncommitted prefixes, four committed home-write combinations and repeated recovery passed. No real disk crash was injected.</td>
+</tr>
+<tr class="odd">
+<td>S03</td>
+<td>Read dependencies, write skew, guard duration, epoch versus revision, receipts and clock direction. Disjoint writes can violate capacity; a revision-only guard cannot distinguish reopening.</td>
+<td>All 20 modeled snapshot histories: 18 violate capacity, two serial orders preserve it. Two guarded orders and 24 reopen/request orders preserve the invariant. Payload, replay and clock checks passed.</td>
+</tr>
+<tr class="even">
+<td>S04</td>
+<td>Quorum overlap plus election/log rules, local append versus commitment versus reply, current-term restriction, suffix repair and historical receipt replay. A majority count alone is not the protocol.</td>
+<td>109 quorum pairs, freshness and append/repair examples, 54 synthetic predicate inputs and receipt cases passed. Coverage description corrected by B-01.</td>
+</tr>
+<tr class="odd">
+<td>S05</td>
+<td>Same offered workload/deadline across policies, exact-cost admission premise, startup, busy versus purchased capacity, and percentile population. Underestimated cost and correlated fan-out invalidate stronger interpretations.</td>
+<td>FIFO and six reorderings, admission failure, batching, two worker traces, five startup cases, fluid conservation and capacity thresholds passed. Fan-out calculation gives 0.332392 under independence.</td>
+</tr>
+<tr class="even">
+<td>C01</td>
+<td>Approval uniqueness versus provider effect, stable payload-bound identities, durable intent, restoration and retention. Marker-before-call can lose an effect; marker-after-call can duplicate it. Unknown external outcomes cannot be resolved by more local replicas.</td>
+<td>Three competing delivery orders, stale/payload cases, historical replay, five crash cuts, provider repeats, identity expiry and indistinguishable local histories passed. Provider behavior remains an assumed contract.</td>
+</tr>
+<tr class="odd">
+<td>S06</td>
+<td>Current authority at commit, historical receipt access, revocation ordering, useful-outcome denominator and resource versus privilege isolation. Cached permission can violate the chosen revocation rule; a correct authorization predicate does not establish trustworthy inputs.</td>
+<td>256 Boolean cases, both revocation orders, stale-cache counterexample, SLI/budget/union/CPU arithmetic and shared/reserved worker traces passed.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Every original reproduction block exited with code 0 and empty stderr in a separate process. The S04 rerun after the comment/prose repair also exited 0. These are bounded checks of constructed examples. The proposed hardware benchmark in S01, workload replay in S05 and live failure-injection plans in S06 were not performed.</p>
+<h2 id="cross-pack-contracts-and-teaching-continuity">Cross-pack contracts and teaching continuity</h2>
+<p>The same invoice case evolves without silently merging distinct identities. Evidence revision identifies data; approval epoch identifies a business round; request key identifies one caller intent; payment identity identifies the provider effect; leadership term identifies protocol leadership. None substitutes for all the others. Historical acceptance is not current approval state, and reopening does not undo a payment already sent.</p>
+<p>S02’s recovery example assumes a complete ordered durable log prefix and NO-STEAL. S03 adds indivisible guarded decisions; S04 adds replicated-log assumptions; C01 adds a separate external authority. These are successive premises, not evidence that the previous toy model implements the next layer. S06 makes authorization and current permission for receipt disclosure explicit. The audit found no claim that consensus or a database rollback alone controls the provider’s effect.</p>
+<p>Receipt policies differ in a documented way: S04’s example remembers command results, including rejection, while C01’s receipt-first rule concerns previously accepted requests. Their shared guarantee is that replay of an accepted identity cannot create another accepted effect. Do not infer a universal rejected-request caching policy from either example; a deployed API must specify it.</p>
+<p>Resource terminology is likewise consistent. S01 separates requested bytes from transfer bytes and throughput from task latency. S05 separates service from response time, offered outcomes from completed-only fractions, and busy work from paid capacity. S06 keeps the request-count error budget distinct from time availability and from authority invariants. The S05 and S06 workloads differ deliberately; their numbers are not benchmark comparisons between modules.</p>
+<p>The worked answers match all 41 numbered tasks: six each in S01–S06 and five in C01. Manual review checked the changed-constraint responses and counterexamples, not only numbering. Companion filenames resolve in both directions; Markdown code fences balance. The 14 file identities match the index entries used to retrieve them. Relative companion links require the files to remain together in an offline export; native file links in the index provide individual access.</p>
+<h2 id="primary-passages-inspected-for-this-audit">Primary passages inspected for this audit</h2>
+<p>Page numbers below are PDF/printed page numbers as specified, not browser line numbers. These targeted checks supplement prior passage records without claiming every prior source was refreshed.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>URL and exact locator</th>
+<th>Audit use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R04, OSTEP</td>
+<td><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf">Chapter 19</a>, §19.1, Figure 19.1, chapter-local pp. 1–2</td>
+<td>Translation-cache lookup and page-table fallback; distinguishes translation state from application data.</td>
+</tr>
+<tr class="even">
+<td>R05, CMU Fall 2025</td>
+<td><a href="https://15445.courses.cs.cmu.edu/fall2025/notes/21-logging.pdf">Lecture 21</a>, §2 pp. 1–2 and §6 pp. 4–5</td>
+<td>Buffer policies, log ordering and commit acknowledgement boundary for S02.</td>
+</tr>
+<tr class="odd">
+<td>R05, same course</td>
+<td><a href="https://15445.courses.cs.cmu.edu/fall2025/notes/20-multiversioning.pdf">Lecture 20</a>, §1 pp. 1–2</td>
+<td>Snapshot isolation and write skew; MVCC alone is not a serializability claim.</td>
+</tr>
+<tr class="even">
+<td>R06, Lamport 1978</td>
+<td><a href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Author PDF</a>, printed p. 560, Logical Clocks and Clock Condition</td>
+<td>Causal precedence implies increasing clocks; ordered clock values alone do not establish causality.</td>
+</tr>
+<tr class="odd">
+<td>R07, extended May 2014 paper</td>
+<td><a href="https://raft.github.io/raft.pdf">Primary PDF</a>, Figure 2 p. 4; §5.4.1–5.4.2 pp. 8–9; §8 p. 13</td>
+<td>Election/log and current-term rules, B-01 coverage distinction, client retry identities and authoritative-read precautions.</td>
+</tr>
+<tr class="even">
+<td>R09, Google SRE</td>
+<td><a href="https://sre.google/sre-book/addressing-cascading-failures/">Chapter 22</a>, Queue Management and Load Shedding and Graceful Degradation</td>
+<td>Backlog costs, burst-dependent choices and useful-work objective; no queue-size recommendation transferred.</td>
+</tr>
+<tr class="odd">
+<td>R09, same book</td>
+<td><a href="https://sre.google/sre-book/embracing-risk/">Chapter 3</a>, Forming Your Error Budget and Benefits</td>
+<td>Risk/release framework; S06’s target and numbers remain original examples.</td>
+</tr>
+<tr class="even">
+<td>R10, Saltzer, Reed and Clark</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/endtoend/endtoend.pdf">Author copy</a>, p. 2 principle and p. 6 Duplicate message suppression</td>
+<td>Placement and application-originated repeat distinction; not a proof of the hypothetical provider contract.</td>
+</tr>
+<tr class="odd">
+<td>R11, Saltzer and Schroeder</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/protection/Basic.html">Basic Principles</a>, §I.A.3 b, c, f</td>
+<td>Permission defaults, mediation including cached decisions, and least privilege.</td>
+</tr>
+</tbody>
+</table>
+</div><p>R08’s full-text verification and R12’s historical elasticity discussion remain at their recorded 2026-11-07 checks; this audit does not claim a new detailed passage review of those sources. Their reported performance or historical prices are not used as current predictions. S05’s fan-out and capacity arithmetic were independently rerun as original examples. Source IDs R01–R24 remain stable. No additional source was needed for the correction.</p>
+<h2 id="remaining-uncertainty-and-next-item">Remaining uncertainty and next item</h2>
+<p>No blocking error remains in the audited educational artifacts. Deployment evidence is still needed for real storage/flush behavior, isolation and mutation-path coverage, replica durability/read protocols, provider identity and retention semantics, cancellation, cross-epoch obligation identity, real workload and startup distributions, authorization freshness, credentials, telemetry and correlated dependencies. Finite checks cannot resolve these inputs, and passing them does not certify a deployed system.</p>
+<p>After the saves and index update, next is <strong>Run 16 — A01: Learning, generalization, and distribution change</strong>. Retrieve F02–F04, inspect R13 learning/resampling/generalization passages and relevant R02 support, and build a simple-predictor baseline and split design for repeated organizations, templates and revisions. Align evaluation with the intended deployment and expose leakage. Do not infer diagnostic answers or mastery. The program remains in progress; final packaging and automation shutdown are not yet due.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-08. Audit B: seven packs and companions, one coverage-description correction, targeted primary checks and 41 exercise mappings.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#decision-and-scope">Decision and scope</a></li><li class="h2"><a href="#b-01-synthetic-predicate-inputs-were-described-too-strongly">B-01 — Synthetic predicate inputs were described too strongly</a></li><li class="h2"><a href="#results-by-pack">Results by pack</a></li><li class="h2"><a href="#cross-pack-contracts-and-teaching-continuity">Cross-pack contracts and teaching continuity</a></li><li class="h2"><a href="#primary-passages-inspected-for-this-audit">Primary passages inspected for this audit</a></li><li class="h2"><a href="#remaining-uncertainty-and-next-item">Remaining uncertainty and next item</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

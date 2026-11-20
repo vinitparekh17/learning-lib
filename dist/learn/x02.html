@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X02 — When does a retry prevent recovery? | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="X02">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X02</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=X#track-X"><span aria-hidden="true">←</span> Extensions</a><p class="eyebrow">Extensions <span aria-hidden="true">/</span> X02</p><h1 id="x02-when-does-a-retry-prevent-recovery">When does a retry prevent recovery?</h1><p class="article-description">Decide whether to spend a remaining deadline and a shared capacity budget on one more attempt.</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/s05.html" data-chip="S05">S05</a><a class="module-chip" href="/learn/s06.html" data-chip="S06">S06</a><a class="module-chip" href="/learn/c03.html" data-chip="C03">C03</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-deployment-questions" >Evidence</a><a class="button secondary" href="/answers/x02.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#why-a-quiet-minute-can-contain-a-busy-second">Why a quiet minute can contain a busy second</a></li><li class="h2"><a href="#trace-a-recovery-window">Trace a recovery window</a></li><li class="h2"><a href="#decide-at-the-caller">Decide at the caller</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-deployment-questions">Evidence and deployment questions</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X02 · 1.0 · 20 November 2026</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>S05 queues, S06 reliability and C03 useful capacity</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Decide whether to spend a remaining deadline and a shared capacity budget on one more attempt.</td>
+</tr>
+<tr class="even">
+<td>Evidence</td>
+<td>XR03 and XR04. Primary passages and scope below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment</td>
+<td>Deterministic queue and deadline checks in the <a href="/answers/x02.html">worked companion</a>.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="why-a-quiet-minute-can-contain-a-busy-second">Why a quiet minute can contain a busy second</h2>
+<p>Marc Brooker describes an operational pattern on Amazon EBS and AWS Lambda. Clients running periodic jobs lined up near clock boundaries. Looking at per-second traffic exposed bursts obscured by longer averages. The team worked with clients to stagger periodic work and reported processing the same work with less server capacity. The report gives no universal percentage saving. For periodic work they used a repeatable offset per host so recurring patterns remained diagnosable. For retrying clients, the same paper describes randomizing the backoff delay. <a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">AWS Builders’ Library, “Jitter,” final five paragraphs</a></p>
+<p>This case gives us two different engineering decisions. Spreading a fixed batch changes <em>when</em> its work arrives. Retrying a timed-out call can also change <em>how much</em> work arrives. A timeout tells the caller that it stopped waiting. The original attempt may still occupy a worker. Ask which of those two quantities is causing the problem before tuning a delay.</p>
+<h2 id="trace-a-recovery-window">Trace a recovery window</h2>
+<p>Imagine a retrieval service that can finish 100 equal-cost attempts per second. At the start of recovery it has 40 queued attempts. Every second 90 new requests arrive. An upstream client also has a pool of previously timed-out requests eligible for retry. Treat arrivals as a batch before service, assume a work-conserving queue and retain unfinished work. These values are invented. <a href="/learn/s05.html">S05</a> explains why real requests can have very different costs.</p>
+<p>With no extra attempts, ten slots per second drain old work. With 15 retries per second, the queue grows by five even though fresh traffic alone is below capacity. Compare end-of-second queue lengths.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Extra attempts admitted each second</th>
+<th style="text-align: right;">Start</th>
+<th style="text-align: right;">After 1 s</th>
+<th style="text-align: right;">After 2 s</th>
+<th style="text-align: right;">After 3 s</th>
+<th style="text-align: right;">After 4 s</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">40</td>
+</tr>
+<tr class="even">
+<td>15</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">60</td>
+</tr>
+</tbody>
+</table>
+</div><p>Compute each cell as <code>max(0, previous queue + fresh attempts + retries − capacity)</code>. At exactly ten retries per second the queue stops growing, yet never drains. To clear all 40 within eight seconds under constant rates, reserve five slots per second for recovery. That leaves at most five for retries. This is a budget for the entire dependency in this model. Giving each of ten callers its own five attempts per second would permit fifty.</p>
+<p>The table holds retry arrivals fixed to isolate their cost. In a running service the loop can feed itself. More attempts lengthen the queue. More callers hit their deadline and resubmit, increasing arrivals again. Google SRE documents this pattern and recommends both per-request attempt limits and an aggregate retry budget. Its numeric overload example illustrates the mechanism. <a href="https://sre.google/sre-book/addressing-cascading-failures/">Google SRE, chapter 22, “Retries”</a></p>
+<h2 id="decide-at-the-caller">Decide at the caller</h2>
+<p>Suppose an AI assistant has 800 ms to return evidence. Its first retrieval attempt times out at 560 ms. It needs 150 ms for another retrieval and 60 ms to assemble a response, using invented deterministic costs. Before backoff it has 240 ms left, of which 30 ms can be spent waiting. A 40 ms backoff puts the earliest modeled finish at 810 ms. The request should stop even if the dependency has spare retry tokens. Conversely, satisfying the deadline cannot create backend capacity. In production the stage times are distributions. Measure the joint end-to-end outcome under load and reserve slack for scheduling.</p>
+<p>A workable policy has one layer own the retry. It checks whether the failure is transient, whether a repeated operation is safe, whether enough deadline remains, and whether the shared budget admits it. It propagates the remaining deadline downstream and records both attempts against one logical request. Two layers that each allow three attempts can send nine attempts to the bottom service on the all-fail path. Jitter spreads those attempts. A cap limits their number.</p>
+<p>For a read-only retrieval, duplicate computation may be tolerable. For an agent issuing a billable or externally visible action, a missing reply can leave an unknown outcome. Reconcile using the operation identity and the provider’s actual guarantees before reissuing it. See <a href="/learn/c01.html">C01</a>. Even read-only inference can be expensive if the original generation keeps decoding. Verify how cancellation propagates and when accelerator capacity is actually released.</p>
+<h2 id="practice">Practice</h2>
+<ol type="1">
+<li>With 40 queued attempts, 90 fresh arrivals and capacity 100, find the largest constant integer retry rate that drains the queue in five seconds. Show why the next integer fails.</li>
+<li>A retry needs 150 ms plus 60 ms for response assembly. Find the latest time at which it can start under an inclusive 800 ms deadline. What changes if the first attempt timed out at 610 ms?</li>
+<li>An SDK and gateway each permit two retries after an initial attempt. Bound downstream attempts and choose which layer should own retries for this workload. Identify the information it needs.</li>
+<li>Design a replay for the retrieval endpoint. Which metric would convince you that retries are helping users? Which measurement would make you stop them?</li>
+</ol>
+<h2 id="evidence-and-deployment-questions">Evidence and deployment questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Inspected locator</th>
+<th>Application boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XR03 · Marc Brooker, AWS</td>
+<td><a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">Timeouts, retries, and backoff with jitter</a>, “Jitter,” EBS/Lambda periodic workload account, and “Retries and backoff”</td>
+<td>Production experience with burst timing and guidance for retries. The model’s capacity and deadlines are original assumptions.</td>
+</tr>
+<tr class="even">
+<td>XR04 · Mike Ulrich, Google</td>
+<td><a href="https://sre.google/sre-book/addressing-cascading-failures/">Addressing Cascading Failures</a>, “Retries” and “Queue Management”</td>
+<td>Describes retry feedback, aggregate limits and waiting costs. The service in our trace is hypothetical.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Before choosing a budget, measure per-dependency headroom during recovery, attempts still running after a timeout, actual retries inside SDKs, and the fraction of logical requests delivering supported evidence by the deadline. An improving attempt success rate can coexist with fewer users receiving timely results.</p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/x02.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/extensions.html#extension-evidence-register">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="X02"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/x01.html"><small>Previous module · X01</small><strong>Cache correctness, invalidation, and stale fills</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#why-a-quiet-minute-can-contain-a-busy-second">Why a quiet minute can contain a busy second</a></li><li class="h2"><a href="#trace-a-recovery-window">Trace a recovery window</a></li><li class="h2"><a href="#decide-at-the-caller">Decide at the caller</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-deployment-questions">Evidence and deployment questions</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

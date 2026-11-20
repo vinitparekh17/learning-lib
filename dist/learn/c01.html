@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>C01 — Where must duplicate-effect prevention live? | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="C01">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">C01</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=C#track-C"><span aria-hidden="true">←</span> Synthesis</a><p class="eyebrow">Synthesis <span aria-hidden="true">/</span> C01</p><h1 id="c01-where-must-duplicate-effect-prevention-live">Where must duplicate-effect prevention live?</h1><p class="article-description">Place duplicate prevention at the boundary that controls the promised effect, and revise a retry policy when that boundary changes</p>
+<div class="article-actions"><a class="button primary" href="#bounded-assignment" >Jump to practice</a><a class="button secondary" href="#evidence-and-reference-card" >Evidence</a><a class="button secondary" href="/answers/c01.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#decision-and-scope">Decision and scope</a></li><li class="h2"><a href="#fix-the-assumptions-and-identity-before-choosing-machinery">Fix the assumptions and identity before choosing machinery</a></li><li class="h2"><a href="#the-failure-that-chooses-the-responsibility-boundary">The failure that chooses the responsibility boundary</a></li><li class="h2"><a href="#compare-alternatives-under-the-same-objective">Compare alternatives under the same objective</a></li><li class="h2"><a href="#proposed-protocol-and-proof-obligations">Proposed protocol and proof obligations</a></li><li class="h2"><a href="#change-one-constraint-the-provider-has-no-identity-contract">Change one constraint: the provider has no identity contract</a></li><li class="h2"><a href="#bounded-assignment">Bounded assignment</a></li><li class="h2"><a href="#evidence-and-reference-card">Evidence and reference card</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>C01 · 1.0 · 2026-11-07</td>
+</tr>
+<tr class="even">
+<td>Type</td>
+<td>Synthesis decision memo</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>F01 remembered state and invariants; S02 durable evidence; S03 atomic decisions; S04 replicated decisions</td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Place duplicate prevention at the boundary that controls the promised effect, and revise a retry policy when that boundary changes</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R10 author-copy pp. 2, 6–7 and R07 §8 p. 13 inspected; supporting passages and limits below</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Executed finite state and crash-cut checks; no real payment, network, database or consensus deployment tested</td>
+</tr>
+<tr class="odd">
+<td>Companion</td>
+<td><a href="/answers/c01.html">Worked analysis and executable checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="decision-and-scope">Decision and scope</h2>
+<p>For the fictional invoice workflow, put approval uniqueness, immutable evidence references and the successful request receipt in one durable application transition. If approval also initiates an external payment, commit a payment intent in that transition and require the payment authority to enforce a stable payment identity. A queue or reliable transport may reduce repeated work, but it cannot alone establish that one business operation had one effect.</p>
+<p>The baseline decision assumes a hypothetical provider with an explicit atomic identity contract. If that provider cannot prevent repeated effects or authoritatively resolve an uncertain attempt, change the policy: pause an ambiguous payment for reconciliation instead of automatically submitting it again. This sacrifices automatic progress to protect the at-most-once target. It does not turn uncertainty into proof of failure.</p>
+<p>This memo extends the earlier D17 case. It is a design exercise, not guidance for a named payment product. Approval and payment are distinct outcomes. We promise at most one accepted proposal per <code>(document, approval epoch)</code> and at most one provider payment per authorized payment intent. We do <strong>not</strong> promise at most one payment across every future correction of an invoice: that broader business rule would need a durable obligation identity and additional guards across epochs.</p>
+<h2 id="fix-the-assumptions-and-identity-before-choosing-machinery">Fix the assumptions and identity before choosing machinery</h2>
+<p>An approval request contains tenant, operation key k, document D17, expected epoch 7, revision 2, actor, evidence reference and payment details. Treat the full canonical tuple as its payload; a hash alone is not the equality definition. Tenant namespaces prevent unrelated customers’ keys from colliding. Authentication and authorization are required before disclosing receipts or creating effects; S06 will develop that boundary.</p>
+<p>The caller preserves k across retries of the same intent. A new key is a new request identity, but does not bypass the occupied approval slot. Reusing k with a different payload is rejected. A different payment amount or destination requires a new authorized business decision, not silent reinterpretation of an old key.</p>
+<p>The application authority provides a serialized conditional transition, durable across the modeled process restart and failover. It retains receipts, epoch history and unsent intents. Every mutation path obeys the same guard. A successful decision includes both its immutable evidence reference and receipt. Storage media loss, malicious replicas and broken authorization are outside the finite model; they remain deployment obligations.</p>
+<p>The hypothetical provider atomically binds payment identity p to the exact payment payload, records the effect and its outcome, returns the same result on identical retries, and rejects conflicting reuse. This contract covers concurrent attempts and survives its modeled restart. Its identity records remain valid throughout the application’s retry horizon. These are strong premises to verify, not features assumed of every provider.</p>
+<p>A timeout means the caller lacks a result. It does not identify which side of a durable transition the system reached. Progress additionally needs eventual communication, a functioning authority and provider, and a dispatcher that continues trying. At-most-once effects alone can be achieved by doing nothing; that is not useful completion.</p>
+<h2 id="the-failure-that-chooses-the-responsibility-boundary">The failure that chooses the responsibility boundary</h2>
+<p>All events below are constructed. Suppose a worker records no durable payment identity and calls a provider that treats each request as a new payment.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Application / client</th>
+<th>Provider</th>
+<th>What survives?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Worker sends payment for D17</td>
+<td>Receives request</td>
+<td>No local completed receipt</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Waits for reply</td>
+<td>Executes payment</td>
+<td>One external effect</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Reply is lost; worker crashes</td>
+<td>Effect remains</td>
+<td>Application still lacks outcome</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Replacement retries the payment</td>
+<td>Executes new request</td>
+<td>Two external effects</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Replacement saves “paid”</td>
+<td></td>
+<td>One local receipt describes two payments</td>
+</tr>
+</tbody>
+</table>
+</div><p>Moving the local marker before the call merely changes the failure: crash after marking but before sending leaves “paid” with zero payments. Holding a database lock during the call does not make the provider’s effect part of the database commit. Rolling back that transaction cannot undo an already executed payment.</p>
+<p>R10 explains why application retries can create distinct network messages for the same operation, and why a meaningful storage acknowledgement must come from the layer that can establish storage completion. R07 §8 explicitly adds client request identities and remembered responses to its consensus discussion. These support the placement argument; the payment protocol here is our own synthesis under the declared contract.</p>
+<h2 id="compare-alternatives-under-the-same-objective">Compare alternatives under the same objective</h2>
+<p>The objective is to preserve both at-most-once invariants while allowing eventual completion when the stated dependencies recover. Assume multiple application workers and lost replies for every option.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Useful contribution</th>
+<th>Missing guarantee or cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Disable repeated UI clicks</td>
+<td>Reduces accidental concurrent submissions</td>
+<td>Does not cover restart, retries or another client</td>
+</tr>
+<tr class="even">
+<td>Worker-local set of seen keys</td>
+<td>Fast filtering within one process</td>
+<td>Another worker or a crash loses the shared history</td>
+</tr>
+<tr class="odd">
+<td>Transport or queue duplicate filtering</td>
+<td>Can reduce redundant delivery</td>
+<td>A new message can represent the same business operation; completion boundary may end before the provider effect</td>
+</tr>
+<tr class="even">
+<td>Atomic application receipt plus guarded approval</td>
+<td>Prevents duplicate approval, preserves evidence and resolves its lost reply</td>
+<td>Does not atomically control an independent provider</td>
+</tr>
+<tr class="odd">
+<td>Durable intent plus provider-enforced payment identity</td>
+<td>Allows repeated delivery while preventing repeated provider effects under the contract</td>
+<td>Requires provider cooperation, retained identities, monitoring and reconciliation</td>
+</tr>
+<tr class="even">
+<td>Stop after an uncertain attempt</td>
+<td>Avoids blindly creating a second attempt</td>
+<td>Can leave an operation incomplete indefinitely; delayed first attempts still need resolution</td>
+</tr>
+</tbody>
+</table>
+</div><p>Choose the fifth option for the baseline and retain the fourth as its local foundation. Lower-layer filtering remains an optimization worth measuring, not the authoritative source of business truth. Consensus protects an ordered state transition against its modeled failures; it does not make an incorrect transition correct or extend a transaction into an arbitrary external service.</p>
+<h2 id="proposed-protocol-and-proof-obligations">Proposed protocol and proof obligations</h2>
+<p>The application transition first checks a previously accepted receipt for <code>(tenant,k)</code>. If the canonical payload matches, it returns the historical receipt; if not, it rejects reuse. A historical receipt says what happened then, not that the approval is still current after reopening.</p>
+<p>For a new key, the transition checks authority, expected epoch, expected revision and an empty owner. On success it atomically writes the owner, evidence reference, receipt and one pending payment intent. Assign p from the accepted intent’s durable unique identity, not from a dispatcher attempt number. It records a status such as <code>approved/payment_pending</code>, never <code>paid</code> merely because the intent exists. Stale or occupied requests cannot create intents.</p>
+<p>A dispatcher reads pending intents and calls the provider with the same p and payload on every attempt. It persists the returned authoritative result before marking the intent complete. Crash before the call leaves pending work; crash after the effect but before recording its result causes a repeat call with p. Under the provider contract, that repeat returns the prior result without another effect. Multiple dispatchers need not create duplicate effects if they use the same p and the provider enforces the contract atomically; leases can still reduce wasted calls.</p>
+<p>The pending-intent record is often called an outbox. The name supplies no guarantee: its crucial property here is commitment with the accepted decision, followed by retryable dispatch. Sending first and creating the intent afterward restores the original crash gap.</p>
+<p>The local invariant proof reuses F01’s state reasoning. Initially each epoch is empty. The only accepting transition consumes that epoch’s empty slot and creates exactly one receipt and intent together. A replay creates neither; a competing fresh key sees an occupied slot. A reopen creates a fresh epoch without deleting history. Thus every epoch has at most one acceptance. S02 supplies durable recovery requirements; S03 supplies the atomic guard; S04 supplies the replicated-state boundary when deployed that way.</p>
+<p>The external proof is conditional: every dispatch of one intent uses one p, and the provider’s only effect-producing transition creates p’s first record atomically. Repeated p cannot produce another effect. This proves at most one effect <strong>per p</strong>, not eventual success, and not uniqueness across independently created intents for the same real-world obligation.</p>
+<p>Reopening does not cancel a dispatched payment. For this case an accepted intent remains authorized after reopening; a later correction creates a separately authorized adjustment. If the business requires reopening to revoke a pending payment, it needs an explicit dispatch/cancellation protocol with provider support. A new epoch alone cannot retract a message already in flight.</p>
+<h2 id="change-one-constraint-the-provider-has-no-identity-contract">Change one constraint: the provider has no identity contract</h2>
+<p>Keep the same application authority and business objective, but replace the provider with one that has neither deduplicated payment identities nor an authoritative operation-status query. Now two histories look identical locally:</p>
+<ul>
+<li>H0: the send never reached the provider; no payment happened.</li>
+<li>H1: the provider paid, but its reply never reached the application.</li>
+</ul>
+<p>Both leave the same durable intent and missing outcome. Retrying can complete H0 but duplicate H1. Never retrying protects H1 from a second attempt but may leave H0 unpaid. A local timestamp, a new leader, a longer timeout or more copies of the intent cannot distinguish these histories.</p>
+<p>Revise the decision to record <code>outcome_unknown</code>, prevent automatic resubmission and reconcile using authoritative external evidence. Human review is a workflow for obtaining evidence, not proof by itself. Even a “not found” query would need semantics excluding a delayed original execution before a fresh attempt is safe. If the provider cannot supply such evidence or cancellation/fencing, retain the unresolved state, or change providers or the business guarantee. Do not label an unresolved payment failed and issue a fresh key.</p>
+<h2 id="bounded-assignment">Bounded assignment</h2>
+<p>Write a one-page decision memo before reading the companion. Use exactly the baseline assumptions above, then the changed provider constraint.</p>
+<ol type="1">
+<li>Draw a lost-reply timeline and state separately what the client knows, what the application committed and what the provider did.</li>
+<li>State the two at-most-once invariants, payload-binding rule and evidence-retention requirement. Explain the different roles of k, p and epoch.</li>
+<li>Choose among the options and identify the atomic boundary. Give a concrete counterexample to one inadequate fix.</li>
+<li>Trace crashes before local commit, after commit/before dispatch, after provider execution/before its reply, and after reply/before local completion. Include two competing keys and a retry after reopening.</li>
+<li>Revise the decision under the changed constraint. State what evidence would permit resumption and which progress claim must be withdrawn.</li>
+</ol>
+<p>For application transfer, ask whether two independently approved documents can represent the same payable obligation. If yes, the invariant needs a domain-specific obligation identity beyond this exercise’s scope. Do not assume content equality alone decides that business question.</p>
+<h2 id="evidence-and-reference-card">Evidence and reference card</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Verified locator</th>
+<th>Role and boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R10, Saltzer, Reed and Clark, 1984</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/endtoend/endtoend.pdf">Author copy</a>, p. 2 principle; p. 6 Duplicate message suppression; p. 7 Transaction management</td>
+<td>Placement and acknowledgement argument; no historical performance figure adopted</td>
+</tr>
+<tr class="even">
+<td>R07, Ongaro and Ousterhout, extended 2014 paper</td>
+<td><a href="https://raft.github.io/raft.pdf">Primary PDF</a>, §8 p. 13</td>
+<td>Retried commands, remembered responses and authoritative reads; not an external payment guarantee</td>
+</tr>
+<tr class="odd">
+<td>F01, S02, S03, S04</td>
+<td>Existing packs, especially F01 §7 exercise 6, S03 “Add the delayed request,” S04 retry contract</td>
+<td>Prior continuity, not newly measured deployment evidence</td>
+</tr>
+<tr class="even">
+<td>This memo and companion</td>
+<td>Original histories, conditional proof and finite checks</td>
+<td>Hypothetical provider contract; no current product guarantee asserted</td>
+</tr>
+</tbody>
+</table>
+</div><p>Reference card: name the effect → define identity and payload → locate the authority → commit decision, evidence and receipt together → preserve identity across retry → resolve unknown outcomes at the effect boundary. Retention must cover delayed delivery and restoration, not just the ordinary client timeout. Expiring a provider’s identity while an old intent can still be sent invalidates the proof.</p>
+<p>Open questions are actual provider semantics, retention, safe cancellation, access control, evidence availability, failover durability and obligation identity. They are deployment inputs, not blockers to this synthesis. Next S06 develops authority, isolation and reliability objectives.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-07. Decision memo, changed-provider constraint, five assessment tasks and separate executed finite checks. No learner answers or mastery inferred.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/c01.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#c01-passage-record-2026-11-07">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="C01"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/b03.html"><small>Previous module · B03</small><strong>Distribution, product boundaries, and defensibility</strong></a><a href="/learn/c02.html"><small>Next module · C02</small><strong>Does better model performance improve the customer outcome?</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#decision-and-scope">Decision and scope</a></li><li class="h2"><a href="#fix-the-assumptions-and-identity-before-choosing-machinery">Fix the assumptions and identity before choosing machinery</a></li><li class="h2"><a href="#the-failure-that-chooses-the-responsibility-boundary">The failure that chooses the responsibility boundary</a></li><li class="h2"><a href="#compare-alternatives-under-the-same-objective">Compare alternatives under the same objective</a></li><li class="h2"><a href="#proposed-protocol-and-proof-obligations">Proposed protocol and proof obligations</a></li><li class="h2"><a href="#change-one-constraint-the-provider-has-no-identity-contract">Change one constraint: the provider has no identity contract</a></li><li class="h2"><a href="#bounded-assignment">Bounded assignment</a></li><li class="h2"><a href="#evidence-and-reference-card">Evidence and reference card</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

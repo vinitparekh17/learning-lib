@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>C03 — Which optimization buys useful capacity? | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="C03">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">C03</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=C#track-C"><span aria-hidden="true">←</span> Synthesis</a><p class="eyebrow">Synthesis <span aria-hidden="true">/</span> C03</p><h1 id="c03-which-optimization-buys-useful-capacity">Which optimization buys useful capacity?</h1><p class="article-description">Select an optimization using workload, deadline and cost constraints, then revise it when the workload changes</p>
+<div class="article-actions"><a class="button primary" href="#assignment-for-later-self-assessment" >Jump to practice</a><a class="button secondary" href="#evidence-and-open-inputs" >Evidence</a><a class="button secondary" href="/answers/c03.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#decision-memo">Decision memo</a></li><li class="h2"><a href="#freeze-the-job-and-the-comparison">1. Freeze the job and the comparison</a></li><li class="h2"><a href="#resource-feasibility-before-timing">2. Resource feasibility before timing</a></li><li class="h2"><a href="#the-three-policies-and-their-mechanism">3. The three policies and their mechanism</a></li><li class="h2"><a href="#count-purchased-capacity-and-unsuccessful-work">4. Count purchased capacity and unsuccessful work</a></li><li class="h2"><a href="#change-one-constraint-and-revise-the-decision">5. Change one constraint and revise the decision</a></li><li class="h2"><a href="#workload-and-operational-checks-that-could-overturn-it">6. Workload and operational checks that could overturn it</a></li><li class="h2"><a href="#assignment-for-later-self-assessment">Assignment for later self-assessment</a></li><li class="h2"><a href="#evidence-and-open-inputs">Evidence and open inputs</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / title</td>
+<td>C03 · Which optimization buys useful capacity?</td>
+</tr>
+<tr class="even">
+<td>Revision / date</td>
+<td>1.0 · 2026-11-13</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>S01 resource models; S05 queues and offered-load accounting; A04 inference memory/scheduling; B02 useful-outcome economics</td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Select an optimization using workload, deadline and cost constraints, then revise it when the workload changes</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R16 v1 §§4.1–4.3 and §4.5; R09 chapter 21 resource-capacity discussion inspected</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Deterministic scheduling and exact cost checks executed; no hardware benchmark or model evaluation</td>
+</tr>
+<tr class="odd">
+<td>Companion</td>
+<td><a href="/answers/c03.html">Worked analysis and reproducible checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="decision-memo">Decision memo</h2>
+<p><strong>Recommendation under the starting assumptions:</strong> test the prompt-processing optimization P before purchasing a second replica R. P delivers all eight offered tasks within the deadline at 30 U per timely correct task, compared with 55 U for R. When the output workload doubles, revise the choice to R: it preserves eight timely tasks while P delivers four. These are conditional results of an invented service model, not deployment claims.</p>
+<p>The decision owner must first validate the resource and quality assumptions. A cheaper case is not useful if evidence is unsupported, authority is violated or latency is measured at the wrong boundary. This memo combines the earlier modules around one bounded choice; it does not claim that either option is universally optimal.</p>
+<h2 id="freeze-the-job-and-the-comparison">1. Freeze the job and the comparison</h2>
+<p>The service prepares invoice evidence for an authorized reviewer. It cannot approve payment. A useful task returns the complete supported package within a 90 ms arrival-to-response deadline, inclusive, with unchanged evidence scope and access checks. All eight offered tasks count in the denominator. Late results, refusals and unsupported results do not count as useful successes, although a refusal may be contract-correct in a broader evaluation.</p>
+<p>The boundary here begins when an eligible prepared input arrives at the serving queue and ends when the validated response is ready. Retrieval, network transit and human consumption are outside this latency boundary. The 90 ms objective is therefore a serving-stage budget, not an end-to-end customer promise. Validation overhead is included in the assigned service durations. A separate illustrative verification charge is counted financially; it does not introduce an unmodeled human wait into the 90 ms clock.</p>
+<p>All numbers are hypothetical. Eight identical-length requests arrive together at time zero, with IDs 1–8 breaking ties. There are no retries, failures, cancellations, transfers, warmup delays or background interference. Model, precision, input evidence and correctness are held fixed. A task must generate its complete required output; shortening it merely to meet the deadline is not an allowed optimization.</p>
+<p>Only batch sizes 1–4 are within this fixture’s characterized operating envelope. Batch size eight and more sophisticated continuous scheduling are candidates for later measurement, not assumed impossible. The memo compares three named policies, not every possible schedule. All provisioned replicas are ready at time zero and remain purchased for a common 200 ms window, including idle time. All traces used for the main comparison finish within that window.</p>
+<h2 id="resource-feasibility-before-timing">2. Resource feasibility before timing</h2>
+<p>Reuse A04’s hypothetical device layout: 24 GiB total, 12 GiB weights, 4 GiB other-memory reserve, leaving 8 GiB for KV state. The cache coefficient is 128 KiB per retained position. Each request has a conservative peak cap of 4,096 positions, including prompt and generated positions for both output scenarios. Thus a request needs at most 512 MiB and four active requests need 2 GiB. Queued requests retain their inputs off-device and hold no KV state. Each replica stores its own weights and cache; its memory is not pooled with another replica.</p>
+<p>The feasibility check is local to each device:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>12</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> GiB</mtext></mrow><mo>+</mo><mn>4</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> GiB</mtext></mrow><mo>+</mo><mn>4</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>4096</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>128</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> KiB</mtext></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>18</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> GiB</mtext></mrow><mo>≤</mo><mn>24</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> GiB</mtext></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+12\text{ GiB}+4\text{ GiB}+4(4096)(128\text{ KiB})=18\text{ GiB}\le24\text{ GiB}.
+</annotation></semantics></math></p>
+<p>The reserve must actually bound workspace, runtime state and metadata. Memory headroom does not establish a latency guarantee. R16’s block-based mapping separates logical KV positions from physical allocations, and its scheduling discussion addresses growth beyond available blocks. These mechanisms motivate measuring allocation and growth; the paper does not supply our timing law.</p>
+<p>A memory-only change M that reduces unused allocation but leaves this feasible schedule and its service durations unchanged produces the same timely count as the baseline. That is a counterexample to equating lower allocated bytes with useful throughput. If larger prompts make memory binding, M may matter; the resource condition and timing evidence must then be revisited together.</p>
+<p>S01’s operation/byte bounds explain what cannot be faster than the available resources permit. Here we additionally assign elapsed service laws so that a trace can be computed. An operation lower bound alone would not justify those durations. R09 chapter 21 cautions that requests differ in resource demand; the same request count need not imply the same capacity requirement.</p>
+<h2 id="the-three-policies-and-their-mechanism">3. The three policies and their mechanism</h2>
+<p>Let b be batch size and d the number of decode rounds after prefill. In the baseline law, prefill takes 8+2b ms and each decode round takes 4+b ms. Prefill emits the first token; a task returns d+1 tokens in this small abstraction. Sequential phase durations add because there is no overlap.</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>B</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mo>,</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>8</mn><mo>+</mo><mn>2</mn><mi>b</mi><mo>+</mo><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>4</mn><mo>+</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+s_B(b,d)=8+2b+d(4+b).
+</annotation></semantics></math></p>
+<p>P halves only prefill time, holding decoding, output quality and all other costs fixed:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>P</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mo>,</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>4</mn><mo>+</mo><mi>b</mi><mo>+</mo><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>4</mn><mo>+</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+s_P(b,d)=4+b+d(4+b).
+</annotation></semantics></math></p>
+<p>This is a proposed performance effect to validate, not a claim that a particular kernel or cache will provide it. R uses two unchanged replicas. Each processes one batch of four at time zero. B and P use one replica with two batches of four in FIFO order; the second begins when the first finishes. No batch-formation delay occurs because all requests already exist.</p>
+<p>At b=4 and d=4, baseline prefill is 16 ms and decoding is 32 ms. Halving a third of the original 48 ms service duration yields 40 ms, a 1.2× batch speedup, not 2×. Even eliminating prefill entirely would leave 32 ms and limit this isolated speedup to 1.5×. This is an original phase-sum derivation; it assumes the change does not move work into decoding or another stage.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Starting workload: d=4</th>
+<th style="text-align: right;">B: one baseline replica</th>
+<th style="text-align: right;">P: faster prefill, one replica</th>
+<th style="text-align: right;">R: two baseline replicas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Batch service time</td>
+<td style="text-align: right;">48 ms</td>
+<td style="text-align: right;">40 ms</td>
+<td style="text-align: right;">48 ms</td>
+</tr>
+<tr class="even">
+<td>Task completion times</td>
+<td style="text-align: right;">48×4, 96×4 ms</td>
+<td style="text-align: right;">40×4, 80×4 ms</td>
+<td style="text-align: right;">48×8 ms</td>
+</tr>
+<tr class="odd">
+<td>Timely correct tasks / offered</td>
+<td style="text-align: right;">4/8</td>
+<td style="text-align: right;">8/8</td>
+<td style="text-align: right;">8/8</td>
+</tr>
+<tr class="even">
+<td>Mean serving response</td>
+<td style="text-align: right;">72 ms</td>
+<td style="text-align: right;">60 ms</td>
+<td style="text-align: right;">48 ms</td>
+</tr>
+<tr class="odd">
+<td>Last completion</td>
+<td style="text-align: right;">96 ms</td>
+<td style="text-align: right;">80 ms</td>
+<td style="text-align: right;">48 ms</td>
+</tr>
+<tr class="even">
+<td>Total busy replica-time</td>
+<td style="text-align: right;">96 ms</td>
+<td style="text-align: right;">80 ms</td>
+<td style="text-align: right;">96 ms</td>
+</tr>
+<tr class="odd">
+<td>Purchased replica-time</td>
+<td style="text-align: right;">200 ms</td>
+<td style="text-align: right;">200 ms</td>
+<td style="text-align: right;">400 ms</td>
+</tr>
+</tbody>
+</table>
+</div><p>Here “48×4” means four tasks finish at 48 ms, not a 192 ms response. R halves the last-completion time relative to B without reducing total busy work. P reduces work modestly, but moves the second batch across the deadline, doubling the useful count in this fixture. Threshold effects can make task-level improvement larger than component speedup.</p>
+<h2 id="count-purchased-capacity-and-unsuccessful-work">4. Count purchased capacity and unsuccessful work</h2>
+<p>Assign a price of 1 U per purchased replica-ms and a non-overlapping 5 U verification/accounting charge per attempted task, including late tasks. U is an arbitrary currency unit, not a provider price. Total modeled cost is</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mn>200</mn><mi>k</mi><mo>+</mo><mn>5</mn><mi>N</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+C=200k+5N,
+</annotation></semantics></math></p>
+<p>where k is replicas and N=8. B and P cost 240 U; R costs 440 U. Divide by timely correct count G, not by tokens or all eventual completions. Costs per useful task are respectively 60, 30 and 55 U. If G=0, retain incurred cost and report no finite cost-per-useful-task ratio.</p>
+<p>The decision rule is lexicographic: first require all eight offered tasks to succeed within the budget; among qualifying policies choose the lowest modeled cost. P and R pass; P wins. This is not a revenue or profitability model. It excludes implementation, maintenance, procurement, shared infrastructure and other unlisted costs. At unchanged traffic and outcomes, P’s recurring saving relative to R is 200 U per window. If P requires K U of additional engineering expense over R, recovery needs at least K/200 identical windows under these assumptions. Neither workload persistence nor that expense is observed.</p>
+<p>Counting only busy time would assign much smaller costs and conceal the idle purchased replica. Conversely, a true usage-only billing contract would need another cost model. The common window makes capacity ownership explicit; it is not evidence about a cloud billing minimum.</p>
+<h2 id="change-one-constraint-and-revise-the-decision">5. Change one constraint and revise the decision</h2>
+<p>Now require d=8 decode rounds, retaining eight arrivals, the 90 ms deadline, the same 4,096-position cap and the same per-round law. Longer complete outputs are required by the changed workload; prompt processing is unchanged. This is a controlled sensitivity case, not an assertion that real decoding time is independent of growing sequence length.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Longer output: d=8</th>
+<th style="text-align: right;">B</th>
+<th style="text-align: right;">P</th>
+<th style="text-align: right;">R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Batch duration</td>
+<td style="text-align: right;">80 ms</td>
+<td style="text-align: right;">72 ms</td>
+<td style="text-align: right;">80 ms</td>
+</tr>
+<tr class="even">
+<td>Completions</td>
+<td style="text-align: right;">80×4, 160×4</td>
+<td style="text-align: right;">72×4, 144×4</td>
+<td style="text-align: right;">80×8</td>
+</tr>
+<tr class="odd">
+<td>Timely correct / offered</td>
+<td style="text-align: right;">4/8</td>
+<td style="text-align: right;">4/8</td>
+<td style="text-align: right;">8/8</td>
+</tr>
+<tr class="even">
+<td>Mean response</td>
+<td style="text-align: right;">120 ms</td>
+<td style="text-align: right;">108 ms</td>
+<td style="text-align: right;">80 ms</td>
+</tr>
+<tr class="odd">
+<td>Modeled cost / useful task</td>
+<td style="text-align: right;">60 U</td>
+<td style="text-align: right;">60 U</td>
+<td style="text-align: right;">55 U</td>
+</tr>
+</tbody>
+</table>
+</div><p>Revise to R because it alone meets the stated all-eight objective. P still reduces elapsed work, but its second batch remains too late. Do not describe P as useless: its improvement simply fails this decision’s threshold. Combining P with R is a fourth option; at the same recurring cost it could reduce latency further, but its additional implementation cost and feasibility are not included in this three-option decision.</p>
+<p>The exact boundaries make the recommendation auditable. With b=4, B’s second wave finishes at 32+16d, P’s at 16+16d, and R’s only wave at 16+8d. At 90 ms, all eight are timely for integer d≤3, d≤4 and d≤9 respectively. For d≥10 none of these three policies meets the all-eight objective. More capacity does not fix a single task whose own service exceeds the budget; another service law, deadline or complete-output contract is needed.</p>
+<h2 id="workload-and-operational-checks-that-could-overturn-it">6. Workload and operational checks that could overturn it</h2>
+<p>At one offered task, there is no second batch to rescue. For b=1,d=4, B takes 30 ms and P 25 ms; both meet the deadline. If R still purchases two replicas for the full window, its extra capacity provides no useful-count gain. More headroom is not automatically a cost saving.</p>
+<p>For the longer-output case, a second replica ready at delay h completes its batch at h+80. It preserves all eight timely tasks only when h≤10 ms, under a routing rule that assigns that batch to it. “Autoscaling is enabled” is not evidence of readiness. The cost table assumes a warm replica; startup charges and delayed arrivals require a revised ledger and trace.</p>
+<p>For unequal output lengths, a static batch may run until its longest member finishes; continuous scheduling can remove finished work and admit waiting requests. Those policies require per-request lengths and iteration-level accounting. Average output length is insufficient to reconstruct the queue. Larger prompts can change both memory demand and phase durations. Do not vary the memory cap while silently keeping a timing law outside its characterized range.</p>
+<p>Validate P against B with the same timestamped offered arrivals, task cases, model, decoding rules and quality rubric. Record accepted/rejected/late/unsupported counts, complete response times, phase durations, peak allocated memory, growth failures, replay/retry work, billed capacity and verification effort. Include idle periods and startup in a declared window. Compare matched quality; one unsupported P result would leave only seven useful tasks and fail the all-eight gate. Eight synthetic tasks do not estimate a production percentile or establish a sustainable arrival rate.</p>
+<p>Stop rollout on authority or evidence-integrity violations. Reject the optimization claim if speed comes from dropping required output, shifting work outside the clock or excluding hard requests from the denominator. Retain a rollback path and test repeated bursts; the fixture is a decision aid, not a production safety proof.</p>
+<h2 id="assignment-for-later-self-assessment">Assignment for later self-assessment</h2>
+<ol type="1">
+<li>Reconstruct per-device memory use and explain why a memory-only optimization need not change this decision.</li>
+<li>Derive all starting-workload finish times, means, useful counts and phase speedup bounds.</li>
+<li>Rebuild the cost ledger, compare busy versus purchased time, and state what engineering expense does to the recommendation.</li>
+<li>Apply the longer-output workload, derive integer decode-round thresholds, and evaluate second-replica startup delays of 0, 10 and 11 ms.</li>
+<li>Design an experiment that can reject P or R. Include sparse traffic, unequal lengths, quality failures and a reason not to report the fixture as a production p99.</li>
+</ol>
+<h2 id="evidence-and-open-inputs">Evidence and open inputs</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Verified locator, inspected 2026-11-13</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R16 Kwon et al., 2023</td>
+<td><a href="https://arxiv.org/pdf/2309.06180v1">arXiv v1 paper</a>, §§4.1–4.3 pp. 5–6; §4.5 p. 8</td>
+<td>Block allocation/mapping and growth-related scheduling constraints; no paper speedup or current implementation default adopted</td>
+</tr>
+<tr class="even">
+<td>R09 Google SRE, 2016</td>
+<td><a href="https://sre.google/sre-book/handling-overload/">Chapter 21</a>, The Pitfalls of Queries per Second</td>
+<td>Resource-dependent request cost; practitioner guidance rather than this fixture’s service law</td>
+</tr>
+<tr class="odd">
+<td>Original conditional model</td>
+<td>Equations, schedules, billing window, sensitivity and companion code</td>
+<td>All numerical inputs invented; checks execute arithmetic and policy traces, not hardware performance</td>
+</tr>
+</tbody>
+</table>
+</div><p>S01 supplies resource feasibility, S05 supplies waiting and offered-load denominators, A04 supplies phase/cache separation, and B02 supplies full-cost useful-outcome accounting. Unknown deployment inputs include actual phase curves, quality, arrivals, memory peaks, startup time, billing and implementation effort. None blocks this synthesis; none is claimed verified.</p>
+<p><strong>Reference card:</strong> freeze the complete task → check per-resource feasibility → trace the same arrivals → count timely correct outputs → charge owned capacity and failed work → test a changed workload → revise the choice when a boundary is crossed.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-13. Three-option capacity memo with a workload-driven recommendation reversal and five analysis tasks.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/c03.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#c03-passage-verification-2026-11-13">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="C03"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/c02.html"><small>Previous module · C02</small><strong>Does better model performance improve the customer outcome?</strong></a><a href="/learn/c04.html"><small>Next module · C04</small><strong>Which product boundary makes the service viable?</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#decision-memo">Decision memo</a></li><li class="h2"><a href="#freeze-the-job-and-the-comparison">1. Freeze the job and the comparison</a></li><li class="h2"><a href="#resource-feasibility-before-timing">2. Resource feasibility before timing</a></li><li class="h2"><a href="#the-three-policies-and-their-mechanism">3. The three policies and their mechanism</a></li><li class="h2"><a href="#count-purchased-capacity-and-unsuccessful-work">4. Count purchased capacity and unsuccessful work</a></li><li class="h2"><a href="#change-one-constraint-and-revise-the-decision">5. Change one constraint and revise the decision</a></li><li class="h2"><a href="#workload-and-operational-checks-that-could-overturn-it">6. Workload and operational checks that could overturn it</a></li><li class="h2"><a href="#assignment-for-later-self-assessment">Assignment for later self-assessment</a></li><li class="h2"><a href="#evidence-and-open-inputs">Evidence and open inputs</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

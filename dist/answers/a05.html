@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>A05 — Hints, worked answers and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">A05</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/a05.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">A05 <span aria-hidden="true">/</span> Worked companion</p><h1 id="a05-hints-worked-answers-and-checks">Hints, worked answers and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/a05.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#contract-and-baselines">1. Contract and baselines</a></li><li class="h2"><a href="#outcome-and-cost-ledger">2. Outcome and cost ledger</a></li><li class="h2"><a href="#traces-and-enforcement">3. Traces and enforcement</a></li><li class="h2"><a href="#repeated-trials">4. Repeated trials</a></li><li class="h2"><a href="#judge-disagreement">5. Judge disagreement</a></li><li class="h2"><a href="#next-decision">6. Next decision</a></li><li class="h2"><a href="#reproduce-the-checks">Reproduce the checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>A05 answers · 1.0 · 2026-11-11</td>
+</tr>
+<tr class="even">
+<td>Title</td>
+<td>Evaluation, workflows, and controlled autonomy — worked answers</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>A01, A03, S06, A04 and <a href="/learn/a05.html">A05 core</a></td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Audit outcome denominators and enforceable control boundaries</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R18/R17/R03 passages linked in core</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Finite predicate/ledger calculations executed; no live model or external action</td>
+</tr>
+</tbody>
+</table>
+</div><p>Reference answers are not learner responses or mastery assessments.</p>
+<h2 id="hints">Hints</h2>
+<ol type="1">
+<li>Who selects the next operation, and who authorizes it, are separate questions.</li>
+<li>Count every offered case, then separately count answerable cases and timely drafts.</li>
+<li>A budget must survive retries; a tool result cannot grant a privilege.</li>
+<li>A repeated trial is not a new document. Selection needs a mechanism.</li>
+<li>Start with a two-by-two table and label each denominator.</li>
+<li>Isolate the useful capability in D2 before accepting the full loop’s complexity.</li>
+</ol>
+<h2 id="contract-and-baselines">1. Contract and baselines</h2>
+<p>All designs must return supported, current, scoped drafts or the appropriate unresolved/refusal disposition within two seconds, with no unauthorized disclosure/effect. None receives payment authority. W uses a coded exact lookup and template. M has one fixed bundle and one model call. L selects further read operations from observations but the controller constrains every dispatch. A workflow can contain a model; its control structure remains fixed if the next step is determined by code.</p>
+<p>Compare the whole designs on the same offered population and permitted corpus. An identical-evidence diagnostic can isolate answer construction, but supplying oracle evidence bypasses retrieval and must be labeled separately. Returning unresolved for an answerable case is safer than inventing a claim, yet fails the chosen completion objective.</p>
+<p><strong>Criterion:</strong> Distinguish outcome, control and authority; preserve the same information/access contract.</p>
+<h2 id="outcome-and-cost-ledger">2. Outcome and cost ledger</h2>
+<p>W’s successful cases are D1,D3,D4,D6: 4/6. M’s are D1,D4,D6: 3/6. L’s are D1,D2,D3,D4: 4/6. Timely drafts occur on D1,D6 for W and M, and D1,D2 for L. Each therefore covers 2/4 answerable cases. D3/D4 are valid non-draft dispositions; counting them as drafts would inflate usefulness.</p>
+<p>With total resource charges [6,12,24], charge per contract success is [6/4,12/3,24/4]=[1.5,4,6]. Charge per timely draft is [6/2,12/2,24/2]=[3,6,12]. Late and unsuccessful work remains in the numerator. These are constructed charges, not estimates from A04’s hardware example or actual billing.</p>
+<p>L has one forbidden approval attempt and zero committed mutations. The external guard succeeds on that case; the policy does not. D6 also lacks a draft, so it is not a contract success. More generally, a policy could attempt a forbidden action, get blocked, then produce a correct draft; report the attempt even if the final-artifact metric passes. A release gate can prohibit such attempts independently.</p>
+<p><strong>Criterion:</strong> Explicit denominators, separate refusal/draft outcomes, and attempted versus realized violations.</p>
+<h2 id="traces-and-enforcement">3. Traces and enforcement</h2>
+<p>Successful D2: scoped search → exact passage read → supported draft → validation. The two reads remain within the three-call cap. Missing evidence: three permitted empty reads consume all three slots; a fourth is denied and the controller returns unresolved. Invalid proposals terminate immediately under the declared policy rather than allowing endless free retries.</p>
+<p>Hostile observation: source text requests approval → model proposes <code>approve</code> → controller rejects because it is outside the allowlist → record the attempt; no mutation. Tenant mismatches and revoked read permission must also fail before evidence is returned. Neither a matching schema nor an apparently sensible action proves authority.</p>
+<p>The sequential check below counts admitted external calls. It does not implement identity verification, concurrent revocation, cancellation of running calls, token accounting or semantic support. A real controller additionally needs model-call/output-size caps, elapsed-time enforcement, bounded tool responses, and checks on final disclosure. If a future mutation times out, consult its stable operation identity; blindly retrying under a new identity can duplicate effects.</p>
+<p><strong>Criterion:</strong> A bounded failure path, no budget reset, authority from trusted execution context and honest implementation limits.</p>
+<h2 id="repeated-trials">4. Repeated trials</h2>
+<p>Rates by case are 3/3,2/3,1/3,0/3. Equal-case mean is (1+2/3+1/3+0)/4=1/2. Pooled success is 6/12=1/2 because all trial counts match. The four underlying cases remain four cases; independent-document uncertainty cannot be calculated by pretending the twelve attempts are unrelated.</p>
+<p>Three cases have at least one success, hence 3/4 is an oracle best-of-three result. To realize it, a system must run multiple attempts and correctly select an acceptable answer. The selection procedure can fail, incurs cost, and must be evaluated as part of the complete system. Unequal trial counts make pooled and equal-case means potentially differ; report the intended estimand before aggregating.</p>
+<p>Keep all revisions of a document family together in the holdout, reconstruct evidence at decision time, and repeat under a frozen sampling configuration. Variation across seeds is not evidence of diversity across suppliers or future periods.</p>
+<p><strong>Criterion:</strong> Distinguish case diversity, stochastic variation and selection-system performance.</p>
+<h2 id="judge-disagreement">5. Judge disagreement</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Reference adjudication</th>
+<th style="text-align: right;">Judge accepts</th>
+<th style="text-align: right;">Judge rejects</th>
+<th style="text-align: right;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Correct</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td>Incorrect</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">12</td>
+</tr>
+</tbody>
+</table>
+</div><p>Agreement is (6+2)/12=2/3. Acceptance precision is 6/9=2/3; false-accept rate among incorrect outputs is 3/5. False rejection among correct outputs is 1/7. The equal numerical values of agreement and precision here are accidental; the populations differ.</p>
+<p>Blind the system identity, inspect original sources/revisions and action logs, and ask a second qualified reviewer to apply the same rubric. Preserve initial judgments. Distinguish ambiguity, context omission, source conflict and evaluator mistakes. Do not settle disagreements by choosing whichever answer helps the preferred system. Treat adjudication as a reference procedure whose reliability also needs checking. Validate changes on new cases; a disagreement-only sample cannot estimate overall error directly.</p>
+<p><strong>Criterion:</strong> Correct confusion matrix, denominator labels, and a process that permits both human and judge error.</p>
+<h2 id="next-decision">6. Next decision</h2>
+<p>Keep W as the baseline under this ledger. Investigate a fixed alternate-extraction branch for D2, using held-out document families and the same source-time contract. Compare that addition with L under identical budgets, deadlines and scoring, recording all cases and violations. L might still be justified if held-out tasks require adaptive searches that fixed branches cannot cover, but that has not been demonstrated.</p>
+<p>Before deployment, test real tool errors, latency tails, revocation, malformed responses and output containment; use shadow operation to observe distribution changes without granting effects. A later controlled rollout must evaluate reviewer behavior and shared-resource interference. The frozen ledger cannot establish customer value, operational safety across every route, or performance after source/provider changes. R17’s dependency and feedback concerns remain relevant even if model weights are unchanged.</p>
+<p><strong>Criterion:</strong> Choose the simplest supported design, name evidence that could reverse it, and preserve offline-to-live limits.</p>
+<h2 id="reproduce-the-checks">Reproduce the checks</h2>
+<p>This is an executable specification of the constructed accounting and sequential admission rules. It does not simulate a language model, network, clock progression, or semantic judge.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> F</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> product</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuples: contract success, timely supported draft, forbidden attempts, effects.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>rows<span class="op">=</span>{</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> <span class="st">'W'</span>:[(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> <span class="st">'M'</span>:[(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> <span class="st">'L'</span>:[(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>)]}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>charges<span class="op">=</span>{<span class="st">'W'</span>:<span class="dv">6</span>,<span class="st">'M'</span>:<span class="dv">12</span>,<span class="st">'L'</span>:<span class="dv">24</span>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name,expected <span class="kw">in</span> [(<span class="st">'W'</span>,<span class="dv">4</span>),(<span class="st">'M'</span>,<span class="dv">3</span>),(<span class="st">'L'</span>,<span class="dv">4</span>)]:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>rows[name]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    successes<span class="op">=</span><span class="bu">sum</span>(r[<span class="dv">0</span>] <span class="cf">for</span> r <span class="kw">in</span> data)<span class="op">;</span>drafts<span class="op">=</span><span class="bu">sum</span>(r[<span class="dv">1</span>] <span class="cf">for</span> r <span class="kw">in</span> data)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> successes<span class="op">==</span>expected <span class="kw">and</span> drafts<span class="op">==</span><span class="dv">2</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> F(drafts,<span class="dv">4</span>)<span class="op">==</span>F(<span class="dv">1</span>,<span class="dv">2</span>) <span class="kw">and</span> <span class="bu">sum</span>(r[<span class="dv">3</span>] <span class="cf">for</span> r <span class="kw">in</span> data)<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [F(charges[n],<span class="bu">sum</span>(r[<span class="dv">0</span>] <span class="cf">for</span> r <span class="kw">in</span> rows[n])) <span class="cf">for</span> n <span class="kw">in</span> rows]<span class="op">==</span>[F(<span class="dv">3</span>,<span class="dv">2</span>),F(<span class="dv">4</span>),F(<span class="dv">6</span>)]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [F(charges[n],<span class="dv">2</span>) <span class="cf">for</span> n <span class="kw">in</span> rows]<span class="op">==</span>[F(<span class="dv">3</span>),F(<span class="dv">6</span>),F(<span class="dv">12</span>)]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(r[<span class="dv">2</span>] <span class="cf">for</span> r <span class="kw">in</span> rows[<span class="st">'L'</span>])<span class="op">==</span><span class="dv">1</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>allowed<span class="op">=</span>{<span class="st">'read_revision'</span>,<span class="st">'search_evidence'</span>}</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> admit(op,authenticated,same_tenant,grant,used,elapsed):</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (op <span class="kw">in</span> allowed <span class="kw">and</span> authenticated <span class="kw">and</span> same_tenant <span class="kw">and</span> grant</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            <span class="kw">and</span> <span class="dv">0</span><span class="op">&lt;=</span>used<span class="op">&lt;</span><span class="dv">3</span> <span class="kw">and</span> <span class="dv">0</span><span class="op">&lt;=</span>elapsed<span class="op">&lt;</span><span class="dv">2000</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Exhaustive 3 operations x 8 flag combinations x 5 counts x 4 clock inputs.</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>count<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> op,auth,scope,grant,used,elapsed <span class="kw">in</span> product(</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'read_revision'</span>,<span class="st">'search_evidence'</span>,<span class="st">'approve'</span>],[<span class="va">False</span>,<span class="va">True</span>],[<span class="va">False</span>,<span class="va">True</span>],</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    [<span class="va">False</span>,<span class="va">True</span>],<span class="bu">range</span>(<span class="dv">5</span>),[<span class="dv">0</span>,<span class="dv">1999</span>,<span class="dv">2000</span>,<span class="dv">2001</span>]):</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    result<span class="op">=</span>admit(op,auth,scope,grant,used,elapsed)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> result:</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> op<span class="op">!=</span><span class="st">'approve'</span> <span class="kw">and</span> <span class="bu">all</span>([auth,scope,grant]) <span class="kw">and</span> used<span class="op">&lt;</span><span class="dv">3</span> <span class="kw">and</span> elapsed<span class="op">&lt;</span><span class="dv">2000</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> op <span class="kw">in</span> allowed <span class="kw">and</span> <span class="bu">all</span>([auth,scope,grant]) <span class="kw">and</span> used<span class="op">&lt;</span><span class="dv">3</span> <span class="kw">and</span> elapsed<span class="op">&lt;</span><span class="dv">2000</span>:</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> result</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    count<span class="op">+=</span><span class="dv">1</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> count<span class="op">==</span><span class="dv">480</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>used<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> admit(<span class="st">'search_evidence'</span>,<span class="va">True</span>,<span class="va">True</span>,<span class="va">True</span>,used,<span class="dv">100</span>)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    used<span class="op">+=</span><span class="dv">1</span> <span class="co"># empty results still consume the dispatched-call budget</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> admit(<span class="st">'search_evidence'</span>,<span class="va">True</span>,<span class="va">True</span>,<span class="va">True</span>,used,<span class="dv">100</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> admit(<span class="st">'approve'</span>,<span class="va">True</span>,<span class="va">True</span>,<span class="va">True</span>,<span class="dv">0</span>,<span class="dv">100</span>)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> admit(<span class="st">'read_revision'</span>,<span class="va">True</span>,<span class="va">True</span>,<span class="va">True</span>,<span class="dv">0</span>,<span class="dv">100</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> admit(<span class="st">'read_revision'</span>,<span class="va">True</span>,<span class="va">True</span>,<span class="va">False</span>,<span class="dv">1</span>,<span class="dv">100</span>) <span class="co"># subsequent revoked grant</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>counts<span class="op">=</span>[<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">0</span>]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(F(x,<span class="dv">3</span>) <span class="cf">for</span> x <span class="kw">in</span> counts)<span class="op">/</span><span class="dv">4</span><span class="op">==</span>F(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="bu">sum</span>(counts),<span class="dv">12</span>)<span class="op">==</span>F(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="bu">sum</span>(x<span class="op">&gt;</span><span class="dv">0</span> <span class="cf">for</span> x <span class="kw">in</span> counts),<span class="dv">4</span>)<span class="op">==</span>F(<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Unequal trial allocations can change the pooled estimand.</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (F(<span class="dv">1</span>,<span class="dv">1</span>)<span class="op">+</span>F(<span class="dv">0</span>,<span class="dv">3</span>))<span class="op">/</span><span class="dv">2</span><span class="op">==</span>F(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">1</span>,<span class="dv">4</span>)<span class="op">!=</span>F(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>tp,fn,fp,tn<span class="op">=</span><span class="dv">6</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> tp<span class="op">+</span>fn<span class="op">+</span>fp<span class="op">+</span>tn<span class="op">==</span><span class="dv">12</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(tp<span class="op">+</span>tn,<span class="dv">12</span>)<span class="op">==</span>F(<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(tp,tp<span class="op">+</span>fp)<span class="op">==</span>F(<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(fp,fp<span class="op">+</span>tn)<span class="op">==</span>F(<span class="dv">3</span>,<span class="dv">5</span>) <span class="kw">and</span> F(fn,tp<span class="op">+</span>fn)<span class="op">==</span>F(<span class="dv">1</span>,<span class="dv">7</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: ledger, cost denominators, 480 admission cases, budget/revocation, trials and judge counts'</span>)</span></code></pre></div>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-11. Six reference solutions and bounded executable checks; no learner performance inferred.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#contract-and-baselines">1. Contract and baselines</a></li><li class="h2"><a href="#outcome-and-cost-ledger">2. Outcome and cost ledger</a></li><li class="h2"><a href="#traces-and-enforcement">3. Traces and enforcement</a></li><li class="h2"><a href="#repeated-trials">4. Repeated trials</a></li><li class="h2"><a href="#judge-disagreement">5. Judge disagreement</a></li><li class="h2"><a href="#next-decision">6. Next decision</a></li><li class="h2"><a href="#reproduce-the-checks">Reproduce the checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

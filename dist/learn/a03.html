@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>A03 — Retrieval, external knowledge, and provenance | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="A03">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">A03</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=A#track-A"><span aria-hidden="true">←</span> AI systems</a><p class="eyebrow">AI systems <span aria-hidden="true">/</span> A03</p><h1 id="a03-retrieval-external-knowledge-and-provenance">Retrieval, external knowledge, and provenance</h1><p class="article-description">Locate a failed evidence-to-answer stage and defend what a citation actually establishes</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/s02.html" data-chip="S02">S02</a><a class="module-chip" href="/learn/a01.html" data-chip="A01">A01</a><a class="module-chip" href="/learn/a02.html" data-chip="A02">A02</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#reference-card-and-evidence" >Evidence</a><a class="button secondary" href="/answers/a03.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#the-answer-changed-which-part-should-change">The answer changed; which part should change?</a></li><li class="h2"><a href="#one-query-and-four-passages">One query and four passages</a></li><li class="h2"><a href="#four-failures-plus-a-handoff-loss">Four failures, plus a handoff loss</a></li><li class="h2"><a href="#what-a-citation-must-preserve">What a citation must preserve</a></li><li class="h2"><a href="#freshness-and-authority-are-separate-clocks">Freshness and authority are separate clocks</a></li><li class="h2"><a href="#what-the-original-rag-paper-contributes">What the original RAG paper contributes</a></li><li class="h2"><a href="#evaluate-the-whole-path-without-hiding-failures">Evaluate the whole path without hiding failures</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card-and-evidence">Reference card and evidence</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Title</td>
+<td>Retrieval, external knowledge, and provenance</td>
+</tr>
+<tr class="even">
+<td>ID / revision / date</td>
+<td>A03 · 1.0 · 2026-11-10</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>S02 versioned evidence, A01 evaluation boundaries, A02 attention; S06 authority bridge below</td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Locate a failed evidence-to-answer stage and defend what a citation actually establishes</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R15 arXiv v4 methods and experimental setup inspected; R11 mediation passage rechecked</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Constructed corpus, fixed scores and executed finite checks; no live retriever, language model or semantic verifier evaluated</td>
+</tr>
+<tr class="odd">
+<td>Companion</td>
+<td><a href="/answers/a03.html">Hints, worked answers and checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="the-answer-changed-which-part-should-change">The answer changed; which part should change?</h2>
+<p>A reviewer asks, “What delivery reference is published for tenant A’s D17 now?” S02’s example has an older revision with delivery reference X and a newer revision with Y. A model can produce fluent text containing either. The decision is whether the answer is supported by the intended revision and whether this reviewer is allowed to see it.</p>
+<p>Keep frequently changing, tenant-specific and auditable facts in a versioned evidence system when those properties are required. Model parameters can supply learned language patterns, but a plausible remembered answer does not identify the document revision used. Retrieval makes particular source material available to the answering procedure; it does not by itself establish that the procedure uses it correctly.</p>
+<p>A <strong>corpus</strong> is the stored collection. An <strong>index</strong> is a representation used to find candidates. A <strong>passage</strong> is a bounded piece of source material. A <strong>ranking score</strong> orders candidates under a rule. A <strong>context</strong> is the evidence actually delivered to the answer-producing component. A <strong>citation</strong> identifies claimed support. These objects can disagree: a source may exist without being indexed, a retrieved passage may be dropped before generation, and a valid link may accompany an unsupported claim.</p>
+<p>Our lesson uses a deterministic document query before discussing open-ended answers. No learner readiness is assumed. S02 supplies immutable revision identity; S06 supplies the distinction between a caller’s request and their authority; A01 requires that evaluation reflect the intended decision time. A02’s normalized attention weights do not certify truth or access rights.</p>
+<h2 id="one-query-and-four-passages">One query and four passages</h2>
+<p>All metadata, scores and times in this case are invented. Time is measured in arbitrary units. Revision 2 was published at t=5, revision 3 at t=15. The query arrives at t=20. An authoritative head lookup selects revision 3; this is a system fact, not a conclusion inferred from similarity scores. Current read permission allows tenant A’s D17 only.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Passage</th>
+<th>Tenant / document / revision</th>
+<th>Content fixture</th>
+<th style="text-align: right;">Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>old</td>
+<td>A / D17 / 2</td>
+<td>Delivery reference X</td>
+<td style="text-align: right;">97</td>
+</tr>
+<tr class="even">
+<td>other</td>
+<td>B / D17 / 3</td>
+<td>Delivery reference Z</td>
+<td style="text-align: right;">95</td>
+</tr>
+<tr class="odd">
+<td>note</td>
+<td>A / D17 / 3</td>
+<td>Review notes; no delivery reference</td>
+<td style="text-align: right;">93</td>
+</tr>
+<tr class="even">
+<td>new</td>
+<td>A / D17 / 3</td>
+<td>Delivery reference Y</td>
+<td style="text-align: right;">88</td>
+</tr>
+</tbody>
+</table>
+</div><p>A score of 97 is simply larger than 88 under this assigned ranking. It is neither 97% confidence nor evidence of freshness. Identical document IDs in different tenant namespaces do not identify the same document.</p>
+<p>Our proposed sequence is:</p>
+<ol type="1">
+<li>Establish the authenticated principal and exact question: current published state, a named revision, or historical state as of a time.</li>
+<li>Resolve the permitted document and selected revision using authoritative metadata.</li>
+<li>Search only eligible passages, or ensure equivalent enforcement before any unauthorized content reaches an untrusted component.</li>
+<li>Retrieve a candidate set, rank/select evidence under a context budget, and preserve stable locators.</li>
+<li>Produce an answer or an explicit insufficient-evidence outcome.</li>
+<li>Check each consequential claim against the selected evidence and enforce permission at disclosure under the declared freshness contract.</li>
+</ol>
+<p>Applying tenant/document/revision constraints leaves <code>note</code> and <code>new</code>. Top-1 by our score retrieves <code>note</code> and misses the fact. Top-2 contains both. But a one-passage context that keeps the first score-ranked passage still drops <code>new</code>. Increasing retrieval depth alone did not solve evidence selection. For this structured query, a simple field-aware selector preferring passages with the requested delivery field chooses <code>new</code>. For prose questions, that relevance judgment needs its own evaluation.</p>
+<p>An exact fact lookup on <code>(tenant, doc, rev, field)</code> is a strong baseline here. A general semantic search is useful when questions or source phrasing are varied, but it must earn its complexity against that baseline. Do not make a precise record lookup harder merely to use generation.</p>
+<h2 id="four-failures-plus-a-handoff-loss">Four failures, plus a handoff loss</h2>
+<p>The desired answer is “The published delivery reference is Y,” linked to the exact location in revision 3. A diagnostic must compare intermediate artifacts, not only the final sentence.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Controlled failure</th>
+<th>Observation to inspect</th>
+<th>Repair candidate and remaining limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Correct evidence missing</td>
+<td>Authoritative revision manifest expects the delivery fact, but the indexed corpus lacks <code>new</code></td>
+<td>Repair ingestion/index publication; a larger k cannot recover absent content</td>
+</tr>
+<tr class="even">
+<td>Present but not retrieved</td>
+<td><code>new</code> exists and is eligible, but top-1 is <code>note</code></td>
+<td>Examine query/ranker/index approximation; top-2 repairs this fixture only</td>
+</tr>
+<tr class="odd">
+<td>Retrieved but dropped</td>
+<td>Candidate IDs include <code>new</code>; delivered context contains only <code>note</code></td>
+<td>Repair selection/truncation; log the actual context, not merely retrieval results</td>
+</tr>
+<tr class="even">
+<td>Retrieved and supplied but ignored</td>
+<td>Context contains <code>new</code>; answer says X without valid current support</td>
+<td>Evaluate answer construction, contradictory memory and abstention; retriever recall is already adequate</td>
+</tr>
+<tr class="odd">
+<td>Cited without support</td>
+<td>Answer says “Payment is settled” and cites <code>new</code></td>
+<td>Resolve the citation and compare the claim with its passage; a delivery reference says nothing about settlement</td>
+</tr>
+</tbody>
+</table>
+</div><p>The first, second, fourth and fifth rows instantiate the curriculum’s required four failure cases. The third separates a common handoff ambiguity in “retrieved.” They are controlled constructions, not observed incident frequencies. In a real failure several defects may coexist. Report the earliest failing stage for triage while retaining later failures rather than pretending each case has one universal cause.</p>
+<p>For debugging, supplying known sufficient evidence directly can isolate downstream behavior. If the answer remains wrong, changing only retrieval cannot fix that controlled run. Such an oracle-evidence test does not estimate deployed quality because it bypasses the retrieval difficulty. Conversely, improved recall does not prove improved supported-answer rate if context selection or generation remains defective.</p>
+<h2 id="what-a-citation-must-preserve">What a citation must preserve</h2>
+<p>Store a citation record with tenant/document identity, immutable revision, passage identifier, source-byte reference, extraction/rendering version and a locator such as page/region or offsets into that exact rendering. Preserve enough bytes to reproduce the source. A digest can detect mismatch; it cannot recreate a deleted document. Re-resolve permissions before disclosing retained evidence. This extends S02 and S06 rather than replacing them with a model prompt.</p>
+<p>Check three different properties:</p>
+<ul>
+<li><strong>Resolution:</strong> the cited object and span exist and identify the source version claimed.</li>
+<li><strong>Support:</strong> that span, possibly together with explicitly identified additional evidence, justifies the actual claim at its stated scope.</li>
+<li><strong>Applicability:</strong> the source belongs to the requested object, time and authority context and is permitted for this principal.</li>
+</ul>
+<p>A citation can resolve perfectly and fail the other two. An old passage supports “revision 2 listed X,” but not “the current revision lists X” at t=20. A delivery reference supports an extracted field claim, not that goods physically arrived or a payment settled. Source support is also distinct from source truth: an authentic invoice can itself contain a false assertion.</p>
+<p>When an answer has several claims, check each. A single source at the paragraph’s end does not necessarily support every sentence. For a conclusion combining passages, retain the combination and explain the inference. Conflicting eligible sources should trigger the declared source-precedence rule or an unresolved result, not a silent choice of whichever scored highest.</p>
+<p>In the companion, support is a manually assigned exact fact relation. It validates the example’s bookkeeping. It is not an algorithm for determining arbitrary textual entailment. Real support assessment needs a rubric, human-labeled cases and an evaluation of the assessor’s errors.</p>
+<h2 id="freshness-and-authority-are-separate-clocks">Freshness and authority are separate clocks</h2>
+<p>For a historical question at t=10, the published revision is 2 and X is appropriate. For the same question at t=20, revision 3 and Y are appropriate. Neither answer should use a mutable “latest” link to reconstruct what was seen earlier. Record query time, source publication time, indexed snapshot and selected revision.</p>
+<p>If the head advances before the new index is ready, do not silently substitute old evidence while claiming current state. One policy is to return “current evidence unavailable” until the revision is searchable, or use an authorized direct lookup. Another is to offer a clearly labeled older result if the product contract permits it. Choose and test that contract explicitly. Updating source bytes without rebuilding affected passages/index entries is not a complete retrieval update.</p>
+<p>For access control, relevance is never permission. Do not send all tenants’ passages to an external model and ask it to ignore forbidden ones. It has already received them. Post-filtering can also hurt recall: selecting global top-1 and then removing ineligible results can yield an empty set even when eligible evidence exists. The fixture demonstrates this without measuring any search engine.</p>
+<p>A permission can change between retrieval and display. Our proposed immediate-disclosure policy requires a current authorization decision coordinated with disclosure; merely storing a policy version does not enforce that ordering. If permission cannot be established, withhold the protected answer. If a system deliberately allows bounded staleness, declare and evaluate that weaker policy. An answer cache must respect principal scope, source revision and permission changes; a query-string-only cache fails these requirements.</p>
+<p>R11’s complete-mediation passage explicitly includes remembered authorization decisions. Retrieved text is untrusted data and cannot grant new privileges by claiming to be an administrator. Authority must be enforced outside the generated response, as S06 established. These are design obligations, not security guarantees provided by R15.</p>
+<h2 id="what-the-original-rag-paper-contributes">What the original RAG paper contributes</h2>
+<p>R15 combines a DPR-based retriever, a dense Wikipedia index and a BART generator. Its RAG-Sequence formulation marginalizes one latent passage across an output sequence; RAG-Token marginalizes passages at each output-token step over the retrieved set. During fine-tuning it updates the query encoder and generator while keeping the document encoder/index fixed. These are specific mechanisms, not a definition of every later retrieval pipeline. Inspect §2.1–2.4, pp. 3–4; §3, p. 4 states the corpus setup.</p>
+<p>An original two-passage calculation makes the distinction concrete. Let retrieval weights be 0.6 and 0.4. For a fixed two-token target and its fixed prefix, let conditional token probabilities be (0.8,0.5) under passage 1 and (0.2,0.9) under passage 2. With these hypothetical normalized weights:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>s</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi></mrow></msub><mo>=</mo><mn>0.6</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.8</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.5</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mn>0.4</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.9</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0.312</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">
+P_{sequence}=0.6(0.8)(0.5)+0.4(0.2)(0.9)=0.312,
+</annotation></semantics></math> <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><mi>n</mi></mrow></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0.6</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.8</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mn>0.4</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mspace width="0.167em"></mspace><mrow><mo stretchy="true" form="prefix">[</mo><mn>0.6</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.5</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mn>0.4</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.9</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mn>0.3696</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+P_{token}=[0.6(0.8)+0.4(0.2)]\,[0.6(0.5)+0.4(0.9)]=0.3696.
+</annotation></semantics></math></p>
+<p>The second expression includes cross-passage contributions between token positions. It does not require fetching a new corpus on each step. Neither number is a probability that the answer is true or a permission decision. The paper’s model is not implemented by our deterministic field selector, and our fixture does not reproduce its experiments.</p>
+<h2 id="evaluate-the-whole-path-without-hiding-failures">Evaluate the whole path without hiding failures</h2>
+<p>Define success for our query as a correct, supported answer for the selected revision with no unauthorized disclosure. Track abstention, incorrect answer and missing evidence separately. A safe abstention can be preferable to fabrication while still failing an answer-completion objective. Questions outside the supported population need a declared separate denominator.</p>
+<p>Imagine 20 eligible test queries, each requiring one evidence item. Four lack it in the corpus; four more miss it during retrieval; two more lose it during selection; three more fail downstream; seven succeed. These stages are nested and exhaustive by construction. Corpus coverage is 16/20, conditional candidate hit rate 12/16, conditional selection retention 10/12, and supported completion given sufficient context 7/10. Their product is 7/20=35%. Reporting only 70% on the sufficient-context subset conceals upstream losses. This is an accounting identity for this suite, not an independence assumption or predicted production rate.</p>
+<p>For multi-evidence questions, replace a single hit with a sufficient-evidence-set criterion; one relevant passage may be inadequate. Freeze corpus snapshots, permissions, query interpretations and answer rubric before final evaluation. Use A01’s group/time boundaries, keep document revisions together and exclude information unavailable at decision time. Compare exact lookup, lexical matching and learned retrieval under the same task contract. Measure ranking, selected-context sufficiency, claim support, abstention and full-task outcomes as well as resource costs. Do not transfer a public QA score to private invoice correctness.</p>
+<h2 id="practice">Practice</h2>
+<ol type="1">
+<li>Trace eligible passages, top-1, top-2 and one-passage context for the t=20 query. Compare a field-aware selector with exact lookup and score-only selection.</li>
+<li>Construct the four required failure cases and the selection-loss case. For each, name the artifact to inspect and a controlled test that distinguishes it from adjacent stages.</li>
+<li>Compare “revision 2 listed X,” “current reference is X” and “payment is settled” with citations to <code>old</code> or <code>new</code>. Separate resolution, support, applicability and source truth.</li>
+<li>Change query time to t=10, then restore t=20 but remove <code>new</code> from the index. Add a permission revocation before display. Specify an honest response policy for each case.</li>
+<li>Recompute the two probability expressions and explain why passage weights, attention weights and claim correctness are different quantities.</li>
+<li>Derive all stage rates for the 20-query suite. Propose an evaluation that could reject a higher-recall retriever, including context budget, access controls, missing answers and deployment-aligned splits.</li>
+</ol>
+<h2 id="reference-card-and-evidence">Reference card and evidence</h2>
+<p>Identify the question’s object/time → enforce authority → verify corpus/index availability → inspect candidates → inspect actual context → assess each claim against exact evidence → retain the source version. A resolvable citation is a starting point for verification.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Inspected locator</th>
+<th>Use and boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R15, Lewis et al., 2020; arXiv v4 dated 2021-04-12</td>
+<td><a href="https://arxiv.org/pdf/2005.11401v4">Versioned paper</a>, Figure 1 p. 2, §§2.1–2.4 pp. 3–4, §3 opening p. 4</td>
+<td>Concrete retriever/generator model and experimental corpus scope; no performance result adopted</td>
+</tr>
+<tr class="even">
+<td>R11, Saltzer and Schroeder, 1975</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/protection/Basic.html">Basic Principles</a>, §I.A.3 c, Complete mediation</td>
+<td>Access checks and updating cached decisions; our disclosure protocol is an application design</td>
+</tr>
+<tr class="odd">
+<td>Earlier packs</td>
+<td>S02 evidence identity; S06 authority; A01 evaluation; A02 attention limits</td>
+<td>Continuity, not fresh deployment validation</td>
+</tr>
+<tr class="even">
+<td>Original synthesis</td>
+<td>Corpus, fixed scores, failure cases, two-passage calculation, stage accounting and companion checks</td>
+<td>Constructed values and explicit assumptions, not measured model behavior</td>
+</tr>
+</tbody>
+</table>
+</div><p>Open inputs include real corpus completeness, grouping, source accuracy, index publication latency, permission synchronization, ranker behavior, context budgets and support-assessor error. No essential source-access blocker remains. Learner answers/mastery remain unknown. Next A04 studies inference serving and memory economics.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-10. Versioned retrieval case, stage diagnostics, provenance/authority boundaries and six exercises.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/a03.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#a03-passage-record-2026-11-10">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="A03"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/a02.html"><small>Previous module · A02</small><strong>Attention and the Transformer mechanism</strong></a><a href="/learn/a04.html"><small>Next module · A04</small><strong>Inference serving and memory economics</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#the-answer-changed-which-part-should-change">The answer changed; which part should change?</a></li><li class="h2"><a href="#one-query-and-four-passages">One query and four passages</a></li><li class="h2"><a href="#four-failures-plus-a-handoff-loss">Four failures, plus a handoff loss</a></li><li class="h2"><a href="#what-a-citation-must-preserve">What a citation must preserve</a></li><li class="h2"><a href="#freshness-and-authority-are-separate-clocks">Freshness and authority are separate clocks</a></li><li class="h2"><a href="#what-the-original-rag-paper-contributes">What the original RAG paper contributes</a></li><li class="h2"><a href="#evaluate-the-whole-path-without-hiding-failures">Evaluate the whole path without hiding failures</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card-and-evidence">Reference card and evidence</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

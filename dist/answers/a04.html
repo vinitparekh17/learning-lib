@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>A04 — Hints, worked answers and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">A04</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/a04.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">A04 <span aria-hidden="true">/</span> Worked companion</p><h1 id="a04-hints-worked-answers-and-checks">Hints, worked answers and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/a04.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#tensor-budget">1. Tensor budget</a></li><li class="h2"><a href="#length-and-concurrency">2. Length and concurrency</a></li><li class="h2"><a href="#block-accounting">3. Block accounting</a></li><li class="h2"><a href="#two-schedule-traces">4. Two schedule traces</a></li><li class="h2"><a href="#counterexample-and-economics">5. Counterexample and economics</a></li><li class="h2"><a href="#a-test-that-can-reject-the-optimization">6. A test that can reject the optimization</a></li><li class="h2"><a href="#reproduce-the-checks">Reproduce the checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>A04 answers · 1.0 · 2026-11-10</td>
+</tr>
+<tr class="even">
+<td>Title</td>
+<td>Inference serving and memory economics — worked answers</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>S01, S05, A02 and <a href="/learn/a04.html">A04 core</a></td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Audit memory units, allocation boundaries and latency-constrained policy comparisons</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R16/R04/R08 locators in core; numerical cases are original</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Python integer/rational checks executed; no model or GPU benchmark</td>
+</tr>
+</tbody>
+</table>
+</div><p>These reference solutions do not represent learner responses or mastery.</p>
+<h2 id="hints">Hints</h2>
+<ol type="1">
+<li>Count both keys and values across every layer and KV head; multiply by bytes per scalar.</li>
+<li>Divide remaining bytes by bytes per request, then round down. Check the next token too.</li>
+<li>Round each request separately before summing. A block cannot lend its unused tail to a separate private request.</li>
+<li>Separate service start, first-token time and final completion. Keep every clock relative to arrival.</li>
+<li>Recount timely completions before changing the cost denominator.</li>
+<li>A lower memory peak says nothing by itself about service time or answer quality.</li>
+</ol>
+<h2 id="tensor-budget">1. Tensor budget</h2>
+<p>The coefficient is 2×32×8×128×2=131,072 bytes per cached token, or 128 KiB. Stored weights consume (6×2^30)×2=12 GiB. Remaining memory is 24−12−4=8 GiB, hence 8×2^30/131,072=65,536 token positions. A request at 4,096 positions consumes 512 MiB; sixteen fit arithmetically.</p>
+<p>Doubling Hkv to 16 doubles the coefficient to 256 KiB and makes a 4,096-position request consume 1 GiB. Eight fit. This changes only the assumed KV layout; a real architecture change can also alter parameter count and quality. Holding those fixed is a sensitivity exercise, not a specification of an actual replacement model.</p>
+<p><strong>Criterion:</strong> Correct tensor dimensions, binary units and omitted-state boundary. No substitution of query-head count without a layout justification.</p>
+<h2 id="length-and-concurrency">2. Length and concurrency</h2>
+<p>At lengths 1,024, 2,048, 4,096 and 8,192, per-request state is respectively 128,256,512 and 1,024 MiB. Dividing the 8,192 MiB pool gives 64,32,16 and 8 requests. These are memory-only limits; none is a throughput claim.</p>
+<p>Sixteen requests at 4,096 positions exactly fill the pool. One more unrounded cached position exceeds it by 128 KiB. With 16-slot blocks, growing one such request to 4,097 requires a new 2 MiB block. If all sixteen grow, the next allocation requires 32 MiB. A correct scheduler needs reserved growth space or a declared fallback such as queueing/preemption; silently exceeding capacity is not a policy.</p>
+<p><strong>Criterion:</strong> Distinguish live-byte growth from allocation-step growth and present occupancy from a safe generation horizon.</p>
+<h2 id="block-accounting">3. Block accounting</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Block size</th>
+<th>Rounded lengths</th>
+<th style="text-align: right;">Allocated slots</th>
+<th style="text-align: right;">Slack slots</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">8</td>
+<td>24,32,32,8</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">16</td>
+<td>32,32,32,16</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">32</td>
+<td>32,32,32,32</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">47</td>
+</tr>
+</tbody>
+</table>
+</div><p>The live count is always 81. At size 16, 112×128 KiB=14 MiB is allocated and 31×128 KiB=3.875 MiB is unused tail capacity. Four fixed 64-position reservations instead allocate 256 slots=32 MiB, with 175 unused slots at this instant. Those slots may be intentional future capacity; they are not necessarily fragmented free memory.</p>
+<p>External fragmentation can prevent a large contiguous request despite sufficient total free space. Internal slack lies inside allocated blocks. The fixture has private blocks and no block-table accounting beyond the declared reserve. Smaller B reduces slack here, but latency could worsen through more lookups or less efficient access. Only measurement decides that trade-off.</p>
+<p><strong>Criterion:</strong> Per-request rounding, exact totals and accurate definitions; no claim of zero total waste.</p>
+<h2 id="two-schedule-traces">4. Two schedule traces</h2>
+<p>For b=1, prefill takes 10 ms and four decode rounds take 4×5=20 ms. Each request takes 30 ms. Serial starts are [0,30,60,90], giving first-token times [10,40,70,100] and completions [30,60,90,120]. Only the first completes by 50 ms.</p>
+<p>For b=4, prefill takes 16 ms and four rounds take 4×8=32 ms. All first tokens arrive at 16 ms; all completions occur at 48 ms. All four meet 50 ms. Makespan throughput is 4/0.120 versus 4/0.048, or approximately 33.33 and 83.33 requests/s. These finite-trace ratios do not establish sustainable traffic rates.</p>
+<p>The first request’s streaming gap worsens from 5 to 8 ms. Its first token is also later. Four outputs sharing a 48 ms computation does not divide their experienced response times by four. It divides busy resource time per output, a different metric.</p>
+<p><strong>Criterion:</strong> Same workload, full response clocks, inclusive deadline and explicit objective. No percentile claims from four requests.</p>
+<h2 id="counterexample-and-economics">5. Counterexample and economics</h2>
+<p>At 40 ms, serial completion 30 qualifies but 60,90,120 do not. Batch completion 48 does not qualify for any request. Serial delivers 1/4 timely results; batching delivers 0/4. Thus a policy with higher completed-request throughput can lose on the chosen objective.</p>
+<p>With price r per busy second, serial costs 0.120r and batch costs 0.048r for the full trace. At 50 ms the charges per timely result are 0.120r and 0.012r. At 40 ms serial remains 0.120r, while batch’s denominator is zero: report no timely result and its incurred charge, not zero cost or a finite ratio.</p>
+<p>Longer prompts, longer generations, bandwidth contention or larger batch sizes outside the assumed range can invalidate the service laws. If requests arrive far apart, batch formation adds waiting and the comparison changes again. Billing over a fixed provisioned window rather than busy time can also change the financial comparison.</p>
+<p><strong>Criterion:</strong> Preserve late work in the numerator, timely outcomes in the denominator and undefined zero-success ratios.</p>
+<h2 id="a-test-that-can-reject-the-optimization">6. A test that can reject the optimization</h2>
+<p>Replay identical timestamped requests independently of completion. Fix architecture, weights, precision, decoding/stopping rules and correctness rubric. Record prompt/output lengths and repeat controlled runs with a stated warmup policy. Compare allocated versus live memory, workspace peaks, first-token and inter-token latency, end-to-end completion, offered/admitted/rejected counts and timely-correct outcomes. Count cancellations, preempted/recomputed work, idle time and startup under the same resource-accounting window.</p>
+<p>Reject the optimization if lower memory usage accompanies worse timely-correct completion, unacceptable streaming gaps, corruption of retained state, isolation failures or greater total cost under the declared objective. If memory has headroom but longer batches saturate memory bandwidth, more available slots are not useful admission capacity. If temporary workspace exceeds its reserved bound, the memory model itself is invalid. A useful experiment identifies which hypothesis failed instead of declaring paging universally good or bad.</p>
+<p>Quality and authority remain independent constraints from A03/S06. Shared prefixes require compatible state and access boundaries; the private-block fixture has not validated cross-request sharing. A05 will evaluate the full workflow rather than treating emitted tokens as useful outcomes.</p>
+<p><strong>Criterion:</strong> A falsifiable outcome, consistent denominator, resource evidence and clearly bounded claims.</p>
+<h2 id="reproduce-the-checks">Reproduce the checks</h2>
+<p>The script below uses exact arithmetic for budgets and the assigned service laws. It checks 4,096 length/block combinations and 64 concurrency boundaries, plus both schedules and cost ratios. These are finite model checks, not hardware experiments.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> F</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>GiB<span class="op">=</span><span class="dv">2</span><span class="op">**</span><span class="dv">30</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>MiB<span class="op">=</span><span class="dv">2</span><span class="op">**</span><span class="dv">20</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>c<span class="op">=</span><span class="dv">2</span><span class="op">*</span><span class="dv">32</span><span class="op">*</span><span class="dv">8</span><span class="op">*</span><span class="dv">128</span><span class="op">*</span><span class="dv">2</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pool<span class="op">=</span><span class="dv">24</span><span class="op">*</span>GiB<span class="op">-</span>(<span class="dv">6</span><span class="op">*</span>GiB)<span class="op">*</span><span class="dv">2</span><span class="op">-</span><span class="dv">4</span><span class="op">*</span>GiB</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> c<span class="op">==</span><span class="dv">128</span><span class="op">*</span><span class="dv">1024</span> <span class="kw">and</span> pool<span class="op">//</span>c<span class="op">==</span><span class="dv">65536</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [pool<span class="op">//</span>(c<span class="op">*</span>t) <span class="cf">for</span> t <span class="kw">in</span> (<span class="dv">1024</span>,<span class="dv">2048</span>,<span class="dv">4096</span>,<span class="dv">8192</span>)]<span class="op">==</span>[<span class="dv">64</span>,<span class="dv">32</span>,<span class="dv">16</span>,<span class="dv">8</span>]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> pool<span class="op">//</span>(<span class="dv">2</span><span class="op">*</span>c<span class="op">*</span><span class="dv">4096</span>)<span class="op">==</span><span class="dv">8</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">65</span>):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    max_t<span class="op">=</span>pool<span class="op">//</span>(c<span class="op">*</span>n)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> n<span class="op">*</span>max_t<span class="op">*</span>c<span class="op">&lt;=</span>pool<span class="op">&lt;</span>n<span class="op">*</span>(max_t<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>c</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> allocated(lengths,b):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(((t<span class="op">+</span>b<span class="op">-</span><span class="dv">1</span>)<span class="op">//</span>b)<span class="op">*</span>b <span class="cf">for</span> t <span class="kw">in</span> lengths)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>lengths<span class="op">=</span>[<span class="dv">17</span>,<span class="dv">31</span>,<span class="dv">32</span>,<span class="dv">1</span>]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(lengths)<span class="op">==</span><span class="dv">81</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [allocated(lengths,b) <span class="cf">for</span> b <span class="kw">in</span> (<span class="dv">8</span>,<span class="dv">16</span>,<span class="dv">32</span>)]<span class="op">==</span>[<span class="dv">96</span>,<span class="dv">112</span>,<span class="dv">128</span>]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> allocated(lengths,<span class="dv">16</span>)<span class="op">*</span>c<span class="op">==</span><span class="dv">14</span><span class="op">*</span>MiB</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F((<span class="dv">112</span><span class="op">-</span><span class="dv">81</span>)<span class="op">*</span>c,MiB)<span class="op">==</span>F(<span class="dv">31</span>,<span class="dv">8</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">4</span><span class="op">*</span><span class="dv">64</span><span class="op">*</span>c<span class="op">==</span><span class="dv">32</span><span class="op">*</span>MiB</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> b <span class="kw">in</span> (<span class="dv">1</span>,<span class="dv">8</span>,<span class="dv">16</span>,<span class="dv">32</span>):</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">1025</span>):</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        a<span class="op">=</span>allocated([t],b)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> a<span class="op">%</span>b<span class="op">==</span><span class="dv">0</span> <span class="kw">and</span> <span class="dv">0</span><span class="op">&lt;=</span>a<span class="op">-</span>t<span class="op">&lt;</span>b</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> a<span class="op">-</span>b<span class="op">&lt;</span>t<span class="op">&lt;=</span>a</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> allocated([<span class="dv">4096</span>]<span class="op">*</span><span class="dv">16</span>,<span class="dv">16</span>)<span class="op">*</span>c<span class="op">==</span>pool</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> allocated([<span class="dv">4097</span>]<span class="op">+</span>[<span class="dv">4096</span>]<span class="op">*</span><span class="dv">15</span>,<span class="dv">16</span>)<span class="op">*</span>c<span class="op">-</span>pool<span class="op">==</span><span class="dv">2</span><span class="op">*</span>MiB</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> allocated([<span class="dv">4097</span>]<span class="op">*</span><span class="dv">16</span>,<span class="dv">16</span>)<span class="op">*</span>c<span class="op">-</span>pool<span class="op">==</span><span class="dv">32</span><span class="op">*</span>MiB</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> times(b):</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    prefill<span class="op">=</span><span class="dv">8</span><span class="op">+</span><span class="dv">2</span><span class="op">*</span>b</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    step<span class="op">=</span><span class="dv">4</span><span class="op">+</span>b</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> prefill,prefill<span class="op">+</span><span class="dv">4</span><span class="op">*</span>step</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>p1,s1<span class="op">=</span>times(<span class="dv">1</span>)<span class="op">;</span>p4,s4<span class="op">=</span>times(<span class="dv">4</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>starts<span class="op">=</span>[i<span class="op">*</span>s1 <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)]</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>first_s<span class="op">=</span>[s<span class="op">+</span>p1 <span class="cf">for</span> s <span class="kw">in</span> starts]<span class="op">;</span>finish_s<span class="op">=</span>[s<span class="op">+</span>s1 <span class="cf">for</span> s <span class="kw">in</span> starts]</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>first_b<span class="op">=</span>[p4]<span class="op">*</span><span class="dv">4</span><span class="op">;</span>finish_b<span class="op">=</span>[s4]<span class="op">*</span><span class="dv">4</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> first_s<span class="op">==</span>[<span class="dv">10</span>,<span class="dv">40</span>,<span class="dv">70</span>,<span class="dv">100</span>] <span class="kw">and</span> finish_s<span class="op">==</span>[<span class="dv">30</span>,<span class="dv">60</span>,<span class="dv">90</span>,<span class="dv">120</span>]</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> first_b<span class="op">==</span>[<span class="dv">16</span>]<span class="op">*</span><span class="dv">4</span> <span class="kw">and</span> finish_b<span class="op">==</span>[<span class="dv">48</span>]<span class="op">*</span><span class="dv">4</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> timely(xs,d):<span class="cf">return</span> <span class="bu">sum</span>(x<span class="op">&lt;=</span>d <span class="cf">for</span> x <span class="kw">in</span> xs)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [timely(xs,<span class="dv">50</span>) <span class="cf">for</span> xs <span class="kw">in</span> (finish_s,finish_b)]<span class="op">==</span>[<span class="dv">1</span>,<span class="dv">4</span>]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [timely(xs,<span class="dv">40</span>) <span class="cf">for</span> xs <span class="kw">in</span> (finish_s,finish_b)]<span class="op">==</span>[<span class="dv">1</span>,<span class="dv">0</span>]</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Deadline boundary checks establish inclusive semantics.</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> timely(finish_b,<span class="dv">47</span>)<span class="op">==</span><span class="dv">0</span> <span class="kw">and</span> timely(finish_b,<span class="dv">48</span>)<span class="op">==</span><span class="dv">4</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">4</span><span class="op">*</span><span class="dv">1000</span>,<span class="bu">max</span>(finish_s))<span class="op">==</span>F(<span class="dv">100</span>,<span class="dv">3</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(<span class="dv">4</span><span class="op">*</span><span class="dv">1000</span>,<span class="bu">max</span>(finish_b))<span class="op">==</span>F(<span class="dv">250</span>,<span class="dv">3</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> charge_per_timely(xs,d):</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    n<span class="op">=</span>timely(xs,d)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F(<span class="bu">max</span>(xs),<span class="dv">1000</span>)<span class="op">/</span>n <span class="cf">if</span> n <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> charge_per_timely(finish_s,<span class="dv">50</span>)<span class="op">==</span>F(<span class="dv">120</span>,<span class="dv">1000</span>)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> charge_per_timely(finish_b,<span class="dv">50</span>)<span class="op">==</span>F(<span class="dv">12</span>,<span class="dv">1000</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> charge_per_timely(finish_b,<span class="dv">40</span>) <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: budgets, 64 capacity boundaries, 4096 block cases, growth, schedules and costs'</span>)</span></code></pre></div>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-10. Six solutions, criteria and executable model checks. No learner performance inferred.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#tensor-budget">1. Tensor budget</a></li><li class="h2"><a href="#length-and-concurrency">2. Length and concurrency</a></li><li class="h2"><a href="#block-accounting">3. Block accounting</a></li><li class="h2"><a href="#two-schedule-traces">4. Two schedule traces</a></li><li class="h2"><a href="#counterexample-and-economics">5. Counterexample and economics</a></li><li class="h2"><a href="#a-test-that-can-reject-the-optimization">6. A test that can reject the optimization</a></li><li class="h2"><a href="#reproduce-the-checks">Reproduce the checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

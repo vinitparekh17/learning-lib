@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S05 — Queues, tail latency, and cloud elasticity | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="S05">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S05</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=S#track-S"><span aria-hidden="true">←</span> Systems</a><p class="eyebrow">Systems <span aria-hidden="true">/</span> S05</p><h1 id="s05-queues-tail-latency-and-cloud-elasticity">Queues, tail latency, and cloud elasticity</h1><p class="article-description">Trace waiting work and compare overload policies against a deadline and resource budget</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f02.html" data-chip="F02">F02</a><a class="module-chip" href="/learn/f03.html" data-chip="F03">F03</a><a class="module-chip" href="/learn/s01.html" data-chip="S01">S01</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-reference-card-and-remaining-questions" >Evidence</a><a class="button secondary" href="/answers/s05.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#the-worker-is-fast-the-request-is-late">The worker is fast; the request is late</a></li><li class="h2"><a href="#six-requests-and-one-common-objective">Six requests and one common objective</a></li><li class="h2"><a href="#compare-four-responses-to-the-same-burst">Compare four responses to the same burst</a></li><li class="h2"><a href="#rates-describe-a-longer-window">Rates describe a longer window</a></li><li class="h2"><a href="#a-small-component-tail-becomes-a-request-tail">A small component tail becomes a request tail</a></li><li class="h2"><a href="#elastic-capacity-changes-the-budget-not-the-past">Elastic capacity changes the budget, not the past</a></li><li class="h2"><a href="#measure-the-policy-without-hiding-failures">Measure the policy without hiding failures</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-reference-card-and-remaining-questions">Evidence, reference card and remaining questions</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>S05 · 1.0 · 2026-11-07</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>F02 probability and denominators, F03 workload comparisons, S01 service cost and batching</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Trace waiting work and compare overload policies against a deadline and resource budget</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R08 author-hosted full text accessed; R09 chapters 21–22 and R12 §6.1 inspected. Locators below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Constructed workloads and executed Python scheduling/arithmetic checks. No real service benchmark.</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/s05.html">Hints, worked answers, and checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="the-worker-is-fast-the-request-is-late">The worker is fast; the request is late</h2>
+<p>The invoice service receives a burst of documents. Processing an ordinary document takes one second in our fictional model, yet a reviewer waits eight seconds for one of them. The missing time is waiting behind other work. Optimizing the one-second operation may help, but choosing a queue size, admission rule or capacity policy requires understanding the entire arrival-to-completion interval.</p>
+<p>An arrival is a request entering the measured boundary. Service time is time occupying the worker. Waiting time precedes service. Response time here ends when the complete result is ready. We exclude network transfer, review and storage commit time from this small model. A production end-to-end clock must include those stages when they matter to the promise.</p>
+<p>Let arrival, start, service duration and finish for request i be a_i, b_i, s_i and f_i. For one non-preemptive first-in, first-out worker:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub><mo>=</mo><mo>max</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><msub><mi>f</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>f</mi><mi>i</mi></msub><mo>=</mo><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>s</mi><mi>i</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>W</mi><mi>i</mi></msub><mo>=</mo><msub><mi>b</mi><mi>i</mi></msub><mo>−</mo><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><msub><mi>f</mi><mi>i</mi></msub><mo>−</mo><msub><mi>a</mi><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+b_i=\max(a_i,f_{i-1}),\quad f_i=b_i+s_i,\quad W_i=b_i-a_i,\quad T_i=f_i-a_i.
+</annotation></semantics></math></p>
+<p>“Non-preemptive” means a started job runs to completion. The worker is work-conserving: it does not idle while an eligible job waits. The recurrence follows directly from those rules. It is a baseline to test, not a promise that every queue behaves this way.</p>
+<h2 id="six-requests-and-one-common-objective">Six requests and one common objective</h2>
+<p>All six requests arrive at time zero. Ties follow IDs J1 through J6. Service durations are <code>[1,1,4,1,1,1]</code> seconds. Five are short and J3 is long. The empirical service distribution puts 5/6 of its mass at 1 and 1/6 at 4, with mean 1.5 seconds. No random draw or real measurement produced these values.</p>
+<p>Every request has a four-second arrival-to-completion deadline, inclusive. The objective is to maximize complete, correct results delivered on time among <strong>all six offered requests</strong>, while reporting resource use and rejected/late outcomes. All computed results are assumed correct. Each policy must return the same complete output for an admitted request. Rejected and late requests do not count as timely successes.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Job</th>
+<th style="text-align: right;">Service</th>
+<th style="text-align: right;">Start</th>
+<th style="text-align: right;">Finish / response time</th>
+<th style="text-align: right;">Waiting</th>
+<th>Meets deadline?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>J1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>J2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>J3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>J4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td>J5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>J6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">8</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div><p>Immediately after J1 starts, five jobs wait. After J2 starts at t=1, four wait. J3 starts at t=2, leaving three short jobs waiting until t=6. The backlog eventually drains at t=9, but eventual completion did not meet the interactive objective. Keeping every job in the queue does not make every acceptance useful.</p>
+<p>The six response times average 5.5 seconds. Define the empirical p-th percentile using nearest rank: sort n observations and choose position <code>ceil(p*n)</code>, counting from one. Then p50 is 6 seconds and p95 is 9. With six observations p95 selects the maximum. It is a descriptive statistic for this batch, not a reliable estimate of a production tail.</p>
+<p>Move the long job to the end while keeping the same service-time distribution. Completions become <code>[1,2,3,4,5,9]</code>, with four timely results and mean response time 4. The unchanged mean service time did not determine the waiting-time distribution. Arrival order, scheduling and burst shape are consequential inputs.</p>
+<h2 id="compare-four-responses-to-the-same-burst">Compare four responses to the same burst</h2>
+<p><strong>Queue everything.</strong> The baseline does nine worker-seconds of busy work and completes two requests on time. A queue is useful if later completion retains value and memory is bounded. It does not increase processing capacity. R09’s Queue Management section discusses how bursts, service time and queue length affect the choice.</p>
+<p><strong>Reject work predicted to miss the deadline.</strong> In ID order, accept a request only if its predicted finish on the one worker is at most four. Assume exact service costs are known at admission, and reject checks cost zero for this model. J1 and J2 reserve two seconds. J3 would finish at six, so reject it. J4 and J5 then reserve seconds three and four. J6 would finish at five, so reject it. Four of six succeed on time using four worker-seconds. The result is conditional on unusually good cost estimates. Underestimation, expensive rejection or immediate retries can erase the advantage.</p>
+<p><strong>Batch adjacent pairs.</strong> Assume a separate execution mode that produces exactly the same results, with pair service time <code>0.5 + max(s_i,s_j)</code>. Both outputs become available together. This is an assigned batching cost, not a measured speedup. All jobs are already present, so there is no assembly delay. The pairs finish at 1.5, 6 and 7.5 seconds. Busy time falls to 7.5 worker-seconds, but only J1 and J2 meet the deadline. J4 waits for its expensive batch partner. This reuses S01’s distinction between amortized work and individual latency.</p>
+<p><strong>Add a worker.</strong> With two identical workers ready at zero and a shared FIFO queue, J1 and J2 finish at one. J3 occupies the first worker from one to five; the second finishes J4, J5 and J6 at two, three and four. Five of six meet the deadline. If the second worker becomes ready only at t=2, completions by job ID are <code>[1,2,6,3,4,5]</code>. Four of six are timely. A scaling decision cannot retroactively process work during startup.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Policy</th>
+<th style="text-align: right;">On-time / offered</th>
+<th style="text-align: right;">Rejected</th>
+<th style="text-align: right;">Eventually completed late</th>
+<th style="text-align: right;">Busy worker-seconds</th>
+<th style="text-align: right;">Last admitted completion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>One worker, FIFO</td>
+<td style="text-align: right;">2/6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td>Deadline admission, one worker</td>
+<td style="text-align: right;">4/6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td>One worker, paired batches</td>
+<td style="text-align: right;">2/6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">7.5</td>
+</tr>
+<tr class="even">
+<td>Two workers ready at zero</td>
+<td style="text-align: right;">5/6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td>Second worker ready at two</td>
+<td style="text-align: right;">4/6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">6</td>
+</tr>
+</tbody>
+</table>
+</div><p>Busy time is not billed capacity. Two provisioned workers can incur cost while one is idle. The admission policy’s completed-only success fraction is 4/4, but its offered-request fraction is 4/6. Report both only with explicit denominators. It would be misleading to advertise “100% success” while hiding the rejected third of the workload.</p>
+<p>The equal-value objective favors short jobs. If J3 is an urgent high-value case, rejecting it may be unacceptable. A class reservation, separate queue or different objective may be appropriate. F02’s loss model supplies the missing value judgment; a scheduler does not discover business priorities from service times.</p>
+<h2 id="rates-describe-a-longer-window">Rates describe a longer window</h2>
+<p>A separate fluid model makes sustained overload visible. Treat work as divisible units with arrival rate λ and service capacity μ in the same units per second. While backlog Q is positive, it changes at λ−μ. At zero, unused service is discarded rather than producing negative backlog.</p>
+<p>Start empty. For four seconds, work arrives at 3 units/s and capacity is 2 units/s. Backlog grows at 1 unit/s, so Q(4)=4. Afterward arrivals drop to 1 unit/s. The spare 1 unit/s drains those four units over four more seconds. The backlog reaches zero at t=8. If the burst rate persists, it never drains under this capacity.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Time t (seconds)</th>
+<th style="text-align: right;">0</th>
+<th style="text-align: right;">1</th>
+<th style="text-align: right;">2</th>
+<th style="text-align: right;">3</th>
+<th style="text-align: right;">4</th>
+<th style="text-align: right;">5</th>
+<th style="text-align: right;">6</th>
+<th style="text-align: right;">7</th>
+<th style="text-align: right;">8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Outstanding work Q(t)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div><p>This model counts outstanding work, not discrete request positions. It cannot supply a per-request percentile. If one request needs four times the work of another, counting requests alone obscures the load. R09 chapter 21’s discussion of queries per second motivates measuring the constraining resource directly.</p>
+<p>For m independent identical workers and mean service demand E[S], the nominal busy-load ratio is <code>ρ = λ E[S]/m</code>, with λ measured in requests/s. It compares offered work to worker time. Under the assumed service model, sustained ρ&gt;1 forces accumulation or rejection. ρ&lt;1 does not guarantee a deadline: our finite burst can fit into a long low-load interval and still produce late requests. Shared locks, storage or external quotas also break the assumption that m workers supply m independent units of service capacity.</p>
+<h2 id="a-small-component-tail-becomes-a-request-tail">A small component tail becomes a request tail</h2>
+<p>Suppose a different workflow waits for all 20 parallel evidence lookups. Assume each lookup independently exceeds threshold d with probability 0.02. The whole request exceeds d whenever at least one lookup does. The complement calculation gives</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><munder><mo>max</mo><mi>i</mi></munder><msub><mi>T</mi><mi>i</mi></msub><mo>&gt;</mo><mi>d</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>0.02</mn><mo stretchy="true" form="postfix">)</mo></mrow><mn>20</mn></msup><mo>≈</mo><mn>0.3324</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+P(\max_i T_i&gt;d)=1-(1-0.02)^{20}\approx 0.3324.
+</annotation></semantics></math></p>
+<p>Thus a two-percent component exceedance becomes about 33.24% in this constructed fan-out model. This is an original calculation using F02 probability. R08 discusses the underlying amplification mechanism and head-of-line blocking, but its reported workload measurements are not our inputs.</p>
+<p>Independence is a substantive assumption. If all 20 lookups are slow together with probability 0.02 and otherwise all fast, the request exceedance is 0.02. Dependence changes the calculation. Neither example is a prediction for this invoice service. Measure joint behavior, fan-out size and the complete-request clock. Do not average component p99 values to obtain an end-to-end p99.</p>
+<h2 id="elastic-capacity-changes-the-budget-not-the-past">Elastic capacity changes the budget, not the past</h2>
+<p>R12 frames elasticity as a way to trade overprovisioning against saturation risk. Its 2009 provider prices are historical. Here is an independent cost model with invented units.</p>
+<p>Over a ten-hour planning window, suppose the required ready capacity is two workers for nine hours and six workers for one known peak hour. Keeping six ready for all ten hours buys 60 worker-hours. Perfectly timed elasticity buys <code>2*9 + 6*1 = 24</code>. If elastic worker-hours cost p times the reserved worker-hour price, its capacity charge is lower when <code>24p &lt; 60</code>, or p&lt;2.5.</p>
+<p>Now the four extra workers each need a quarter-hour of paid startup before the peak. Elastic consumption becomes 25 worker-hours, and the threshold becomes p&lt;2.4. The peak must be anticipated early enough to make them ready. A reactive policy discovering the peak at its start leaves a capacity gap. Billing granularity, minimum commitments, data loading, quotas and operating labor are omitted; adding them can reverse the decision. This calculation compares capacity charges only, not profitability.</p>
+<p>A plausible policy for uncertain interactive traffic is a measured warm baseline, bounded queues and admission, with scaling for sustained changes. That is a hypothesis to test. Frequent sharp bursts may justify more warm headroom. Long deadlines may justify buffering and slower provisioning. Batch-compatible work may justify a different execution mode. The six-job result is too small to select a production configuration.</p>
+<h2 id="measure-the-policy-without-hiding-failures">Measure the policy without hiding failures</h2>
+<p>Replay the same timestamped arrivals and payloads under each policy. Drive arrivals independently of response completion so a slow system does not silently receive less load. Record offered, admitted, completed, correct, late and rejected counts, plus retry attempts per original operation. Keep a clock starting at the original arrival for the user outcome. Count work expended on failed attempts.</p>
+<p>Report service and waiting distributions separately, with the percentile definition, sample count and observation window. Segment by request cost and customer class. Preserve unanswered requests as failures or censored observations according to a declared rule; never drop them silently. Include startup and drain periods. F03’s paired-workload discipline applies, while shared-resource interference may require separate controlled runs.</p>
+<p>R09 chapter 22 describes retry amplification and recommends retry limits and budgets. A failed request can add work precisely when the server is already overloaded. Test retries, cancellation and deadline propagation as part of the workload. No overload policy should bypass the evidence or approval checks established in earlier packs to make its latency chart look better.</p>
+<h2 id="practice">Practice</h2>
+<ol type="1">
+<li>Reproduce the FIFO start/finish/wait table, mean response time, nearest-rank p50 and p95. Explain why the mean service time is insufficient.</li>
+<li>Execute deadline admission in ID order. Report both offered-request and completed-request success fractions. Give one cost-estimation failure.</li>
+<li>Derive the paired-batch and both two-worker traces. Explain why lower busy time can coexist with no improvement in on-time success.</li>
+<li>Derive Q(4) and the drain time in the fluid model. What happens if post-burst arrivals equal capacity instead of falling below it?</li>
+<li>Calculate the 20-way independent fan-out exceedance, then compare the perfectly correlated construction. Specify the percentile population you would measure.</li>
+<li>Reproduce the capacity-price thresholds with and without paid startup. Propose a replay that could reverse a warm-baseline/scaling recommendation, including rejection and retry outcomes.</li>
+</ol>
+<h2 id="evidence-reference-card-and-remaining-questions">Evidence, reference card and remaining questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Inspected locator</th>
+<th>Use and boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R08, Dean and Barroso, CACM 56(2), 2013</td>
+<td><a href="https://barroso.org/publications/TheTailAtScale.pdf">Author PDF</a>, printed p. 76, Component-Level Variability Amplified By Scale and Reducing Component Variability</td>
+<td>Fan-out and head-of-line mechanisms. No published benchmark transferred. Direct author download resolved a web-reader timeout and the earlier access gap.</td>
+</tr>
+<tr class="even">
+<td>R09, Google SRE, 2016</td>
+<td><a href="https://sre.google/sre-book/handling-overload/">Chapter 21</a>, The Pitfalls of “Queries per Second” and Client-Side Throttling</td>
+<td>Resource-based capacity and nonzero rejection cost. Practice guidance.</td>
+</tr>
+<tr class="odd">
+<td>R09, same book</td>
+<td><a href="https://sre.google/sre-book/addressing-cascading-failures/">Chapter 22</a>, Queue Management, Load Shedding and Graceful Degradation, Retries</td>
+<td>Queue trade-offs, useful work and retry feedback. No numerical queue-size prescription adopted.</td>
+</tr>
+<tr class="even">
+<td>R12, Armbrust et al., 2009</td>
+<td><a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2009/EECS-2009-28.pdf">University PDF</a>, §6.1 printed pp. 10–11</td>
+<td>Historical elasticity and provisioning-risk argument. No current prices asserted.</td>
+</tr>
+<tr class="odd">
+<td>Original derivations and executed checks</td>
+<td>Tables and companion Python</td>
+<td>Six-job, fluid, probability and capacity-charge models; all inputs hypothetical.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Reference card: define the boundary and denominator → trace arrival, wait and service → compare on-time useful outcomes → count work and purchased capacity separately → test bursts, startup and retries. A percentile needs a population and convention. A scaling request is not ready capacity.</p>
+<p>Actual arrivals, cost estimates, service distributions, correlation, startup delays, failure costs and fairness constraints remain unknown. No empirical service improvement is claimed. A04 will reuse the batching and queue distinctions for inference; B02 and B03 will connect capacity choices to delivery economics. Next C01 uses the earlier systems packs to locate duplicate-effect prevention.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-07. Original burst comparison, fluid backlog, fan-out derivation and elasticity budget; primary access gap repaired.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/s05.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#s05-passage-record-2026-11-07">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="S05"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/s04.html"><small>Previous module · S04</small><strong>Replication, consensus, and partial failure</strong></a><a href="/learn/s06.html"><small>Next module · S06</small><strong>Reliability, isolation, and authority boundaries</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#the-worker-is-fast-the-request-is-late">The worker is fast; the request is late</a></li><li class="h2"><a href="#six-requests-and-one-common-objective">Six requests and one common objective</a></li><li class="h2"><a href="#compare-four-responses-to-the-same-burst">Compare four responses to the same burst</a></li><li class="h2"><a href="#rates-describe-a-longer-window">Rates describe a longer window</a></li><li class="h2"><a href="#a-small-component-tail-becomes-a-request-tail">A small component tail becomes a request tail</a></li><li class="h2"><a href="#elastic-capacity-changes-the-budget-not-the-past">Elastic capacity changes the budget, not the past</a></li><li class="h2"><a href="#measure-the-policy-without-hiding-failures">Measure the policy without hiding failures</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-reference-card-and-remaining-questions">Evidence, reference card and remaining questions</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

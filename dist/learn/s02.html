@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S02 — Data organization, indexes, and recovery | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="S02">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S02</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=S#track-S"><span aria-hidden="true">←</span> Systems</a><p class="eyebrow">Systems <span aria-hidden="true">/</span> S02</p><h1 id="s02-data-organization-indexes-and-recovery">Data organization, indexes, and recovery</h1><p class="article-description"></p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f01.html" data-chip="F01">F01</a><a class="module-chip" href="/learn/s01.html" data-chip="S01">S01</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#reference-card-and-evidence" >Evidence</a><a class="button secondary" href="/answers/s02.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#what-should-an-approval-point-to">What should an approval point to?</a></li><li class="h2"><a href="#put-two-questions-to-the-same-twelve-rows">Put two questions to the same twelve rows</a></li><li class="h2"><a href="#what-a-new-index-costs-the-writer">What a new index costs the writer</a></li><li class="h2"><a href="#crash-after-the-reply-before-the-last-page-write">Crash after the reply, before the last page write</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card-and-evidence">Reference card and evidence</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID, revision, date</td>
+<td>S02 · 1.0 · 2026-11-05</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>F01 for keys and invariants, S01 for locality and units of work. A row is one record. A page is a fixed-size unit of storage in this lesson.</td>
+</tr>
+<tr class="odd">
+<td>Capability</td>
+<td>Design a revision-aware fact store, estimate two read paths, and explain what survives an acknowledged commit.</td>
+</tr>
+<tr class="even">
+<td>Evidence</td>
+<td>CMU 15-445/645 Fall 2025 (R05) and OSTEP’s journaling chapter (R04). Verified passages appear at the end.</td>
+</tr>
+<tr class="odd">
+<td>Experiment</td>
+<td>Constructed workload and failure model. Companion checks use SQLite for relational results and a separate Python model for crash boundaries.</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/s02.html">Hints, worked answers, and reproducible checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="what-should-an-approval-point-to">What should an approval point to?</h2>
+<p>A reviewer approved a payment using page 2 of invoice D17. A week later the supplier sends a corrected invoice with a different total. The reviewer needs both the current total and the evidence behind the earlier decision. A table keyed only by invoice ID makes overwriting the old value easy. Once that happens, an audit that joins the approval to today’s invoice can produce a plausible but false account of yesterday’s decision.</p>
+<p>Give the logical document a stable ID and give each accepted revision its own identity. Keep the source bytes retrievable under an immutable reference. A digest can help verify retrieved bytes, but reproducing the page requires the bytes themselves. In this design a revision includes one frozen extraction result. Re-extracting the same bytes with a changed extractor creates a new revision that may share the same content reference. This is a design convention that makes the history unambiguous.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Relation</th>
+<th>Key</th>
+<th>Other information and constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Revision</td>
+<td>(doc, rev)</td>
+<td>Immutable source reference, content digest, extractor version, completion manifest such as the expected fact slots</td>
+</tr>
+<tr class="even">
+<td>Fact</td>
+<td>(doc, rev, slot)</td>
+<td>Name, typed value, source locator. Foreign key to Revision. Slot identifies one occurrence within the frozen extraction.</td>
+</tr>
+<tr class="odd">
+<td>Head</td>
+<td>doc</td>
+<td>Chosen published rev. The pair (doc, rev) references Revision.</td>
+</tr>
+<tr class="even">
+<td>ApprovalEvidence</td>
+<td>(approval_id, evidence_no)</td>
+<td>Exact (doc, rev, slot) used, with a foreign key to Fact. Multiple pieces of evidence can support one approval.</td>
+</tr>
+</tbody>
+</table>
+</div><p>At every published boundary, Head must select a complete revision. Its facts must resolve to evidence in the same source version. Existing approvals must continue to resolve even when Head advances. A foreign key establishes that the target row exists. Completeness additionally requires checking the expected slots before publication. For an invoice with no extractable facts, an explicit empty manifest distinguishes a completed empty result from an extraction still in progress.</p>
+<p>Store amounts with a currency and an agreed exact numeric representation. Preserve a locator such as page number plus coordinates in the frozen page image. An offset into a newly generated text rendering would also require its rendering version. Publish Revision, Fact, and Head within one database transaction after validating the manifest. Assume a single publisher for now. If the source is in separate object storage, make the immutable object durable and verify it before publishing the database reference. A crash between those operations can leave an unreferenced object. Retention and later cleanup must protect every revision used as evidence.</p>
+<h2 id="put-two-questions-to-the-same-twelve-rows">Put two questions to the same twelve rows</h2>
+<p>The reviewer opens D17 revision 2 and asks for all its facts, including their source locators (Q1). An investigator instead asks for every historical occurrence of delivery reference X, including the document and source locator (Q2). Those questions place the same rows in different groups. “Historical” matters. A later correction may remove X from the current revision while an older occurrence still answers Q2.</p>
+<p>Here is a hypothetical heap, an unordered collection of pages holding records. The numbers are physical row identifiers for this example. Each fact label below abbreviates one fully identified fact with its own slot and locator. A vertical ordering across pages reflects insertion order, with revisions interleaved as they arrive.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Page</th>
+<th>Four records in slot order, shown as row ID, document/revision, fact</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>P1</td>
+<td>1 D17/1 total · 2 D17/1 delivery X · 3 D08/1 total · 4 D08/1 delivery Y</td>
+</tr>
+<tr class="even">
+<td>P2</td>
+<td>5 D17/2 delivery X · 6 D09/1 total · 7 D09/1 delivery Z · 8 D10/1 total</td>
+</tr>
+<tr class="odd">
+<td>P3</td>
+<td>9 D10/1 delivery Y · 10 D17/2 total · 11 D11/1 total · 12 D11/1 delivery X</td>
+</tr>
+</tbody>
+</table>
+</div><p>With a full scan, inspect all twelve records on three heap pages. Q1 returns rows 5 and 10. Q2 returns rows 2, 5, and 12. Scan predicates are simple enough to use as an oracle when testing an index. For example, changing Q1 to filter only on doc would accidentally return revision 1 as well. A faster path that returns that larger set has changed the question.</p>
+<p>An index stores another route to the records. Imagine two ordered indexes. One groups physical row IDs by (doc, rev). The other includes only delivery facts and groups their row IDs by reference value. In our small model, each lookup follows one root separator to one leaf page holding the complete matching entry and its short list of row IDs. Assume a cold cache and count each distinct page read once during the query. The caller needs the source locator, which lives in the heap. These assumptions describe a constructed two-level tree. A real tree may fit in a single page or span many levels.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table style="width:100%;">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Query</th>
+<th>Lookup trace</th>
+<th style="text-align: right;">Distinct pages</th>
+<th style="text-align: right;">Candidate heap rows inspected</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Q1 by revision</td>
+<td>Root → leaf for (D17,2) → row 5 on P2 and row 10 on P3</td>
+<td style="text-align: right;">2 index + 2 heap = 4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td>Q2 by delivery</td>
+<td>Root → leaf for X → rows 2, 5, 12 on P1, P2, P3</td>
+<td style="text-align: right;">2 index + 3 heap = 5</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td>Either by scan</td>
+<td>P1 → P2 → P3</td>
+<td style="text-align: right;">3 heap</td>
+<td style="text-align: right;">12</td>
+</tr>
+</tbody>
+</table>
+</div><p>The index saves predicate evaluations, yet both indexed paths touch more pages than the scan on this layout. S01’s question about the unit being counted changes the recommendation. On a much larger heap, a selective lookup might still lead to only two data pages. Conversely, a popular delivery reference might lead to nearly every page. A widely scattered result also changes how the storage device can serve the reads. Page counts alone do not determine elapsed time.</p>
+<p>One alternative is to put frequently requested output fields in the leaf. In a read model where all required fields and visibility information are available there, Q2 could finish after the index lookup. The wider entries take more space and may reduce the number that fit per page. Another option is to store a revision’s facts together, so Q1 fetches them from fewer pages. Q2 might still reach many pages because delivery references cut across documents. Choose after measuring the query mix, common and rare keys, cache state, and required output columns. The CMU notes explain leaf entries and the distinction between record IDs and tuple payloads. <a href="https://15445.courses.cs.cmu.edu/fall2025/notes/08-indexes1.pdf">R05, lecture 08 §§1–2</a></p>
+<h2 id="what-a-new-index-costs-the-writer">What a new index costs the writer</h2>
+<p>Suppose revision 3 adds a total and a delivery reference Y. Those two facts require two base rows and two row-ID associations in the revision index. The delivery-only index gains one association. That is five logical additions in this fact-storage model, plus the revision metadata and Head update. A batch could share a leaf write, and a full leaf could split, so five additions do not predict five device writes. Index keys and row IDs consume storage for every retained revision. Returning historical X matches remains correct even after the head moves to Y.</p>
+<p>Before adding the delivery index, ask how frequently investigators actually search by reference and how selective the common values are. Measure extra bytes per revision, ingestion time, and the distribution of lookup times under the same workload. Include maintenance and recovery in the comparison. If approvals mostly open known revisions and historical investigations are rare, a revision index and occasional scan may suffice. If selective investigations must finish within a deadline, the secondary index earns a trial against the scan.</p>
+<h2 id="crash-after-the-reply-before-the-last-page-write">Crash after the reply, before the last page write</h2>
+<p>A server has published D17/2 and now wants to publish D17/3. Consider two persistent logical objects in a small recovery model. F3 is the complete immutable revision bundle, including its facts and locators. H is the head pointer. The old revision remains accessible. Representing the new bundle as one object keeps the trace short. An implementation with several fact pages must log all of them. For this trace the indexes are derived and rebuilt from recovered facts before reads resume.</p>
+<p>Assume a single transaction, a trusted initial snapshot, atomic writes of each modeled object, and stable storage that retains completed flushes through power loss. The source bytes are already durable. Volatile memory is lost in a crash. The durable log is a valid prefix of complete records in order. This toy protocol prohibits uncommitted updates from reaching home pages (NO-STEAL) and allows committed pages to reach home after acknowledgement (NO-FORCE). A <strong>home page</strong> is the normal storage location for the object. These choices allow a compact redo-only demonstration.</p>
+<ol type="1">
+<li>Stage the full bundle and new head in memory. Append log records setting F3 to the complete bundle and H to 3. The writer can flush those records before it decides to commit.</li>
+<li>Append COMMIT for this transaction and flush the log through COMMIT. An ordered flush makes both earlier updates durable with it. Publish both changes as a unit for subsequent readers, then send the success reply.</li>
+<li>Later write the committed objects to their home locations. For the example, F3 goes home first. Retain the log until a durable checkpoint includes both objects.</li>
+<li>After a crash, recover before accepting reads. Apply the assignments of each fully committed transaction in log order. An incomplete transaction has no durable home updates under the stated policy. Replaying the same full-value assignment twice gives the same state here.</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Last event before power loss</th>
+<th>What survives</th>
+<th>State after recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Updates flushed, COMMIT absent</td>
+<td>Update records and old home pages</td>
+<td>D17/2 is current</td>
+</tr>
+<tr class="even">
+<td>COMMIT flushed, reply still in transit</td>
+<td>Complete transaction log, old home pages</td>
+<td>D17/3 is current. Client needs to resolve the uncertain outcome.</td>
+</tr>
+<tr class="odd">
+<td>Client received success, only F3 reached home</td>
+<td>Complete log, new F3, home H still 2</td>
+<td>Replaying H publishes D17/3 with its evidence</td>
+</tr>
+<tr class="even">
+<td>Both objects reached home, log still retained</td>
+<td>Complete log and new home values</td>
+<td>Repeated assignments preserve D17/3</td>
+</tr>
+</tbody>
+</table>
+</div><p>Move the reply earlier as a counterexample. If the server replies after appending COMMIT only in volatile memory, power loss can leave an update-only durable prefix. Recovery correctly retains revision 2, contradicting the promise the client heard. A transaction ID or stable publication key lets a retry query the committed result after a lost reply. Protecting an external payment from duplicate effects requires its own contract in C01.</p>
+<p>A system that lets uncommitted updates reach home must also handle their effects during recovery. CMU’s ARIES lesson describes analysis, replaying history, and undoing incomplete transactions. The toy protocol deliberately buys a shorter proof by restricting flushes. OSTEP’s data-journaling trace provides the related file-system intuition: persist the journal contents, persist the commit marker, then install the updates at their home locations. Each layer has its own transaction boundary. <a href="https://15445.courses.cs.cmu.edu/fall2025/notes/21-logging.pdf">R05, lectures 21 §§2, 6</a> and <a href="https://15445.courses.cs.cmu.edu/fall2025/notes/22-recovery.pdf">22, recovery phases</a> · <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/file-journaling.pdf">R04, chapter 42, p. 11</a></p>
+<h2 id="practice">Practice</h2>
+<ol type="1">
+<li>An approval cites only D17 and “total.” Show what happens on a join after the total changes. Specify the missing keys and one source-retention assumption.</li>
+<li>Trace Q1 and Q2 using the table. Count candidate heap records and distinct cold pages for each access path. Explain how a cached root changes each indexed count.</li>
+<li>Q2 becomes “all <strong>current</strong> invoices citing X.” Assume each document’s highest listed revision is its published head. Which rows qualify? Explain how to implement the changed query and which extra reads were absent from the original count.</li>
+<li>For the two-fact revision 3, count logical additions with each index. Name one observed change in workload that would reverse your recommendation.</li>
+<li>Crash after the success reply with only F3 installed. Recover by hand. Then remove the rule that prevents uncommitted home writes and construct a state the toy algorithm fails to repair.</li>
+<li>Formulate the acknowledgement in one sentence. Explain what the client can conclude after a timeout, and what additional mechanism you would need if the storage device itself were lost.</li>
+</ol>
+<h2 id="reference-card-and-evidence">Reference card and evidence</h2>
+<p>Keep four things on the page: the stable logical identity, the query predicate and output, the unit of physical work, and the durable event preceding success. At the end of a recovery trace test both an old approval and a fresh Head lookup. S03 considers interleaved writers, S04 broadens the failure boundary to replicas, and A03 reuses revision identity for evidence retrieval.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Inspected locator</th>
+<th>Use and limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R05, CMU Fall 2025</td>
+<td><a href="https://15445.courses.cs.cmu.edu/fall2025/notes/03-storage1.pdf">03, §§7–10, pp. 3–4</a></td>
+<td>Pages, heap layout, record IDs. Page sizes and occupancy here are assigned.</td>
+</tr>
+<tr class="even">
+<td>R05, same edition</td>
+<td><a href="https://15445.courses.cs.cmu.edu/fall2025/notes/08-indexes1.pdf">08, §§1–2, pp. 1–2</a></td>
+<td>Keys, routing, leaf payloads, insertion. Our posting lists and two-level counts are conditional.</td>
+</tr>
+<tr class="odd">
+<td>R05, same edition</td>
+<td><a href="https://15445.courses.cs.cmu.edu/fall2025/notes/21-logging.pdf">21, §2 pp. 1–2 and §6 pp. 4–5</a> and <a href="https://15445.courses.cs.cmu.edu/fall2025/notes/22-recovery.pdf">22, pp. 5–6</a></td>
+<td>Buffer policies, log-before-data ordering, durable commit, scope of ARIES redo and undo.</td>
+</tr>
+<tr class="even">
+<td>R04, OSTEP</td>
+<td><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/file-journaling.pdf">Crash Consistency, chapter-local p. 11, data-journaling protocol and Recovery</a></td>
+<td>File-system analogy for commit versus checkpoint.</td>
+</tr>
+<tr class="odd">
+<td>Original design and executed checks</td>
+<td>Companion below the six solutions</td>
+<td>Synthetic history and failure model. Actual storage barriers, corruption handling, concurrent publication, workload selectivity, and latency need separate verification.</td>
+</tr>
+</tbody>
+</table>
+</div></article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/s02.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#s02-passage-record-2026-11-05">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="S02"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/s01.html"><small>Previous module · S01</small><strong>Resource models, locality, and abstraction costs</strong></a><a href="/learn/s03.html"><small>Next module · S03</small><strong>Concurrency, transactions, and logical time</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#what-should-an-approval-point-to">What should an approval point to?</a></li><li class="h2"><a href="#put-two-questions-to-the-same-twelve-rows">Put two questions to the same twelve rows</a></li><li class="h2"><a href="#what-a-new-index-costs-the-writer">What a new index costs the writer</a></li><li class="h2"><a href="#crash-after-the-reply-before-the-last-page-write">Crash after the reply, before the last page write</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card-and-evidence">Reference card and evidence</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

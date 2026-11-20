@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S06 — Reliability, isolation, and authority boundaries | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="S06">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S06</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=S#track-S"><span aria-hidden="true">←</span> Systems</a><p class="eyebrow">Systems <span aria-hidden="true">/</span> S06</p><h1 id="s06-reliability-isolation-and-authority-boundaries">Reliability, isolation, and authority boundaries</h1><p class="article-description">Define an observable service objective while preserving authority checks and limiting the damage from faulty components</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/s03.html" data-chip="S03">S03</a><a class="module-chip" href="/learn/s04.html" data-chip="S04">S04</a><a class="module-chip" href="/learn/s05.html" data-chip="S05">S05</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice-and-transfer" >Jump to practice</a><a class="button secondary" href="#evidence-and-unresolved-inputs" >Evidence</a><a class="button secondary" href="/answers/s06.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#two-failures-that-need-different-repairs">Two failures that need different repairs</a></li><li class="h2"><a href="#map-authority-before-drawing-machines">Map authority before drawing machines</a></li><li class="h2"><a href="#the-approval-boundary-and-a-revocation-race">The approval boundary and a revocation race</a></li><li class="h2"><a href="#the-model-proposes-the-authority-decides">The model proposes; the authority decides</a></li><li class="h2"><a href="#define-an-observable-outcome-without-rewarding-denial">Define an observable outcome without rewarding denial</a></li><li class="h2"><a href="#observe-enough-to-distinguish-causes">Observe enough to distinguish causes</a></li><li class="h2"><a href="#isolation-has-both-authority-and-capacity-costs">Isolation has both authority and capacity costs</a></li><li class="h2"><a href="#practice-and-transfer">Practice and transfer</a></li><li class="h2"><a href="#evidence-and-unresolved-inputs">Evidence and unresolved inputs</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>S06 · 1.0 · 2026-11-08</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>S03 atomic decisions and epochs; S04 failure/replication boundaries; S05 queues and denominators; C01 external effects</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Define an observable service objective while preserving authority checks and limiting the damage from faulty components</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R09 chapters 3–4, R11 introductory design principles and R10 placement principle inspected; locators below</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Executed constructed authorization, budget and scheduling checks; no deployment or security certification</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/s06.html">Hints, worked answers and checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="two-failures-that-need-different-repairs">Two failures that need different repairs</h2>
+<p>The invoice service sometimes takes too long to return D17’s evidence. It also has a dangerous shortcut: a model can propose an approval and the worker executes it using a shared administrator credential. Adding replicas may help the first problem. It can reproduce the second problem more reliably.</p>
+<p>A service-level indicator (SLI) is a defined measurement; a service-level objective (SLO) is its target over a declared population and window. Availability concerns whether the service can deliver the intended operation. Authorization concerns whether this principal may perform this action on this object. Authentication establishes the principal’s identity; it does not itself grant the action. R09 chapter 4 supplies the measurement terminology; R11 supplies the protection concepts.</p>
+<p>Our decision is how to keep useful evidence reads available while ensuring that only an authorized reviewer can create an approval. We will use one control boundary for the approval and separate resource controls for workload isolation. The examples are hypothetical, with no claim about a particular cloud, model or payment provider.</p>
+<h2 id="map-authority-before-drawing-machines">Map authority before drawing machines</h2>
+<p>A principal is an accountable identity: a reviewer, a service account or an administrator. A role groups permissions; an object is the resource being accessed. A tenant is the customer boundary in this case. An object ID supplied by a caller is a lookup request, not evidence that the caller owns the object.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Principal</th>
+<th>Permitted operation in this design</th>
+<th>Explicit limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tenant A reviewer</td>
+<td>Read authorized A evidence; request approval for assigned A documents</td>
+<td>Cannot read B evidence or change grants</td>
+</tr>
+<tr class="even">
+<td>Proposal worker</td>
+<td>Read the evidence subset authorized for its job; write a draft proposal</td>
+<td>Cannot approve, issue payments or change policy</td>
+</tr>
+<tr class="odd">
+<td>Approval authority</td>
+<td>Validate identity, current policy, tenant, epoch, revision and evidence; commit a valid decision</td>
+<td>Must not treat proposal text as authorization</td>
+</tr>
+<tr class="even">
+<td>Payment dispatcher</td>
+<td>Execute already committed intents under C01’s contract</td>
+<td>Cannot invent a new approval or edit its amount</td>
+</tr>
+<tr class="odd">
+<td>Policy administrator</td>
+<td>Grant/revoke scoped reviewer access</td>
+<td>No automatic payment or evidence access merely from this role</td>
+</tr>
+<tr class="even">
+<td>Audit reader</td>
+<td>Read approved audit metadata</td>
+<td>No mutation privilege; raw document access is separate</td>
+</tr>
+</tbody>
+</table>
+</div><p>The identity and policy stores are trusted inputs. Tenant ownership is read from trusted object metadata. The proposal worker’s credential is job-scoped and cannot enumerate every tenant. The approval authority has privileged database access because it must enforce the transition; compromising it is outside the small model and is a major deployment risk. Least privilege reduces that trusted surface rather than making it disappear.</p>
+<figure class="authority-diagram">
+<figcaption>Allowed interfaces in the approval workflow</figcaption>
+<div class="diagram-inputs"><div>Reviewer identity<small>Request</small></div><div>Proposal worker<small>Untrusted proposal</small></div><div>Policy and object metadata<small>Current facts</small></div></div>
+<ol class="diagram-chain"><li><strong>Approval authority</strong><small>Atomic decision ↓</small></li><li><strong>Receipts and intents</strong><small>Committed intent ↓</small></li><li><strong>Payment dispatcher</strong><small>Stable payment identity ↓</small></li><li><strong>External provider</strong></li></ol>
+<details><summary>Mermaid source</summary><pre><code>flowchart TD
+  R[Reviewer identity] --&gt;|request| G[Approval authority]
+  M[Proposal worker] --&gt;|untrusted proposal| G
+  P[Policy and object metadata] --&gt;|current facts| G
+  G --&gt;|atomic decision| D[Receipts and intents]
+  D --&gt;|committed intent| X[Payment dispatcher]
+  X --&gt;|stable payment identity| E[External provider]</code></pre></details>
+</figure><p>The arrows are allowed interfaces, not proof that an implementation blocks other routes. Evidence reads use a separately mediated read interface and tenant-scoped store access; they are omitted from this diagram to keep its single purpose clear. Test direct database access, batch tools, repair scripts and recovery paths as well as the normal API. A secure button cannot protect an unguarded endpoint.</p>
+<h2 id="the-approval-boundary-and-a-revocation-race">The approval boundary and a revocation race</h2>
+<p>Start from S03’s <code>(epoch=7, revision=2, owner=empty)</code>. Add policy version v=10, which grants reviewer R approval rights on tenant A’s D17. Model a grant revocation as an ordered update to the same authority state as the approval decision. This serialization is a premise of the lesson. A separately cached policy service does not automatically provide it.</p>
+<p>For a new approval, the authority evaluates:</p>
+<p><code>authenticated AND active_grant AND tenant_match AND action_allowed AND current_epoch AND current_revision AND evidence_valid AND slot_empty</code>.</p>
+<p>It takes principal identity from verified execution context, not an <code>actor</code> field invented by the model. Exact payload, evidence identity and successful receipt commit with the decision. An existing receipt is returned only after checking current permission to read that historical result; the replay itself creates no new effect. This refines C01’s distinction between historical retrieval and fresh approval.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Ordered event</th>
+<th>Current state</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R opens the review page</td>
+<td>v=10 grants access</td>
+<td>Page displays evidence</td>
+</tr>
+<tr class="even">
+<td>Administrator revokes R</td>
+<td>v=11 removes grant</td>
+<td>Revocation commits</td>
+</tr>
+<tr class="odd">
+<td>R’s delayed approval arrives with v=10</td>
+<td>Current policy is v=11</td>
+<td>Deny; no owner or intent created</td>
+</tr>
+<tr class="even">
+<td>R retries unchanged request</td>
+<td>Grant still absent</td>
+<td>Deny again</td>
+</tr>
+</tbody>
+</table>
+</div><p>Checking access only when opening the page fails this example. A cached “allowed” answer also fails if it outlives the change. Our rule is that an approval ordered after revocation must not commit for R. If approval commits first, revocation does not undo it or cancel a payment already sent. Cancellation requires its own contract, as C01 established.</p>
+<p>To implement the premise, one option is to keep grants and protected decisions in the same serialized authority. Another is a version-validation protocol that atomically rejects a decision if its checked policy version changed before commit. Merely recording the checked version in a log does not enforce this condition. If a product deliberately accepts a bounded stale-permission interval, state that weaker contract and its risks explicitly; do not call it immediate revocation.</p>
+<p>The invariant is: every new committed approval has an authorizing grant, matching tenant and valid business state at its decision boundary. Initially no approval exists. A denial changes none of the protected state. The only accepting transition checks the complete predicate and creates a receipt with its policy version. Ordered revocation removes the predicate for subsequent transitions. The proof depends on all writes using that transition and on trustworthy identity/policy data.</p>
+<p>R11’s fail-safe defaults, complete mediation and least privilege motivate this design. Our serialized revocation mechanism is an original application of those principles. If policy cannot be established, the chosen approval contract denies or defers the mutation; it does not turn a timeout into permission. That can reduce availability while preserving the authority boundary.</p>
+<h2 id="the-model-proposes-the-authority-decides">The model proposes; the authority decides</h2>
+<p>Suppose a model proposes <code>Approve(tenant=B, D17, actor=admin)</code> while executing under a tenant A proposal-worker identity. The authority uses the actual principal, observes no approval grant and rejects it. No approval, receipt of acceptance or payment intent is created. Prompt instructions saying “never approve without permission” may guide behavior, but they do not implement the guard.</p>
+<p>Checks outside the model include authenticated identity, object ownership, allowed action, current grants, amount/destination constraints, evidence identity, current epoch/revision, duplicate identity and the atomic write boundary. Treat source documents and generated text as data. Neither can grant privileges by asserting that an administrator authorized the operation.</p>
+<p>The residual damage matters. A faulty worker can still produce wrong drafts, consume its allocated compute, or leak information already placed in its context through an allowed output channel. Restricting mutation privileges does not prove confidentiality or factual correctness. Limit read scope, destinations, credential lifetime and resource quotas, and evaluate output quality separately. A trusted reviewer can also make a wrong authorized decision; authorization does not establish business truth.</p>
+<h2 id="define-an-observable-outcome-without-rewarding-denial">Define an observable outcome without rewarding denial</h2>
+<p>For a hypothetical evidence-read service, define a fixed seven-day window and count distinct original read operations received at the instrumented ingress. Eligibility requires supported request shape and a predeclared authorized test/customer cohort for the requested object. Do not remove operations because downstream policy lookup fails or because the service sheds load. Record retries under the original operation ID, starting the clock at its first arrival.</p>
+<p>A good operation returns the requested immutable revision with its required evidence reference within two seconds, with no unauthorized disclosure. This checks identity/integrity of the returned evidence, not whether the invoice’s assertions are true. In this numerical example all callers retain access throughout the window. In deployment, genuine revoked or forbidden requests belong in a separate policy-outcome population; inability to determine policy must not be disguised as a legitimate exclusion. Keep exclusion counts and reasons independently reviewable.</p>
+<p>Set an illustrative SLO of at least 99.5% good operations. In a completed window of 10,000 eligible operations, suppose 9,960 are good, 25 are late and 15 unavailable, with disjoint categories and no security incident. The observed fraction is 99.6%. The allowed bad count is <code>10,000*(1−0.995)=50</code>; 40 were used and 10 remain relative to this fixed-window count. This is a request budget, not 0.5% of a week’s minutes. Future traffic changes the denominator; the figure is not a fixed forecast of remaining requests.</p>
+<p>If retrospective verification identifies 20 additional distinct operations previously counted good as bad, the count becomes 60, the SLI is 99.4%, and the window exceeds its allowance by ten. An original operation that is both late and incorrect is still one bad operation. Summing overlapping error counters would overcount.</p>
+<p>A security violation is separately actionable even if the aggregate SLO passes. This design permits no intentional unauthorized approvals or disclosures; an availability error budget is not permission to spend a few data leaks. Zero observed violations also does not prove none occurred. This is our policy distinction, not a universal numerical security guarantee.</p>
+<h2 id="observe-enough-to-distinguish-causes">Observe enough to distinguish causes</h2>
+<p>Record operation ID, authenticated principal reference, tenant/object/revision, policy version, decision reason, ingress and completion times, and whether a durable receipt exists. Protect those records with scoped access and avoid copying credentials or full invoice text into general logs. Compare ingress counts with terminal outcomes to find missing requests. Mark missing telemetry as unknown rather than treating it as success.</p>
+<p>Use separate views for user outcomes, policy denials, resource pressure and committed effects. Queue depth and CPU can explain symptoms but do not replace the user-outcome SLI. A denial spike may reflect attempted misuse, revoked grants, or a broken policy rollout; inspect reason codes and controlled probes before choosing a repair. Retrying a revoked action cannot restore permission. Retrying an unavailable read might help, subject to S05’s deadline and retry budget. C01 governs an uncertain payment outcome.</p>
+<p>Our proposed operating policy slows discretionary releases when the outcome budget is exhausted and prioritizes diagnosis and repair. Emergency security fixes need a separately evaluated release path. R09 chapter 3 motivates using a shared error budget to guide risk decisions; the target and this release rule are example choices, not current Google requirements.</p>
+<h2 id="isolation-has-both-authority-and-capacity-costs">Isolation has both authority and capacity costs</h2>
+<p>Permissions limit what a component can change. Resource isolation limits how much another workload can delay it. Neither substitutes for the other. Suppose four ten-second A jobs and then one one-second B job arrive together, ties in that order. Four identical shared FIFO workers start all A jobs, so B finishes at second eleven. Reserving two workers for A and two for B lets B finish at one, while A’s final completion moves from ten to twenty. Busy work remains 41 worker-seconds; idle reserved capacity and paid provisioning are separate costs. This deterministic example assumes no shared bottleneck beyond the modeled workers.</p>
+<p>Two pools on one database still share database failure and contention. Separate service accounts on one overloaded worker still share CPU delay. Trace each proposed isolation boundary to the resource or privilege it actually limits.</p>
+<p>For a different hypothetical cost comparison, adding three milliseconds of serial authorization work to each of 10,000 operations adds 30 CPU-seconds in total under a single-core work model. It is not 30 seconds of added wall time for every user. At saturated capacity it may increase queueing nonlinearly. Measure latency, useful throughput, policy availability and revocation behavior with the guard enabled. Optimize placement or a correctly invalidated cache instead of bypassing the guard to improve the chart.</p>
+<p>Choose scoped worker credentials, a mandatory approval authority and measured workload limits as the baseline. More dedicated capacity is justified when cross-tenant contention violates the outcome target. More complicated authorization caching is justified only with an explicit freshness contract and tests of revocation, not just a faster average.</p>
+<h2 id="practice-and-transfer">Practice and transfer</h2>
+<ol type="1">
+<li>Draw principals, protected data and permitted actions. Identify two bypass routes the drawing alone cannot exclude.</li>
+<li>Trace both orders of approval and revocation. Give a cached-allow counterexample and state the required atomicity.</li>
+<li>Explain what remains true when the model proposes another tenant’s approval, and name two harms still possible.</li>
+<li>Recompute the 10,000-operation SLI, budget and retrospective correction. Explain why retries and policy outages must not shrink the denominator.</li>
+<li>Reproduce the shared and reserved worker completion times and the additional CPU work. Name a shared dependency that defeats the intended isolation.</li>
+<li>Propose one authorized failure-injection exercise for a policy outage and one for overload. State observations, stop conditions and a change that would reverse the capacity choice.</li>
+</ol>
+<p>Reference card: identify the principal → bind the object and action → enforce current authority at the effect boundary → retain the decision evidence → measure useful original-operation outcomes → isolate the resource actually causing damage. Availability, integrity, confidentiality and authorization are related but different properties.</p>
+<h2 id="evidence-and-unresolved-inputs">Evidence and unresolved inputs</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Inspected locator</th>
+<th>Use and limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R09, Google SRE</td>
+<td><a href="https://sre.google/sre-book/service-level-objectives/">Chapter 4</a>, Indicators, Objectives, What Do You and Your Users Care About?, Collecting Indicators, Aggregation</td>
+<td>Measurement terminology and user-facing population; no vendor SLA or historical benchmark adopted</td>
+</tr>
+<tr class="even">
+<td>R09, same book</td>
+<td><a href="https://sre.google/sre-book/embracing-risk/">Chapter 3</a>, Forming Your Error Budget and Benefits</td>
+<td>Risk/release framework; all numerical targets here are invented</td>
+</tr>
+<tr class="odd">
+<td>R11, Saltzer and Schroeder, 1975</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/protection/Basic.html">Basic Principles</a>, §I.A.3 design principles b, c, f; <a href="https://web.mit.edu/saltzer/www/publications/protection/">glossary</a></td>
+<td>Default denial, complete mediation, least privilege and principal terminology; historical design guidance</td>
+</tr>
+<tr class="even">
+<td>R10, Saltzer, Reed and Clark, 1984</td>
+<td><a href="https://web.mit.edu/saltzer/www/publications/endtoend/endtoend.pdf">Author PDF</a>, p. 2 principle</td>
+<td>Function placement context; not a proof of this design</td>
+</tr>
+<tr class="odd">
+<td>Original models</td>
+<td>Revocation trace, SLI arithmetic and worker schedule; companion code</td>
+<td>Explicit assumptions and finite checks, not implementation validation</td>
+</tr>
+</tbody>
+</table>
+</div><p>Open inputs include real grants and revocation semantics, all mutation/read paths, credential compromise, source correctness, telemetry gaps, correlated failures, resource demand and actual operating cost. No curriculum blocker remains. A05 will reuse the external authority boundary for agents; B02/B03 will connect reliability costs and promises. Next is Audit B, not a claim of learner mastery.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-08. Authority/revocation case, observable outcome budget, isolation trade-off and six exercises with separate answers.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/s06.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#s06-passage-record-2026-11-08">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="S06"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/s05.html"><small>Previous module · S05</small><strong>Queues, tail latency, and cloud elasticity</strong></a><a href="/learn/a01.html"><small>Next module · A01</small><strong>Learning, generalization, and distribution change</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#two-failures-that-need-different-repairs">Two failures that need different repairs</a></li><li class="h2"><a href="#map-authority-before-drawing-machines">Map authority before drawing machines</a></li><li class="h2"><a href="#the-approval-boundary-and-a-revocation-race">The approval boundary and a revocation race</a></li><li class="h2"><a href="#the-model-proposes-the-authority-decides">The model proposes; the authority decides</a></li><li class="h2"><a href="#define-an-observable-outcome-without-rewarding-denial">Define an observable outcome without rewarding denial</a></li><li class="h2"><a href="#observe-enough-to-distinguish-causes">Observe enough to distinguish causes</a></li><li class="h2"><a href="#isolation-has-both-authority-and-capacity-costs">Isolation has both authority and capacity costs</a></li><li class="h2"><a href="#practice-and-transfer">Practice and transfer</a></li><li class="h2"><a href="#evidence-and-unresolved-inputs">Evidence and unresolved inputs</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

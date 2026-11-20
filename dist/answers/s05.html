@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S05 — Hints, worked answers, and reproducible checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S05</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/s05.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">S05 <span aria-hidden="true">/</span> Worked companion</p><h1 id="s05-hints-worked-answers-and-reproducible-checks">Hints, worked answers, and reproducible checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/s05.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#fifo-distributions-and-the-missing-waiting-time">1. FIFO, distributions and the missing waiting time</a></li><li class="h2"><a href="#admission-and-the-denominator">2. Admission and the denominator</a></li><li class="h2"><a href="#batching-capacity-and-startup">3. Batching, capacity and startup</a></li><li class="h2"><a href="#backlog-and-spare-capacity">4. Backlog and spare capacity</a></li><li class="h2"><a href="#fan-out-and-correlation">5. Fan-out and correlation</a></li><li class="h2"><a href="#capacity-charges-and-evidence-that-changes-the-policy">6. Capacity charges and evidence that changes the policy</a></li><li class="h2"><a href="#executed-checks-and-limits">Executed checks and limits</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / title</td>
+<td>S05 answers · Queues, tail latency, and cloud elasticity</td>
+</tr>
+<tr class="even">
+<td>Revision / date</td>
+<td>1.0 · 2026-11-07</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>F02, F03, S01; <a href="/learn/s05.html">S05 core pack</a></td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Defend a capacity policy with an explicit workload, deadline, denominator and cost boundary</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R08, R09 and R12 passages inspected; exact URLs and locators in the core evidence table and source register</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Python checks below executed successfully on constructed inputs; no deployment benchmark</td>
+</tr>
+</tbody>
+</table>
+</div><p>These are model solutions, not a record of your answers or mastery. Try the six core exercises before opening the corresponding solutions. Alternative policies are valid when their assumptions, objective and accounting are explicit.</p>
+<h2 id="hints">Hints</h2>
+<ol type="1">
+<li>A FIFO request waits until both its arrival and the preceding completion. Service duration is only part of response time. Apply the stated nearest-rank convention, not interpolation.</li>
+<li>A rejected job consumes no reserved processing time in this model. Keep rejected requests in the offered population.</li>
+<li>A pair releases two outputs together. With multiple workers, assign the next queued job to the earliest available worker, breaking availability ties by worker index.</li>
+<li>Track work units, not request counts. Spare capacity is what drains backlog; full utilization alone does not drain it.</li>
+<li>Compute the probability that none of the lookups is slow, then take its complement. State where independence enters.</li>
+<li>Sum paid worker-hours, including startup. A useful replay must preserve the original arrivals when the service slows down.</li>
+</ol>
+<h2 id="fifo-distributions-and-the-missing-waiting-time">1. FIFO, distributions and the missing waiting time</h2>
+<p>For costs <code>[1,1,4,1,1,1]</code>, all arriving at zero, starts and waiting times are <code>[0,1,2,6,7,8]</code>. Finishes and response times are <code>[1,2,6,7,8,9]</code>. The total service demand is nine worker-seconds, so mean service time is 9/6 = 1.5 seconds. Mean response time is 33/6 = 5.5 seconds; mean waiting time is 24/6 = 4 seconds. The identity mean response = mean waiting + mean service holds for this population.</p>
+<p>Nearest-rank p50 takes observation <code>ceil(0.5*6)=3</code>, giving six seconds. p95 takes observation <code>ceil(0.95*6)=6</code>, giving nine. These are response percentiles across six offered, completed jobs from this constructed burst. A six-job p95 is its maximum and says little about the tail of a different workload.</p>
+<p>Moving the four-second job to the end yields finishes <code>[1,2,3,4,5,9]</code>. Mean response falls to four seconds and timely completions increase from two to four without changing mean service demand. The test code checks all six positions of the long job: mean response ranges from 6.5 to 4 seconds, and timely counts range from one to four. An average service cost leaves ordering and arrival clustering unspecified.</p>
+<p><strong>Assessment criterion:</strong> Correct recurrence and population; distinction between service and response; an ordering or burst counterexample. An unexplained claim that “p95 is always the maximum” fails: it is true here because the population has six observations.</p>
+<h2 id="admission-and-the-denominator">2. Admission and the denominator</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 21%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Job</th>
+<th style="text-align: right;">Predicted finish if accepted</th>
+<th>Decision</th>
+<th style="text-align: right;">Reserved finish after decision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>J1</td>
+<td style="text-align: right;">1</td>
+<td>Accept</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td>J2</td>
+<td style="text-align: right;">2</td>
+<td>Accept</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td>J3</td>
+<td style="text-align: right;">6</td>
+<td>Reject</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td>J4</td>
+<td style="text-align: right;">3</td>
+<td>Accept</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td>J5</td>
+<td style="text-align: right;">4</td>
+<td>Accept</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td>J6</td>
+<td style="text-align: right;">5</td>
+<td>Reject</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+</div><p>Accepted IDs are J1, J2, J4 and J5. They finish at seconds 1, 2, 3 and 4. The offered-request timely fraction is 4/6; the completed-request timely fraction is 4/4. Neither fraction alone describes every outcome. Report two rejections, zero late completions and four worker-seconds of busy work.</p>
+<p>For a concrete estimation failure, predict every job costs one second. The rule admits J1 through J4 and rejects J5 and J6. Actual processing still takes costs <code>[1,1,4,1]</code>, finishing at <code>[1,2,6,7]</code>. Only two of six offered jobs finish on time. Admission is a policy using information; an optimistic estimate is not a guarantee. Rejection checks, retries and request-value differences are additional costs deliberately excluded from the baseline model. R09 chapter 21 explains why real rejection can itself consume meaningful resources.</p>
+<p><strong>Assessment criterion:</strong> Track reservations after a rejection; retain the offered denominator; show a concrete failure of a stated assumption. Do not claim that all overload should be rejected or that the long job lacks value.</p>
+<h2 id="batching-capacity-and-startup">3. Batching, capacity and startup</h2>
+<p>Adjacent pair durations are 1.5, 4.5 and 1.5 seconds. Their cumulative finishes are 1.5, 6 and 7.5. Since both outputs are released at each pair completion, per-job finishes are <code>[1.5,1.5,6,6,7.5,7.5]</code>. Pair mode does 7.5 worker-seconds of busy work, saving 1.5 relative to FIFO, yet still has only two timely completions. The short J4 inherits the long J3’s batch completion. No assembly delay occurs because every request was already waiting; a staggered arrival workload would need a batch timeout rule.</p>
+<p>With two workers ready at zero, worker 0 handles J1 from 0–1 and J3 from 1–5. Worker 1 handles J2 from 0–1, J4 from 1–2, J5 from 2–3 and J6 from 3–4. In job order, finishes are <code>[1,1,5,2,3,4]</code>. Five are timely; busy work remains nine worker-seconds.</p>
+<p>With worker 1 ready only at second two, worker 0 executes J1 from 0–1, J2 from 1–2 and J3 from 2–6. The worker-index tie rule assigns J3 to worker 0. Worker 1 executes J4 from 2–3, J5 from 3–4 and J6 from 4–5. Finishes are <code>[1,2,6,3,4,5]</code>; four are timely. The final completion is at six, even though J6 finishes at five: always take the maximum completion, not the final array element.</p>
+<p><strong>Assessment criterion:</strong> Correct pair release semantics and worker assignment; count outcomes against the same deadline; distinguish busy worker-seconds from provisioned and billed capacity. A faster drain is useful but does not establish a better user outcome for every request.</p>
+<h2 id="backlog-and-spare-capacity">4. Backlog and spare capacity</h2>
+<p>During the four-second burst, net input is <code>3−2=1</code> work unit per second. Thus Q(4)=4. Afterward spare capacity is <code>2−1=1</code> unit per second, and the backlog drains in four additional seconds, at t=8.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Time t (seconds)</th>
+<th style="text-align: right;">0</th>
+<th style="text-align: right;">1</th>
+<th style="text-align: right;">2</th>
+<th style="text-align: right;">3</th>
+<th style="text-align: right;">4</th>
+<th style="text-align: right;">5</th>
+<th style="text-align: right;">6</th>
+<th style="text-align: right;">7</th>
+<th style="text-align: right;">8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Outstanding work Q(t)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div><p>If arrivals fall only to two units/s, input equals capacity and the accumulated four units remain. If arrivals stay above two, backlog grows. If the system is empty and arrivals are below capacity, unused capacity disappears rather than making Q negative. This is a deterministic fluid model; it is not a stochastic queue or a per-request latency simulator.</p>
+<p><strong>Assessment criterion:</strong> Correct units and time origin; explain that recovery needs spare capacity. A long-window mean arrival rate below capacity can coexist with short-window deadline misses.</p>
+<h2 id="fan-out-and-correlation">5. Fan-out and correlation</h2>
+<p>Under the independent model, each lookup is fast enough with probability 0.98. All 20 are fast enough with probability <code>0.98^20</code>. The complete request exceeds d with probability <code>1−0.98^20 = 0.332392…</code>, or about 33.24%.</p>
+<p>For the perfectly correlated construction, all lookups exceed d in the same two percent of requests. The whole request therefore exceeds d with probability 0.02. Every component retains the same marginal exceedance as before, but the joint distribution changes. Correlation cannot be ignored; these two constructions alone do not specify every possible dependence pattern.</p>
+<p>Measure latency for complete original user operations over a specified window and workload, starting at original arrival and ending at the promised complete result. Separately record rejected, failed, timed-out and retried operations. If calculating a percentile only for completed operations, label that conditional population and also report the offered-operation success rate. Do not silently treat timeout duration as a successful completion, omit incomplete operations, or average component percentiles. Component-level distributions remain useful diagnostics, not substitutes for the user clock.</p>
+<p><strong>Assessment criterion:</strong> Show the complement and independence assumption, supply the correlated counterexample, and define the measured population. The 33.24% is a calculated teaching case, not R08’s reported benchmark.</p>
+<h2 id="capacity-charges-and-evidence-that-changes-the-policy">6. Capacity charges and evidence that changes the policy</h2>
+<p>Fixed provisioning buys <code>6*10=60</code> worker-hours. Ideal elasticity buys <code>2*9+6*1=24</code>. If elastic unit price is p times the fixed unit price, break-even is <code>24p=60</code>, so p=2.5. Elasticity is cheaper below that threshold, equal at it, and more expensive above it under these assumptions.</p>
+<p>Four extra workers each incur 0.25 paid startup hours. That adds one worker-hour, giving 25 and break-even <code>60/25=2.4</code>. This assumes baseline capacity is ready initially and the peak is anticipated; the extra startup is inside the accounting boundary. It excludes minimum billing units, commitments, network costs, operational labor and the value lost when deadlines are missed. It is not a current cloud quote or a profit calculation.</p>
+<p>A bounded replay could compare a warm baseline plus scaling against a larger always-ready pool. Predeclare the useful-outcome deadline, correctness requirement and offered-operation denominator. Replay identical timestamped arrivals and payload costs, including several bursts shorter than measured startup time, a sustained peak and a post-peak drain. Record ready capacity over time, startup work, queue depth in both requests and estimated work units, paid capacity, original-operation latency, rejections, late completions, failed attempts and retries. Keep retry budgets and cancellation behavior explicit; do not let a response-driven load generator reduce offered load when latency rises.</p>
+<p>If short frequent bursts cause unacceptable misses before additional workers become ready, and the value of avoiding those misses exceeds the headroom charge, increase warm capacity. If long deadlines and sparse peaks permit buffering without loss of useful outcomes, favor a smaller baseline. If rejection and retries amplify overload, change admission and retry behavior before interpreting a scaling comparison. Different value by request class may call for reservations or a revised objective. These are decision rules, not measured findings. Real observations must supply the costs and acceptance limits.</p>
+<p><strong>Assessment criterion:</strong> Correct capacity arithmetic and a test capable of falsifying the recommendation. The replay must account for failures, startup and work spent on retries; aggregate successful-request latency alone is insufficient.</p>
+<h2 id="executed-checks-and-limits">Executed checks and limits</h2>
+<p>Run the following with Python 3; it needs only the standard library. It checks the worked traces using exact rational arithmetic, compares FIFO with independently accumulated service costs, varies all six placements of the long job, checks admission under cost underestimation, validates the two capacity traces and busy-work conservation across five startup values, and verifies fluid conservation, probability and cost thresholds.</p>
+<p>These finite deterministic checks establish consistency of the examples. They do not establish queue stability under a random process, estimate a production tail, validate an implementation’s scheduler, measure rejection overhead or prove a policy optimal. No simulated result is treated as learner evidence.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> F</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> accumulate</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> ceil</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> heapq</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>costs <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>deadline <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> schedule(work, ready):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    workers <span class="op">=</span> [(F(t), i) <span class="cf">for</span> i, t <span class="kw">in</span> <span class="bu">enumerate</span>(ready)]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    heapq.heapify(workers)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    starts, finishes <span class="op">=</span> [], []</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cost <span class="kw">in</span> work:  <span class="co"># all arrivals zero; ID order; worker-index tie break</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        start, worker <span class="op">=</span> heapq.heappop(workers)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        finish <span class="op">=</span> start <span class="op">+</span> cost</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        starts.append(start)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        finishes.append(finish)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        heapq.heappush(workers, (finish, worker))</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> starts, finishes</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> timely(finishes):</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(t <span class="op">&lt;=</span> deadline <span class="cf">for</span> t <span class="kw">in</span> finishes)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>starts, fifo <span class="op">=</span> schedule(costs, [<span class="dv">0</span>])</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> fifo <span class="op">==</span> <span class="bu">list</span>(accumulate(costs)) <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> starts <span class="op">==</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>]</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(fifo) <span class="op">/</span> <span class="dv">6</span> <span class="op">==</span> F(<span class="dv">11</span>, <span class="dv">2</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(costs) <span class="op">==</span> <span class="dv">9</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sorted</span>(fifo)[ceil(F(<span class="dv">1</span>, <span class="dv">2</span>) <span class="op">*</span> <span class="dv">6</span>) <span class="op">-</span> <span class="dv">1</span>] <span class="op">==</span> <span class="dv">6</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sorted</span>(fifo)[ceil(F(<span class="dv">95</span>, <span class="dv">100</span>) <span class="op">*</span> <span class="dv">6</span>) <span class="op">-</span> <span class="dv">1</span>] <span class="op">==</span> <span class="dv">9</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> timely(fifo) <span class="op">==</span> <span class="dv">2</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Six distinct positions of the long job: same service distribution.</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>means, successes <span class="op">=</span> [], []</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> position <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">6</span>):</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    work <span class="op">=</span> [<span class="dv">1</span>] <span class="op">*</span> <span class="dv">6</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    work[position] <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    _, finish <span class="op">=</span> schedule(work, [<span class="dv">0</span>])</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> finish <span class="op">==</span> <span class="bu">list</span>(accumulate(work))</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    means.append(<span class="bu">sum</span>(finish) <span class="op">/</span> <span class="dv">6</span>)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    successes.append(timely(finish))</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> means <span class="op">==</span> [F(<span class="dv">13</span>, <span class="dv">2</span>), <span class="dv">6</span>, F(<span class="dv">11</span>, <span class="dv">2</span>), <span class="dv">5</span>, F(<span class="dv">9</span>, <span class="dv">2</span>), <span class="dv">4</span>]</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> successes <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>reserved <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>accepted, rejected <span class="op">=</span> [], []</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> job, cost <span class="kw">in</span> <span class="bu">enumerate</span>(costs, <span class="dv">1</span>):</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> reserved <span class="op">+</span> cost <span class="op">&lt;=</span> deadline:</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        reserved <span class="op">+=</span> cost</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        accepted.append(job)</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        rejected.append(job)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> accepted <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>] <span class="kw">and</span> rejected <span class="op">==</span> [<span class="dv">3</span>, <span class="dv">6</span>]</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> schedule([costs[j<span class="op">-</span><span class="dv">1</span>] <span class="cf">for</span> j <span class="kw">in</span> accepted], [<span class="dv">0</span>])[<span class="dv">1</span>] <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># If predicted costs are all one, the first four are admitted.</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> schedule(costs[:<span class="dv">4</span>], [<span class="dv">0</span>])[<span class="dv">1</span>] <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> timely(schedule(costs[:<span class="dv">4</span>], [<span class="dv">0</span>])[<span class="dv">1</span>]) <span class="op">==</span> <span class="dv">2</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>pair_costs <span class="op">=</span> [F(<span class="dv">1</span>, <span class="dv">2</span>) <span class="op">+</span> <span class="bu">max</span>(costs[i:i<span class="op">+</span><span class="dv">2</span>]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">2</span>)]</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>pair_finishes <span class="op">=</span> <span class="bu">list</span>(accumulate(pair_costs))</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>batch <span class="op">=</span> [t <span class="cf">for</span> t <span class="kw">in</span> pair_finishes <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>)]</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> batch <span class="op">==</span> [F(<span class="dv">3</span>, <span class="dv">2</span>), F(<span class="dv">3</span>, <span class="dv">2</span>), <span class="dv">6</span>, <span class="dv">6</span>, F(<span class="dv">15</span>, <span class="dv">2</span>), F(<span class="dv">15</span>, <span class="dv">2</span>)]</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(pair_costs) <span class="op">==</span> F(<span class="dv">15</span>, <span class="dv">2</span>) <span class="kw">and</span> timely(batch) <span class="op">==</span> <span class="dv">2</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> schedule(costs, [<span class="dv">0</span>, <span class="dv">0</span>])[<span class="dv">1</span>] <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> schedule(costs, [<span class="dv">0</span>, <span class="dv">2</span>])[<span class="dv">1</span>] <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> timely(schedule(costs, [<span class="dv">0</span>, <span class="dv">0</span>])[<span class="dv">1</span>]) <span class="op">==</span> <span class="dv">5</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> timely(schedule(costs, [<span class="dv">0</span>, <span class="dv">2</span>])[<span class="dv">1</span>]) <span class="op">==</span> <span class="dv">4</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> readiness <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    begin, end <span class="op">=</span> schedule(costs, [<span class="dv">0</span>, readiness])</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">sum</span>(e<span class="op">-</span>b <span class="cf">for</span> b, e <span class="kw">in</span> <span class="bu">zip</span>(begin, end)) <span class="op">==</span> <span class="dv">9</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>q, trace <span class="op">=</span> <span class="dv">0</span>, [<span class="dv">0</span>]</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> second <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">8</span>):</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    arrivals <span class="op">=</span> <span class="dv">3</span> <span class="cf">if</span> second <span class="op">&lt;</span> <span class="dv">4</span> <span class="cf">else</span> <span class="dv">1</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    served <span class="op">=</span> <span class="bu">min</span>(q <span class="op">+</span> arrivals, <span class="dv">2</span>)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    next_q <span class="op">=</span> q <span class="op">+</span> arrivals <span class="op">-</span> served</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> next_q <span class="op">&gt;=</span> <span class="dv">0</span> <span class="kw">and</span> next_q <span class="op">+</span> served <span class="op">==</span> q <span class="op">+</span> arrivals</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> next_q</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    trace.append(q)</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> trace <span class="op">==</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">max</span>(<span class="dv">0</span>, <span class="dv">4</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">-</span> <span class="dv">2</span>) <span class="op">==</span> <span class="dv">4</span>  <span class="co"># equal rates do not drain backlog</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>fanout <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> F(<span class="dv">98</span>, <span class="dv">100</span>)<span class="op">**</span><span class="dv">20</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">round</span>(<span class="bu">float</span>(fanout), <span class="dv">4</span>) <span class="op">==</span> <span class="fl">0.3324</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> fanout <span class="op">&gt;</span> F(<span class="dv">2</span>, <span class="dv">100</span>)</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>fixed, elastic <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> <span class="dv">10</span>, <span class="dv">2</span> <span class="op">*</span> <span class="dv">9</span> <span class="op">+</span> <span class="dv">6</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>startup <span class="op">=</span> <span class="dv">4</span> <span class="op">*</span> F(<span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (fixed, elastic, elastic <span class="op">+</span> startup) <span class="op">==</span> (<span class="dv">60</span>, <span class="dv">24</span>, <span class="dv">25</span>)</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> F(fixed, elastic) <span class="op">==</span> F(<span class="dv">5</span>, <span class="dv">2</span>)</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> fixed <span class="op">/</span> (elastic <span class="op">+</span> startup) <span class="op">==</span> F(<span class="dv">12</span>, <span class="dv">5</span>)</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: FIFO, six reorderings, admission and estimation failure, batches,'</span>)</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'two-worker traces, five startup cases, fluid conservation, fan-out, costs.'</span>)</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Fluid backlog at integer seconds:'</span>, trace)</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Independent fan-out exceedance:'</span>, <span class="bu">round</span>(<span class="bu">float</span>(fanout), <span class="dv">6</span>))</span></code></pre></div>
+<p>Observed output on 2026-11-07:</p>
+<pre class="text" tabindex="0" aria-label="Code example"><code>PASS: FIFO, six reorderings, admission and estimation failure, batches,
+two-worker traces, five startup cases, fluid conservation, fan-out, costs.
+Fluid backlog at integer seconds: [0, 1, 2, 3, 4, 3, 2, 1, 0]
+Independent fan-out exceedance: 0.332392</code></pre>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-07. Six worked solutions, hints, assessment criteria and executed checks. All inputs are constructed; actual arrivals, service costs, correlations, resource constraints and pricing remain application questions.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#fifo-distributions-and-the-missing-waiting-time">1. FIFO, distributions and the missing waiting time</a></li><li class="h2"><a href="#admission-and-the-denominator">2. Admission and the denominator</a></li><li class="h2"><a href="#batching-capacity-and-startup">3. Batching, capacity and startup</a></li><li class="h2"><a href="#backlog-and-spare-capacity">4. Backlog and spare capacity</a></li><li class="h2"><a href="#fan-out-and-correlation">5. Fan-out and correlation</a></li><li class="h2"><a href="#capacity-charges-and-evidence-that-changes-the-policy">6. Capacity charges and evidence that changes the policy</a></li><li class="h2"><a href="#executed-checks-and-limits">Executed checks and limits</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

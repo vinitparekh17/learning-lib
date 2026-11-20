@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>A01 — Learning, generalization, and distribution change | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="A01">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">A01</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=A#track-A"><span aria-hidden="true">←</span> AI systems</a><p class="eyebrow">AI systems <span aria-hidden="true">/</span> A01</p><h1 id="a01-learning-generalization-and-distribution-change">Learning, generalization, and distribution change</h1><p class="article-description">Design a comparison that tests the intended deployment instead of rewarding memorization or future information</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f02.html" data-chip="F02">F02</a><a class="module-chip" href="/learn/f03.html" data-chip="F03">F03</a><a class="module-chip" href="/learn/f04.html" data-chip="F04">F04</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#reference-card-and-evidence" >Evidence</a><a class="button secondary" href="/answers/a01.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#what-does-a-successful-fit-buy-us">What does a successful fit buy us?</a></li><li class="h2"><a href="#fit-a-small-predictor-before-a-large-one">Fit a small predictor before a large one</a></li><li class="h2"><a href="#penalize-flexibility-then-test-the-choice">Penalize flexibility, then test the choice</a></li><li class="h2"><a href="#zero-error-from-the-wrong-split">Zero error from the wrong split</a></li><li class="h2"><a href="#let-deployment-choose-the-holdout">Let deployment choose the holdout</a></li><li class="h2"><a href="#distribution-change-can-reverse-the-winner">Distribution change can reverse the winner</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card-and-evidence">Reference card and evidence</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>A01 · 1.0 · 2026-11-09</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>F02 expectations and loss, F03 comparison design, F04 fitted weights; optional bridge below</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Design a comparison that tests the intended deployment instead of rewarding memorization or future information</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R13 Python edition and author labs; R02 January 2024 draft. Inspected locators below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Original constructed datasets; exact Python arithmetic and split checks executed. No real model benchmark or deployment trial.</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/a01.html">Hints, worked answers and checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="what-does-a-successful-fit-buy-us">What does a successful fit buy us?</h2>
+<p>The invoice service wants to predict active review minutes when a document arrives. A schedule based on these estimates could help allocate reviewer capacity. It could also repeatedly underestimate difficult work. Before choosing a model, specify the decision time, what is observable then, and what outcome will eventually be measured.</p>
+<p>Our input x is the page count available at intake. The target y is active review minutes measured under one declared review workflow. Waiting in a queue is excluded from y. Changing reviewer tools could change y even for the same document. These are design choices, not facts about a deployed service.</p>
+<p>A <strong>feature</strong> is an input available to the predictor. A <strong>label</strong> is the outcome used to judge a prediction. A <strong>parameter</strong> is a number fitted from training examples. A <strong>hyperparameter</strong> chooses aspects of that fitting procedure, such as penalty strength. A <strong>baseline</strong> is a credible simple alternative evaluated on the same cases. Learning here means choosing a predictor from data; generalization concerns its behavior on cases outside that fitting process.</p>
+<p>F04 showed that reducing training loss can worsen an unseen prediction. A01 develops the missing evaluation design. F02 supplies the loss/denominator distinction, and F03 supplies the requirement to compare the same population under a declared protocol. No prior diagnostic answer is assumed.</p>
+<h2 id="fit-a-small-predictor-before-a-large-one">Fit a small predictor before a large one</h2>
+<p>Reuse F04’s zero-intercept model, predicted minutes = wx. Its strong assumption is that time grows proportionally with pages, without fixed setup time. Use two invented training cases: (1 page, 2 minutes) and (2 pages, 4 minutes).</p>
+<p>The squared loss for one case is (prediction − outcome)². The mean squared error (MSE) averages it over cases. Here:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mi>w</mi><mo>−</mo><mn>4</mn><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mrow><mn>2</mn></mfrac><mo>=</mo><mfrac><mn>5</mn><mn>2</mn></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>−</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+L(w)=\frac{(w-2)^2+(2w-4)^2}{2}=\frac52(w-2)^2.
+</annotation></semantics></math></p>
+<p>Thus w=2 minimizes training MSE, with value zero. A constant baseline predicts the training mean, 3 minutes, for every case; its training MSE is 1 minute². Squared errors penalize large deviations heavily. Also report mean absolute error (MAE), in minutes, so an operator can interpret the scale. Neither metric alone measures whether scheduling actually improves customer outcomes.</p>
+<p>Now lock both predictors and evaluate two invented validation cases, (1,1) and (2,2). The fitted predictor gives [2,4], so MSE is (1+4)/2=2.5. The constant baseline gives [3,3], so MSE is (4+1)/2=2.5 as well. A perfect training fit did not beat the baseline here. The validation set differs in its relation between pages and time; that was deliberately constructed, not discovered empirically.</p>
+<p>The training objective is an average over observed fitting cases. The desired deployment risk is an expectation of loss over the intended future population, with the predictor fixed. An average on held-out data estimates that target only to the extent that the sampling and information conditions match it. An unseen row is not necessarily a new independent document, supplier or time period.</p>
+<h2 id="penalize-flexibility-then-test-the-choice">Penalize flexibility, then test the choice</h2>
+<p>Consider a penalized objective J(w)=L(w)+λw², with λ≥0. Differentiate the quadratic: J′(w)=5(w−2)+2λw. Setting this to zero gives</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>λ</mi></msub><mo>=</mo><mfrac><mn>10</mn><mrow><mn>5</mn><mo>+</mo><mn>2</mn><mi>λ</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+w_\lambda=\frac{10}{5+2\lambda}.
+</annotation></semantics></math></p>
+<p>The positive curvature 5+2λ makes this the unique minimum. For λ=0, 2.5 and 7.5, the weights are 2, 1 and 0.5. In this example units and loss scaling are fixed; multiplying features or replacing mean loss by sum loss changes the numerical meaning of λ. The penalty is a preference for smaller weights, not evidence that smaller weights are always better.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Candidate</th>
+<th>Weight / prediction rule</th>
+<th style="text-align: right;">Training MSE</th>
+<th style="text-align: right;">Validation MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Constant baseline</td>
+<td>Always 3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.5</td>
+</tr>
+<tr class="even">
+<td>λ=0</td>
+<td>2x</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.5</td>
+</tr>
+<tr class="odd">
+<td>λ=2.5</td>
+<td>x</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>λ=7.5</td>
+<td>0.5x</td>
+<td style="text-align: right;">5.625</td>
+<td style="text-align: right;">0.625</td>
+</tr>
+</tbody>
+</table>
+</div><p>Select λ=2.5 using this validation set. It has worse training fit but better validation fit among these candidates. This is not a general recommendation for λ=2.5. If deployment followed y=2x instead, the unpenalized predictor would be preferable. Regularization can trade fit for stability, but it cannot repair a label that contains future information or a test set chosen for easy cases.</p>
+<p>Reserve a separate final test with cases (3,3), (4,4), which has not influenced the candidate grid or selection. The frozen selected model has MSE 0 there; the constant baseline has MSE 0.5. These tiny exact examples illustrate the bookkeeping, not an estimated production advantage. If the final cases instead followed y=2x, the selected model’s MSE would be 12.5. That counterexample exposes the missing transport assumption.</p>
+<p>For a real study, use training folds to fit parameters and development folds to choose features, penalties and other settings. Fit normalization, missing-value handling and feature selection inside each training fold. Reserve an outer test for evaluating the complete selection procedure. Once its results influence changes, it is development evidence for those changes. Calling it “test” does not restore independence. A final refit on all development data is a new fitted model; evaluate that actual frozen model rather than reusing earlier numbers as though its weights were unchanged.</p>
+<h2 id="zero-error-from-the-wrong-split">Zero error from the wrong split</h2>
+<p>Here is a separate, deliberately adversarial dataset. Four underlying documents each have two near-identical revisions with the same assigned target. Each document has two pages. Metadata are:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Document</th>
+<th>Organization</th>
+<th>Template family</th>
+<th>Revision IDs</th>
+<th style="text-align: right;">Assigned minutes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D1</td>
+<td>A</td>
+<td>X</td>
+<td>D1r1, D1r2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td>D2</td>
+<td>A</td>
+<td>Y</td>
+<td>D2r1, D2r2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td>D3</td>
+<td>B</td>
+<td>X</td>
+<td>D3r1, D3r2</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td>D4</td>
+<td>B</td>
+<td>Z</td>
+<td>D4r1, D4r2</td>
+<td style="text-align: right;">8</td>
+</tr>
+</tbody>
+</table>
+</div><p>A lookup predictor remembers training labels by document ID and falls back to the training mean for an unknown document. Put each r1 in training and each r2 in validation. All four validation predictions are exact. This is one possible row-split allocation, not the expected result of every random split. It tests recognition of previously labeled documents, not prediction for new documents at intake. The use of prior labels also needs to match what is available at decision time.</p>
+<p>Now train on both revisions of D1 and D2, and evaluate both revisions of D3 and D4. Every validation document is unseen. The fallback is 3, giving MSE ((6−3)²+(8−3)²)/2=17. The constant baseline has the same MSE. The zero-error advantage vanished. Duplicating each target does not produce twice as many independent documents.</p>
+<p>Organization separation is still not template separation: X appears in both A and B. This is not automatically an error. New customers may use familiar templates. But it cannot establish performance on unseen templates. Grouping by the pair (organization, template) also fails to separate either individual attribute. If both organization and template must be unseen, group connected components of the graph whose edges join shared organizations or shared template families. Here the X connection joins A and B; all four documents belong to one component. There is no nonempty disjoint train/test partition satisfying both constraints. Collect more disconnected groups or narrow the claim; do not manufacture independent evidence by splitting the component.</p>
+<h2 id="let-deployment-choose-the-holdout">Let deployment choose the holdout</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Intended claim</th>
+<th>Proposed holdout</th>
+<th>What it still cannot establish</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>New documents from existing suppliers</td>
+<td>Later intake period; no document family crosses partitions; features reconstructed as of intake</td>
+<td>Performance for unknown suppliers or changed review procedures</td>
+</tr>
+<tr class="even">
+<td>New suppliers, possibly familiar templates</td>
+<td>Entire organizations held out; retain all revisions of each document together</td>
+<td>Unseen-template performance if templates overlap</td>
+</tr>
+<tr class="odd">
+<td>New template families</td>
+<td>Entire template families held out</td>
+<td>New-organization behavior unless also separated</td>
+</tr>
+<tr class="even">
+<td>Both unseen organizations and templates</td>
+<td>Disconnected organization/template components held out</td>
+<td>Future stability or representativeness of missing components</td>
+</tr>
+</tbody>
+</table>
+</div><p>For a temporal evaluation, choose training labels that were already available at the fitting cutoff. A document arriving before cutoff but resolved afterward cannot contribute its outcome to that historical fit. Route all revisions of a case together, or exclude boundary-crossing cases under a declared rule and report the exclusions. At prediction time reconstruct only the evidence then available. A correction published next week is not an intake feature today.</p>
+<p>Use development partitions that mimic the same deployment boundary as the final holdout. A grouped final test combined with row-leaking model selection can still choose a poor procedure. Keep an audit record of case IDs, group membership, timestamps, label availability, feature schema and transformations. Count overlaps directly. Inspect a sample for hidden duplicate documents, renamed suppliers and template variants that exact IDs miss.</p>
+<h2 id="distribution-change-can-reverse-the-winner">Distribution change can reverse the winner</h2>
+<p>Even valid held-out evidence concerns a population. Suppose model P has subgroup MSE 1 on routine cases and 9 on exceptions, while Q has 4 and 4. At 90% routine, P’s weighted loss is 1.8 versus Q’s 4. At 50% routine, P’s loss becomes 5, and Q wins. The crossover solves 9−8r=4, giving routine share r=5/8. This is F03’s workload-mix reasoning applied to losses. It assumes each subgroup’s error rate remains unchanged; a changed review process can invalidate even that assumption.</p>
+<p>Report performance by relevant groups, the target mix, missing outcomes and severe underestimation. A change in inputs can be visible before labels arrive; it does not prove quality declined. Outcome monitoring needs matured labels and their availability lag. A frozen model that changes who gets reviewed also changes the feedback data, so evaluate the full workflow separately before claiming causal business benefit.</p>
+<p>Prefer the simple baseline until added complexity earns its cost on an evaluation matched to deployment. More data from the same repeated template need not answer a new-template question. More parameters need not provide useful information absent from intake features. For language models, prompts, demonstrations, retrieval corpora and thresholds are also choices in the evaluated procedure. The same information-boundary discipline applies, while unknown pretraining exposure limits claims that a benchmark is entirely unseen.</p>
+<h2 id="practice">Practice</h2>
+<ol type="1">
+<li>Derive the constant baseline and all training/validation MSEs in the candidate table. Derive wλ and explain why the units/scaling of λ matter.</li>
+<li>Select a candidate using validation, compute its final test MSE and MAE, and compare the baseline. Change the final targets to 6 and 8. What claim does that defeat?</li>
+<li>Reproduce the lookup predictor’s zero-error row allocation and its grouped MSE of 17. Identify the independent document count and what the two evaluations measure.</li>
+<li>Construct the organization/template connected components. Explain why grouping by their pair is insufficient, and propose a feasible response when all records form one component.</li>
+<li>Write a one-page split plan for future new documents from existing suppliers, then revise it for new suppliers with unseen templates. Specify label cutoff, revision handling, preprocessing, baseline, tuning and final evaluation.</li>
+<li>Derive the routine-share crossover for P and Q. Specify one monitoring observation that would invalidate reweighting, and distinguish model quality from a causal improvement in scheduling.</li>
+</ol>
+<h2 id="reference-card-and-evidence">Reference card and evidence</h2>
+<p>Specify decision time → define feature/label availability → name the future population → split at its independence boundary → fit all transformations inside training → select on development → freeze → evaluate once → monitor matured outcomes. Record the unit and denominator beside each score.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Inspected locator</th>
+<th>Supported use and limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R13, James, Witten, Hastie, Tibshirani and Taylor, Python edition, 2023</td>
+<td><a href="https://hastie.su.domains/ISLP/ISLP_website.pdf.download.html">Author download page</a>, §2.2.1 printed p. 28; §5.1.1 p. 202; §6.2.1 p. 240</td>
+<td>Training versus unseen error, held-out fitting and quadratic penalty. No book dataset result transferred.</td>
+</tr>
+<tr class="even">
+<td>R13 author labs, stable snapshot accessed 2026-11-09</td>
+<td><a href="https://github.com/intro-stat-learning/ISLP_labs/blob/stable/Ch05-resample-lab.ipynb">Chapter 5</a>, The Validation Set Approach; <a href="https://github.com/intro-stat-learning/ISLP_labs/blob/stable/Ch06-varselect-lab.ipynb">Chapter 6</a>, Choosing Among Models Using the Validation Set Approach and Cross-Validation, and Evaluating Test Error of Cross-Validated Ridge</td>
+<td>Fold-local selection and separation of tuning from final evaluation. These passages were read; the authors’ experiments were not rerun.</td>
+</tr>
+<tr class="odd">
+<td>R02, January 2024 author draft</td>
+<td><a href="https://mml-book.github.io/book/mml-book.pdf">PDF</a>, §§8.2.1–8.2.2 pp. 259–261, eqs. 8.6–8.10</td>
+<td>Hypothesis class, empirical loss and fixed-predictor expected risk.</td>
+</tr>
+<tr class="even">
+<td>Original design and derivations</td>
+<td>Tables, split proposals, graph example, mixture reversal and companion Python</td>
+<td>Constructed teaching cases. Group/time split policy follows the declared deployment question, not a universal split recipe.</td>
+</tr>
+</tbody>
+</table>
+</div><p>The author download page redirected to its hosted PDF, which was read locally after web-reader access failed. Notebook passages were also retrieved from the authors’ repository. PDF text extraction had font warnings; cited prose and section locators were readable. Formulas in this pack were derived and checked independently. No essential access blocker remains.</p>
+<p>Open inputs: actual target population, independent group count, feature/label timestamps, outcome quality, review-policy changes, loss asymmetry and deployment costs. These examples cannot choose a production model or establish learner mastery. A02 next develops attention mechanics; A03 and A05 reuse these evaluation boundaries for retrieval and complete workflows.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-09. Small-predictor comparison, penalty derivation, leakage counterexample, deployment-aligned split design and six exercises.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/a01.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#a01-passage-record-2026-11-09">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="A01"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/s06.html"><small>Previous module · S06</small><strong>Reliability, isolation, and authority boundaries</strong></a><a href="/learn/a02.html"><small>Next module · A02</small><strong>Attention and the Transformer mechanism</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#what-does-a-successful-fit-buy-us">What does a successful fit buy us?</a></li><li class="h2"><a href="#fit-a-small-predictor-before-a-large-one">Fit a small predictor before a large one</a></li><li class="h2"><a href="#penalize-flexibility-then-test-the-choice">Penalize flexibility, then test the choice</a></li><li class="h2"><a href="#zero-error-from-the-wrong-split">Zero error from the wrong split</a></li><li class="h2"><a href="#let-deployment-choose-the-holdout">Let deployment choose the holdout</a></li><li class="h2"><a href="#distribution-change-can-reverse-the-winner">Distribution change can reverse the winner</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#reference-card-and-evidence">Reference card and evidence</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

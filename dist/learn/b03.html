@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>B03 — Distribution, product boundaries, and defensibility | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="B03">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">B03</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=B#track-B"><span aria-hidden="true">←</span> Technology business</a><p class="eyebrow">Technology business <span aria-hidden="true">/</span> B03</p><h1 id="b03-distribution-product-boundaries-and-defensibility">Distribution, product boundaries, and defensibility</h1><p class="article-description">Choose an adoption path and responsibility boundary, then test whether the offer survives a stronger alternative</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/b01.html" data-chip="B01">B01</a><a class="module-chip" href="/learn/b02.html" data-chip="B02">B02</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice-connections-and-reference-card" >Jump to practice</a><a class="button secondary" href="#evidence-ledger-and-unresolved-inputs" >Evidence</a><a class="button secondary" href="/answers/b03.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#a-good-component-can-still-be-a-poor-offer">A good component can still be a poor offer</a></li><li class="h2"><a href="#start-narrow-enough-to-observe-the-whole-job">Start narrow enough to observe the whole job</a></li><li class="h2"><a href="#model-adoption-as-several-observable-transitions">Model adoption as several observable transitions</a></li><li class="h2"><a href="#three-boundaries-around-the-same-job">Three boundaries around the same job</a></li><li class="h2"><a href="#a-worked-comparison-with-both-sides-of-the-ledger">A worked comparison with both sides of the ledger</a></li><li class="h2"><a href="#break-the-recommendation-deliberately">Break the recommendation deliberately</a></li><li class="h2"><a href="#the-supplier-bundles-your-main-feature">The supplier bundles your main feature</a></li><li class="h2"><a href="#turn-a-moat-claim-into-a-test">Turn a moat claim into a test</a></li><li class="h2"><a href="#practice-connections-and-reference-card">Practice, connections and reference card</a></li><li class="h2"><a href="#evidence-ledger-and-unresolved-inputs">Evidence ledger and unresolved inputs</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>B03 · 1.0 · 2026-11-13</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>B01 customer evidence; B02 unit economics; S06/A05 for authority and outcome contracts</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Choose an adoption path and responsibility boundary, then test whether the offer survives a stronger alternative</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>R22 Recruit/Delight/Manual, R21 packaging, R19 budget/authority passages inspected; evidence ledger below</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Hypothetical scenarios and exact arithmetic checked; no outreach, customer trial, supplier test or market result</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/b03.html">Hints, worked answers and reproducible checks</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="a-good-component-can-still-be-a-poor-offer">A good component can still be a poor offer</h2>
+<p>A document model can extract invoice fields accurately while the purchasing team continues using a spreadsheet. Perhaps nobody reaches the budget owner. Perhaps importing records takes longer than matching them. Perhaps the team cannot send data outside its environment. These are different bottlenecks; a better extraction benchmark does not resolve them all.</p>
+<p>The question is: why would a particular customer find, adopt, keep and pay for this offering when alternatives improve? <strong>Distribution</strong> is the path to a qualified customer and an authorized adoption decision. <strong>Product boundary</strong> says which work and responsibilities the supplier accepts. <strong>Defensibility</strong> is a hypothesis that a valuable advantage can persist despite substitution or imitation. None is established by a feature list.</p>
+<p>B01 asked whether the problem matters. B02 asked whether a useful unit can support its delivery costs. Here we hold the customer job constant while changing how the work reaches the customer and who performs it. The framework and cases are original teaching designs. Practitioner sources supply questions to investigate, not verified demand.</p>
+<h2 id="start-narrow-enough-to-observe-the-whole-job">Start narrow enough to observe the whole job</h2>
+<p>Retain the fictional purchasing workflow: assemble invoice and delivery evidence for a human payment reviewer. Choose an initial segment of small purchasing teams that repeatedly match a limited set of document formats, have an identifiable operations buyer, and can authorize a bounded pilot. This is a proposed segment, not a claim about its prevalence. Teams barred from external processing require a different deployment path.</p>
+<p>The job ends when an authorized reviewer receives a supported, timely evidence package or a clearly unresolved case. Payment approval remains outside the product. An assistant that silently guesses missing evidence fails the contract even if the user likes its writing. The clerk uses the output, the operations manager funds it, and a data/security owner permits access. One person might fill several roles; do not assume that a willing user can authorize all of them.</p>
+<p>A first distribution route could be introductions through a bookkeeping practitioner who already works with this segment, followed by a workflow demonstration to its buyer. That is a channel hypothesis. It requires permission and a credible reason for the practitioner to introduce you; it is not an audience you already possess. A fallback is a narrowly relevant professional community with an approved demonstration. Count distinct organizations, record referral incentives, and separate warm contacts from independently reached customers.</p>
+<p>R22 recommends manual early recruitment and attentive service, including doing work manually before automating it. Its founder anecdotes motivate a small learning route, not a causal claim that handholding creates a scalable business. R19’s budget and authority discussion motivates checking who can actually approve the change.</p>
+<h2 id="model-adoption-as-several-observable-transitions">Model adoption as several observable transitions</h2>
+<p>Define events before collecting counts. A <strong>qualified organization</strong> fits the segment and has a relevant recent problem. <strong>Activation</strong> means completing the first permitted real workflow to the agreed quality bar, not opening an account. <strong>Repeat use</strong> means another eligible workflow cycle with the same success definition. A paid contract and a useful outcome are separate events.</p>
+<p>For an invented completed outreach cohort, suppose 40 distinct organizations are reached, 12 qualify, 6 agree to a demonstration, 3 activate, and 2 complete a second eligible cycle. Every later set is a subset of the earlier one, and all organizations have enough follow-up time. Overall repeat-use fraction is 2/40=5%. Conditional fractions are 12/40, 6/12, 3/6 and 2/3; their product equals 2/40 by cancellation. No independence assumption is needed for these nested observed fractions. Multiplying rates from different cohorts would require additional transportability assumptions.</p>
+<p>The six demonstrations and only three activations suggest investigating onboarding, access or fit. They do not prove onboarding caused the loss. Track refusal reasons and elapsed time: an organization waiting for approval is not the same as a completed rejection. Recent cohorts without a second cycle yet are not mature retention cohorts. In small samples, a single organization changes the percentage substantially.</p>
+<p>If recruitment and demonstrations cost 600 U, acquisition cost per activated organization is 600/3=200 U. Cost per repeated-use organization is 300 U, a different descriptive ratio. Neither denominator implies payment. With zero activations, report 600 U spent and an undefined finite acquisition ratio rather than zero cost.</p>
+<h2 id="three-boundaries-around-the-same-job">Three boundaries around the same job</h2>
+<p>All options preserve evidence traceability, access control and customer payment approval. Their completion promises and operational owners must be explicit.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dimension</th>
+<th>Self-serve hosted tool</th>
+<th>Managed evidence service</th>
+<th>Internal deployment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Offer</td>
+<td>Software assembles a draft; customer operates checks and exceptions</td>
+<td>Supplier operates assembly and first review; customer authorizes final use</td>
+<td>Customer runs the workflow inside its controlled environment</td>
+</tr>
+<tr class="even">
+<td>Buyer / route</td>
+<td>Operations buyer; focused demo, documented trial and self-onboarding</td>
+<td>Operations buyer; scoped proposal through trusted introduction</td>
+<td>Operations sponsor plus IT owner; internal budget and deployment review</td>
+</tr>
+<tr class="odd">
+<td>Onboarding</td>
+<td>Customer maps fields and imports permitted records</td>
+<td>Supplier helps map records within a bounded engagement</td>
+<td>Customer integration, access policy, release and rollback process</td>
+</tr>
+<tr class="even">
+<td>Required trust</td>
+<td>Hosted data handling, traceable outputs, export and support terms</td>
+<td>Same plus named human access, confidentiality and escalation ownership</td>
+<td>Local operator competence, controlled dependencies, patching and incident ownership</td>
+</tr>
+<tr class="odd">
+<td>Variable labor</td>
+<td>Customer verification; supplier support still exists</td>
+<td>Supplier verification and exceptions; customer final review persists</td>
+<td>Customer verification and operations; external support only if separately purchased</td>
+</tr>
+<tr class="even">
+<td>Maintenance burden</td>
+<td>Supplier service changes; customer mapping changes</td>
+<td>Supplier process/staff training plus software changes</td>
+<td>Customer runtime, connectors, evaluation and upgrades</td>
+</tr>
+<tr class="odd">
+<td>Switching friction</td>
+<td>Mapping/export and user retraining</td>
+<td>Replacement of process knowledge and service handoffs</td>
+<td>Migration of integrations, policies and operational knowledge</td>
+</tr>
+<tr class="even">
+<td>Supplier exposure</td>
+<td>Hosted/API price, policy, availability and bundling</td>
+<td>Those dependencies plus labor availability</td>
+<td>External model/package dependencies can remain even with local hosting</td>
+</tr>
+</tbody>
+</table>
+</div><p>Internal deployment does not automatically mean offline operation. A locally installed interface calling an external model still exports data. Draw the actual boundary. Likewise, a managed service is not a transfer of every liability: the final approval owner and unresolved-case escalation remain named.</p>
+<p>R21 describes packaging through feature and usage differences for customer groups. Our three responsibility boundaries go beyond pricing columns. A plan becomes misleading if it sells a managed outcome while budgeting only for software delivery.</p>
+<h2 id="a-worked-comparison-with-both-sides-of-the-ledger">A worked comparison with both sides of the ledger</h2>
+<p>Every number below is invented, in a common unit U. These are new B03 scenarios, not edits to B02’s baseline. Compare one organization with 100 eligible cases per month over six months. Assume matched quality, deadlines and authorized access have already passed feasibility checks. That premise must be tested before any real choice.</p>
+<p>Customer labor is valued at 30 U/hour. Current handling takes 8 minutes per case: 400 U/month. It is capacity value, not automatically avoidable payroll. All recurring customer minutes include verification, residual handling and allocated operations time; all one-time customer hours include setup and switching. No category overlaps.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Input per organization</th>
+<th style="text-align: right;">Self-serve</th>
+<th style="text-align: right;">Managed</th>
+<th style="text-align: right;">Internal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Monthly supplier fee</td>
+<td style="text-align: right;">120 U</td>
+<td style="text-align: right;">180 U</td>
+<td style="text-align: right;">0 U</td>
+</tr>
+<tr class="even">
+<td>Customer recurring minutes per case</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td>Customer one-time onboarding hours</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td>Customer recurring infrastructure cost</td>
+<td style="text-align: right;">0 U</td>
+<td style="text-align: right;">0 U</td>
+<td style="text-align: right;">40 U/month</td>
+</tr>
+<tr class="odd">
+<td>Supplier variable monthly delivery cost</td>
+<td style="text-align: right;">40 U</td>
+<td style="text-align: right;">120 U</td>
+<td style="text-align: right;">Not a supplier revenue offer here</td>
+</tr>
+<tr class="even">
+<td>Supplier one-time onboarding cost</td>
+<td style="text-align: right;">60 U</td>
+<td style="text-align: right;">90 U</td>
+<td style="text-align: right;">Not applicable</td>
+</tr>
+</tbody>
+</table>
+</div><p>Let H be months, n cases/month, b baseline minutes/case, t new minutes/case, w labor value/hour, f monthly fee, i monthly infrastructure cost and o onboarding hours. Customer modeled net capacity value is</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mi>H</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mo>−</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>w</mi><mi>/</mi><mn>60</mn><mo>−</mo><mi>f</mi><mo>−</mo><mi>i</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo>−</mo><mi>o</mi><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+V=H[n(b-t)w/60-f-i]-ow.
+</annotation></semantics></math></p>
+<p>This subtracts fees and setup from valued capacity. It excludes unmodeled risk, financing and benefits unrelated to handling time. It is not a willingness-to-pay estimate.</p>
+<p>At H=6, self-serve gives 6(200−120)−120=360 U; managed gives 6(300−180)−60=660 U; internal gives 6(250−40)−360=900 U. Internal has the highest modeled value, but its feasibility depends on the actual IT owner and maintenance allowance. If that owner cannot support it, the ranking is irrelevant. For a permitted outsourced pilot with no internal operator, managed is the tentative choice, conditional on its effort estimates.</p>
+<p>Now examine the supplier. Monthly contribution before shared overhead and acquisition is 80 U for self-serve and 60 U for managed. Assign the same hypothetical acquisition cost of 200 U to each newly activated paying organization for this comparison. Six fully paid months leave 6×80−60−200=220 U for self-serve and 6×60−90−200=70 U for managed, before shared overhead. Managed creates more modeled customer value yet leaves less supplier contribution. Both sides must work.</p>
+<p>Continuous-month recovery of acquisition plus supplier onboarding is 260/80=3.25 months and 290/60≈4.83 months. With contribution collected at month end, recovery first occurs after months 4 and 5. These are conditional payback calculations, not lifetime-value forecasts. If service ends after three paid months, remainders are −20 and −110 U. No constant churn assumption rescues a cohort that has not been observed.</p>
+<h2 id="break-the-recommendation-deliberately">Break the recommendation deliberately</h2>
+<p>Suppose managed customer effort is actually 5 minutes/case because exceptions require customer rechecking. Its six-month value becomes 6(150−180)−60=−240 U. The managed recommendation fails even though the supplier fee and demo accuracy are unchanged. The next measurement should capture total customer effort and correct completion, not only supplier review time.</p>
+<p>Alternatively, an internal variant with an additional 6 hours/month of customer maintenance adds 180 U/month. Its modeled value falls from 900 to −180 U. This is incremental maintenance beyond the original table’s allowance, not the same hours counted twice. “Runs internally” is a location, not a maintenance budget.</p>
+<p>Manual onboarding can reveal repeated problems worth automating. It can also mask a different bespoke workflow for every customer. Keep a work log split into reusable setup, customer-specific setup, recurring operations and exceptions. Move toward self-serve when repeat customers can complete the workflow with documented setup and measured support effort. Keep a service boundary when valuable recurring human judgment remains necessary and its costs can be funded. Stop or narrow the offer when neither boundary satisfies the joint quality, customer-value and supplier-cost conditions.</p>
+<h2 id="the-supplier-bundles-your-main-feature">The supplier bundles your main feature</h2>
+<p>Treat this as a hypothetical stress test, not news about a named supplier. Assume a customer’s existing platform adds equivalent extraction at zero incremental fee. First ask whether it also solves evidence mapping, authorization, exceptions and review. A free component may still require costly workflow work.</p>
+<p>Assign the bundle 5 customer minutes/case and 3 onboarding hours, with no additional infrastructure charge. Its six-month value is 6×150−90=810 U. Under those premises it beats the managed offer’s 660 U by 150 U. The bundle is not automatically inferior because it lacks our interface, nor automatically equivalent because its extraction score matches.</p>
+<p>For managed to tie that bundle while retaining 2 customer minutes/case, solve 6(300−f)−60≥810: f≤155 U/month. At 155, supplier six-month remainder is 6(155−120)−90−200=−80 U. The supplier needs f≥120+290/6≈168.33 U to recover these modeled costs within six months. There is no feasible price interval under these assumptions. Negotiating the price alone cannot repair this scenario. Reduce delivery/acquisition costs, prove additional customer value, choose a different segment, or decline the offer. Bundling may also reduce the supplier’s own compute bill; that is a separate scenario requiring evidence.</p>
+<h2 id="turn-a-moat-claim-into-a-test">Turn a moat claim into a test</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Claimed advantage</th>
+<th>Mechanism to test</th>
+<th>Evidence against it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Workflow knowledge</td>
+<td>Faster correct onboarding across new organizations</td>
+<td>Every setup remains bespoke; partner handles it equally well</td>
+</tr>
+<tr class="even">
+<td>Evaluation corpus</td>
+<td>Permitted representative cases detect failures competitors miss</td>
+<td>No reusable rights, stale cases or no outcome improvement</td>
+</tr>
+<tr class="odd">
+<td>Distribution relationship</td>
+<td>Repeat access to qualified buyers at acceptable effort</td>
+<td>Referrals depend on one person; channel costs erase contribution</td>
+</tr>
+<tr class="even">
+<td>Integration and trust</td>
+<td>Useful reliable handoffs plus credible data/control practices</td>
+<td>Bundle already provides the same end-to-end outcome</td>
+</tr>
+<tr class="odd">
+<td>More customer data</td>
+<td>Authorized feedback improves a defined outcome for later customers</td>
+<td>Data cannot be reused or more data adds no measurable benefit</td>
+</tr>
+</tbody>
+</table>
+</div><p>These are original testable hypotheses, not an empirical taxonomy of winning businesses. More records do not by themselves establish a network effect; demonstrate how another participant improves value for existing participants under permissible reuse. Switching friction can delay departure without proving satisfaction. Offer usable exports, preserve evidence identifiers and test migration; voluntary renewal despite a credible alternative is more informative than retention caused by trapped records. No source inspected here establishes an actual moat for this service.</p>
+<h2 id="practice-connections-and-reference-card">Practice, connections and reference card</h2>
+<p>Prepare a short comparison when studying later; no learner response is required for production.</p>
+<ol type="1">
+<li>Specify segment, user, buyer, approver, acquisition route and activation event for the invoice job. Identify one rival explanation for low activation.</li>
+<li>Recalculate the nested cohort fractions and both acquisition ratios. Explain the zero-activation and incomplete-follow-up cases.</li>
+<li>Rebuild the three customer-value results. State the feasibility condition that makes the highest numerical value unusable, then evaluate both labor shocks.</li>
+<li>Rebuild supplier contribution, six-month remainders and both payback conventions. Evaluate departure after three paid months.</li>
+<li>Calculate the bundled alternative and the managed customer’s fee ceiling versus the supplier’s cost floor. Decide whether price alone can fix the offer.</li>
+<li>Propose a bounded pilot and a defensibility test. Name trust boundaries, a stop rule, a counterexample to a data-moat claim and evidence that changes the recommended product boundary.</li>
+</ol>
+<p>B01 contributes problem/authority evidence; B02 contributes explicit units and cost scope; S06 preserves authority independently of sales promises; A05 preserves whole-task evaluation. C04 will turn these into a fuller decision memo, and C06 will examine supplier replacement. B03 teaches the comparison mechanism rather than completing those later assignments.</p>
+<p><strong>Reference card:</strong> name one job and segment → map buyer and approval roles → define acquisition/activation/repeat events → assign responsibility and labor → compare customer and supplier economics → test a stronger alternative → name the observation that changes the choice.</p>
+<h2 id="evidence-ledger-and-unresolved-inputs">Evidence ledger and unresolved inputs</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Basis</th>
+<th>Verified primary locator, accessed 2026-11-13</th>
+<th>What it supports / limits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R22 Paul Graham, July 2013</td>
+<td><a href="https://paulgraham.com/ds.html">Do Things that Don’t Scale</a>, Recruit, Delight and Manual sections</td>
+<td>Manual recruitment/service as practitioner guidance; selected-success anecdotes do not establish conversion effects or market prevalence</td>
+</tr>
+<tr class="even">
+<td>R21 Patrick McKenzie / Stripe</td>
+<td><a href="https://stripe.com/guides/atlas/saas-pricing">Pricing low-touch SaaS</a>, Introduction and Pricing and packaging for things with no physical form</td>
+<td>Packaging by features/usage and customer group; historical examples are not present prices or validated demand</td>
+</tr>
+<tr class="odd">
+<td>R19 YC / Eric Migicovsky, 2019-09-04</td>
+<td><a href="https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/">Startup School Week 1 transcript</a>, 30:31–33:44, cost/frequency/budget/authority discussion</td>
+<td>Interview questions and first-customer considerations; practitioner advice, not a causal study</td>
+</tr>
+<tr class="even">
+<td>Original synthesis and derivations</td>
+<td>All numerical fixtures, comparison tables, threshold algebra, pilot rules and defensibility tests above; companion script</td>
+<td>Hypothetical inputs and executed arithmetic only; not market findings or legal/accounting guidance</td>
+</tr>
+</tbody>
+</table>
+</div><p>Unresolved: actual customer workload and time value, access permissions, buyer commitment, paid retention, supplier costs, maintenance burden, reusable data rights and alternative quality. These are application inputs, not blockers to this lesson. No learner mastery is inferred.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-13. Distribution transitions, three responsibility boundaries, two-sided economics, supplier-bundling counterexample and six exercises.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/b03.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#b03-passage-verification-2026-11-13">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="B03"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/b02.html"><small>Previous module · B02</small><strong>Unit economics, pricing units, and sensitivity</strong></a><a href="/learn/c01.html"><small>Next module · C01</small><strong>Where must duplicate-effect prevention live?</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#a-good-component-can-still-be-a-poor-offer">A good component can still be a poor offer</a></li><li class="h2"><a href="#start-narrow-enough-to-observe-the-whole-job">Start narrow enough to observe the whole job</a></li><li class="h2"><a href="#model-adoption-as-several-observable-transitions">Model adoption as several observable transitions</a></li><li class="h2"><a href="#three-boundaries-around-the-same-job">Three boundaries around the same job</a></li><li class="h2"><a href="#a-worked-comparison-with-both-sides-of-the-ledger">A worked comparison with both sides of the ledger</a></li><li class="h2"><a href="#break-the-recommendation-deliberately">Break the recommendation deliberately</a></li><li class="h2"><a href="#the-supplier-bundles-your-main-feature">The supplier bundles your main feature</a></li><li class="h2"><a href="#turn-a-moat-claim-into-a-test">Turn a moat claim into a test</a></li><li class="h2"><a href="#practice-connections-and-reference-card">Practice, connections and reference card</a></li><li class="h2"><a href="#evidence-ledger-and-unresolved-inputs">Evidence ledger and unresolved inputs</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

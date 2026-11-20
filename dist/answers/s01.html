@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>S01 — Hints, worked answers, and reproducible checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">S01</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/s01.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">S01 <span aria-hidden="true">/</span> Worked companion</p><h1 id="s01-hints-worked-answers-and-reproducible-checks">Hints, worked answers, and reproducible checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/s01.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#first-pass-traffic">1. First-pass traffic</a></li><li class="h2"><a href="#capacity-changes-and-the-second-pass">2. Capacity changes and the second pass</a></li><li class="h2"><a href="#translation">3. Translation</a></li><li class="h2"><a href="#batching">4. Batching</a></li><li class="h2"><a href="#a-test-that-can-overturn-the-explanation">5. A test that can overturn the explanation</a></li><li class="h2"><a href="#changed-constraints">6. Changed constraints</a></li><li class="h2"><a href="#reproduction-appendix">Reproduction appendix</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>S01 answers · 1.0 · 2026-11-04</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/learn/s01.html">Resource models, locality, and abstraction costs</a></td>
+</tr>
+<tr class="odd">
+<td>Prerequisites / capability</td>
+<td>F01 and S01’s declared toy machine. Explain resource counts, latency, and a falsifiable comparison.</td>
+</tr>
+<tr class="even">
+<td>Source-check status</td>
+<td>Uses R04 passages and evidence boundaries recorded in the core pack.</td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Python 3 model checks below executed successfully. No measured hardware performance.</td>
+</tr>
+<tr class="even">
+<td>Assessment status</td>
+<td>Suggested criteria only. No learner answers received or mastery inferred.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="hints">Hints</h2>
+<ol type="1">
+<li>Divide an address by the block size and discard the remainder. Track data lines and translated pages separately. A node has two loads.</li>
+<li>Keep the cache contents after pass one. Ask how many distinct blocks are touched before a block is revisited.</li>
+<li>Preserve the offset when changing a virtual page number to a physical frame number.</li>
+<li>Separate assembly waiting, whole-batch service, and service cost divided by record count.</li>
+<li>Design a comparison where the suspected mechanism changes while useful work stays the same.</li>
+<li>Include how positions are found, how storage is allocated, and whether a compact snapshot must be built.</li>
+</ol>
+<h2 id="first-pass-traffic">1. First-pass traffic</h2>
+<p>For the array, the line IDs are four 0s followed by four 1s. All eight page IDs are 0. There are two line misses and one translation miss.</p>
+<p>For packed nodes, the sixteen field loads have four accesses per line, covering lines 0–3. Pages 0 and 1 each hold four nodes. There are four line misses and two translation misses.</p>
+<p>For scattered nodes, value addresses give line IDs 0, 8, 2, 10, 4, 12, 6, 14 and page IDs 0, 4, 1, 5, 2, 6, 3, 7. Each next-pointer load repeats its value’s line and page. There are eight misses of each kind, eight data hits, and eight TLB hits. A 50% TLB hit rate here reflects one hit on every node’s pointer. It does not establish good absolute performance.</p>
+<p>Multiplying data misses by the hypothetical 32-byte fill unit gives 64, 128, and 256 bytes. The pointer values contain the next addresses, including a terminating sentinel stored at the final node. Reading that sentinel counts as a load. Following it does not occur.</p>
+<p><strong>Criterion.</strong> Explain every miss and hit using the access sequence. Keep field storage, virtual span, requested bytes, and transferred bytes distinct.</p>
+<h2 id="capacity-changes-and-the-second-pass">2. Capacity changes and the second pass</h2>
+<p>With four cache lines, the array’s two lines and the packed list’s four lines remain resident after pass one. Neither has another data miss. Their one and two translations also fit, so their second-pass TLB misses are zero. The scattered layout exceeds both capacities and reuses blocks only after eviction. It incurs eight of each kind again.</p>
+<p>With only two data-cache lines, the array still fits and has zero second-pass data misses. The packed list finishes its first pass with lines 2 and 3. Reading lines 0 and 1 evicts those, then reading 2 and 3 misses again. Its second pass has four data misses. The scattered list still has eight. Translation capacity is unchanged, so second-pass TLB misses remain 0, 0, and 8.</p>
+<p>This is a concrete counterexample to “a second run is warm, therefore every access hits.” Warmth requires the relevant state to survive. It is also a counterexample to “every linked list has poor locality.” The packed list fits the original cache and translation capacities, though it still loads pointers and occupies more bytes than the array.</p>
+<p><strong>Criterion.</strong> Show which state survives and which is evicted. Do not infer time from miss counts alone.</p>
+<h2 id="translation">3. Translation</h2>
+<p>136 = 2 × 64 + 8, so the virtual page number is 2 and the offset is 8. Mapping page 2 to frame 7 yields physical address 7 × 64 + 8 = <strong>456</strong>.</p>
+<p>The TLB remembers a mapping. The data cache remembers data. A TLB miss can be resolved from page tables for an already-resident page. It says nothing by itself about whether the resulting physical data line is cached. Storage I/O requires a separate condition such as fetching a nonresident backed page. Our simulation excludes that condition. It also excludes the page-table memory traffic needed to repair a translation miss.</p>
+<p><strong>Criterion.</strong> Preserve the offset and distinguish translation work, data-cache lookup, and nonresident-page handling. The R04 chapter 19 and 21 passages in the core ledger support this boundary.</p>
+<h2 id="batching">4. Batching</h2>
+<p>The one-record service cost is 24 + 3 = 27 microseconds. For eight records it is 24 + 8 × 3 = 48, or 6 per record. With an indefinitely backlogged worker, throughputs are 1,000,000/27 ≈ 37,037 records/s and 8,000,000/48 ≈ 166,667 records/s. Their ratio is 4.5. These are conditional model outputs, not benchmark results.</p>
+<p>At 100-microsecond arrival spacing, eight arrivals occur at 0, 100, …, 700. The full batch completes at 748. Latencies are 748, 648, 548, 448, 348, 248, 148, and 48 microseconds. Their mean is (748 + 48)/2 = <strong>398</strong>. Each immediately processed record takes 27 because service completes before the next arrival.</p>
+<p>For general positive integer k in this scenario, first-record latency is</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mn>24</mn><mo>+</mo><mn>3</mn><mi>k</mi><mo>=</mo><mn>103</mn><mi>k</mi><mo>−</mo><mn>76</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+100(k-1)+24+3k = 103k-76.
+</annotation></semantics></math></p>
+<p>The requirement 103k−76 ≤ 750 gives k ≤ 826/103 ≈ 8.019. Thus the largest permitted full batch is eight. Nine would take 851. A wait timeout can cap assembly time when arrivals vary, but must leave time for actual service and any queueing. It does not guarantee a deadline on its own.</p>
+<p><strong>Criterion.</strong> Name the arrival and load conditions. Never call the amortized 6-microsecond service cost a 6-microsecond batch-member latency.</p>
+<h2 id="a-test-that-can-overturn-the-explanation">5. A test that can overturn the explanation</h2>
+<p>A useful hypothesis is that dependent scattered accesses cause longer traversal time for the target record sizes. Start with one compiled implementation and the same immutable records and checksum. Measure packed and scattered node traversal at several sizes. Use the same field representation so pointer overhead is not confused with array-versus-node layout. Separately include the packed array as the practical alternative.</p>
+<p>Allocation inside only one timed region is a confound. So is placing one candidate’s data in a different memory region or running it under different competing load. Report construction-inclusive and traversal-only times with matching boundaries. Check warmup, compiler elimination, generated dependencies, and output correctness.</p>
+<p>Where the platform exposes suitable counters, compare cache misses, translation events, and memory traffic using their documented meanings. Test a small working set that fits, then enlarge it. A small-set speed gap that persists without the predicted miss difference weakens a cache-miss-only explanation. Add identical expensive per-record arithmetic as a separate sensitivity test. If arithmetic then dominates, layout may matter less to whole-task time. A null result with noisy measurements is inconclusive, so include repeated-run variation.</p>
+<p><strong>Criterion.</strong> State a predicted change, a controlled comparison, a mechanism observation, and a result that would change the explanation. This is a proposed experiment, not an executed one.</p>
+<h2 id="changed-constraints">6. Changed constraints</h2>
+<p>For frequent insertion after already-known nodes, a linked representation can avoid shifting a packed array’s suffix. That conclusion assumes node references are already available and storage can be allocated. Searching for the insertion point, allocation, ownership, and concurrent mutation can dominate or invalidate a simple constant-work splice story. A segmented or slack-filled representation is another candidate if scans and updates both matter.</p>
+<p>For a repeatedly scanned immutable snapshot, a compact array is a reasonable starting choice. Measure the cost of constructing the snapshot and how many scans reuse it. If compacting costs C and each subsequent scan saves Δ, the simple serial break-even condition is mΔ &gt; C for m scans, assuming Δ &gt; 0 and no other changes. Include extra peak memory while both forms coexist. If only one scan occurs, conversion can lose overall despite a faster scan.</p>
+<p>An integer sum invariant remains that after k logical visits the accumulator equals the sum of exactly those k values. A cycle, missed node, duplicate visit, overflow, or reordering that violates the actual task contract invalidates the comparison before speed matters.</p>
+<p><strong>Criterion.</strong> Defend a conditional choice and include construction, memory, and correctness. A representation name alone is not an explanation.</p>
+<h2 id="reproduction-appendix">Reproduction appendix</h2>
+<p>The following standard-library Python 3 block was executed on 2026-11-04. It models references to explicitly assigned addresses. The Python runtime’s own memory layout and execution time have no role in these results. It verifies list termination and sums, cache and TLB counts over two passes, changed capacity, translation arithmetic, batch deadlines, and units-based throughput ratios. LRU state is retained between passes and reset between layouts.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> OrderedDict</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LRU:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, capacity):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> capacity <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.capacity <span class="op">=</span> capacity</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.items <span class="op">=</span> OrderedDict()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> touch(<span class="va">self</span>, block):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        miss <span class="op">=</span> block <span class="kw">not</span> <span class="kw">in</span> <span class="va">self</span>.items</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> miss:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.items.move_to_end(block)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.items[block] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(<span class="va">self</span>.items) <span class="op">&gt;</span> <span class="va">self</span>.capacity:</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.items.popitem(last<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">int</span>(miss)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> linked_trace(addresses):</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    nodes <span class="op">=</span> {</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        a: (i <span class="op">+</span> <span class="dv">1</span>, addresses[i <span class="op">+</span> <span class="dv">1</span>] <span class="cf">if</span> i <span class="op">+</span> <span class="dv">1</span> <span class="op">&lt;</span> <span class="bu">len</span>(addresses) <span class="cf">else</span> <span class="va">None</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, a <span class="kw">in</span> <span class="bu">enumerate</span>(addresses)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    trace, seen, total <span class="op">=</span> [], <span class="bu">set</span>(), <span class="dv">0</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> addresses[<span class="dv">0</span>]</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> p <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> p <span class="kw">in</span> nodes <span class="kw">and</span> p <span class="kw">not</span> <span class="kw">in</span> seen</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        seen.add(p)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        value, nxt <span class="op">=</span> nodes[p]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        trace.extend([p, p <span class="op">+</span> <span class="dv">8</span>])</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        total <span class="op">+=</span> value</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> nxt</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(seen) <span class="op">==</span> <span class="bu">len</span>(addresses) <span class="kw">and</span> total <span class="op">==</span> <span class="dv">36</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> trace</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>traces <span class="op">=</span> {</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">'array'</span>: <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">64</span>, <span class="dv">8</span>)),</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">'packed'</span>: linked_trace(<span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">128</span>, <span class="dv">16</span>))),</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">'scattered'</span>: linked_trace([<span class="dv">0</span>, <span class="dv">256</span>, <span class="dv">64</span>, <span class="dv">320</span>, <span class="dv">128</span>, <span class="dv">384</span>, <span class="dv">192</span>, <span class="dv">448</span>]),</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">9</span>)) <span class="op">==</span> <span class="dv">36</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> two_passes(trace, cache_capacity<span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    cache, tlb <span class="op">=</span> LRU(cache_capacity), LRU(<span class="dv">2</span>)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> []</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        data_misses <span class="op">=</span> translation_misses <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> address <span class="kw">in</span> trace:</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> address <span class="op">%</span> <span class="dv">8</span> <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> address <span class="op">//</span> <span class="dv">32</span> <span class="op">==</span> (address <span class="op">+</span> <span class="dv">7</span>) <span class="op">//</span> <span class="dv">32</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>            data_misses <span class="op">+=</span> cache.touch(address <span class="op">//</span> <span class="dv">32</span>)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>            translation_misses <span class="op">+=</span> tlb.touch(address <span class="op">//</span> <span class="dv">64</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        results.append((data_misses, translation_misses))</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>expected <span class="op">=</span> {</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">'array'</span>: [(<span class="dv">2</span>, <span class="dv">1</span>), (<span class="dv">0</span>, <span class="dv">0</span>)],</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">'packed'</span>: [(<span class="dv">4</span>, <span class="dv">2</span>), (<span class="dv">0</span>, <span class="dv">0</span>)],</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">'scattered'</span>: [(<span class="dv">8</span>, <span class="dv">8</span>), (<span class="dv">8</span>, <span class="dv">8</span>)],</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, trace <span class="kw">in</span> traces.items():</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> two_passes(trace)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> result <span class="op">==</span> expected[name]</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Independent first-pass counts work because no block is revisited</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># after moving on from its contiguous run in these particular traces.</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> result[<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">==</span> <span class="bu">len</span>({a <span class="op">//</span> <span class="dv">32</span> <span class="cf">for</span> a <span class="kw">in</span> trace})</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> result[<span class="dv">0</span>][<span class="dv">1</span>] <span class="op">==</span> <span class="bu">len</span>({a <span class="op">//</span> <span class="dv">64</span> <span class="cf">for</span> a <span class="kw">in</span> trace})</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, result, <span class="st">'fill bytes'</span>, result[<span class="dv">0</span>][<span class="dv">0</span>] <span class="op">*</span> <span class="dv">32</span>)</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> two_passes(traces[<span class="st">'array'</span>], <span class="dv">2</span>) <span class="op">==</span> [(<span class="dv">2</span>, <span class="dv">1</span>), (<span class="dv">0</span>, <span class="dv">0</span>)]</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> two_passes(traces[<span class="st">'packed'</span>], <span class="dv">2</span>) <span class="op">==</span> [(<span class="dv">4</span>, <span class="dv">2</span>), (<span class="dv">4</span>, <span class="dv">0</span>)]</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> two_passes(traces[<span class="st">'scattered'</span>], <span class="dv">2</span>) <span class="op">==</span> [(<span class="dv">8</span>, <span class="dv">8</span>), (<span class="dv">8</span>, <span class="dv">8</span>)]</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">divmod</span>(<span class="dv">136</span>, <span class="dv">64</span>) <span class="op">==</span> (<span class="dv">2</span>, <span class="dv">8</span>)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">7</span> <span class="op">*</span> <span class="dv">64</span> <span class="op">+</span> <span class="dv">8</span> <span class="op">==</span> <span class="dv">456</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>h, c, k, spacing <span class="op">=</span> <span class="dv">24</span>, <span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">100</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>service <span class="op">=</span> h <span class="op">+</span> c <span class="op">*</span> k</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>arrival <span class="op">=</span> [i <span class="op">*</span> spacing <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(k)]</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>finish <span class="op">=</span> arrival[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> service</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>latencies <span class="op">=</span> [finish <span class="op">-</span> t <span class="cf">for</span> t <span class="kw">in</span> arrival]</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> service <span class="op">==</span> <span class="dv">48</span> <span class="kw">and</span> Fraction(service, k) <span class="op">==</span> <span class="dv">6</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> Fraction(k, service) <span class="op">/</span> Fraction(<span class="dv">1</span>, h <span class="op">+</span> c) <span class="op">==</span> Fraction(<span class="dv">9</span>, <span class="dv">2</span>)</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (latencies[<span class="dv">0</span>], latencies[<span class="op">-</span><span class="dv">1</span>]) <span class="op">==</span> (<span class="dv">748</span>, <span class="dv">48</span>)</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> Fraction(<span class="bu">sum</span>(latencies), k) <span class="op">==</span> <span class="dv">398</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> first_latency(size):</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (size <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> spacing <span class="op">+</span> h <span class="op">+</span> c <span class="op">*</span> size</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> first_latency(<span class="dv">8</span>) <span class="op">==</span> <span class="dv">748</span> <span class="kw">and</span> first_latency(<span class="dv">9</span>) <span class="op">==</span> <span class="dv">851</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">max</span>(s <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">101</span>) <span class="cf">if</span> first_latency(s) <span class="op">&lt;=</span> <span class="dv">750</span>) <span class="op">==</span> <span class="dv">8</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="co"># A monotone expression establishes the bound beyond the tested range.</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> spacing <span class="op">+</span> c <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> h <span class="op">+</span> c <span class="op">&lt;</span> spacing</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'All S01 model checks passed.'</span>)</span></code></pre></div>
+<p>Expected printed rows are <code>array [(2, 1), (0, 0)] fill bytes 64</code>, <code>packed [(4, 2), (0, 0)] fill bytes 128</code>, and <code>scattered [(8, 8), (8, 8)] fill bytes 256</code>, followed by the success line. These checks establish the declared model’s bookkeeping, not production speed, physical memory consumption, or a real scheduler’s behavior.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-04. Six worked answers, assessment criteria, and executed model checks. Curriculum Audit A remains pending.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#first-pass-traffic">1. First-pass traffic</a></li><li class="h2"><a href="#capacity-changes-and-the-second-pass">2. Capacity changes and the second pass</a></li><li class="h2"><a href="#translation">3. Translation</a></li><li class="h2"><a href="#batching">4. Batching</a></li><li class="h2"><a href="#a-test-that-can-overturn-the-explanation">5. A test that can overturn the explanation</a></li><li class="h2"><a href="#changed-constraints">6. Changed constraints</a></li><li class="h2"><a href="#reproduction-appendix">Reproduction appendix</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

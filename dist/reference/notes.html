@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>SDE Foundations — Consolidated Notes | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link " href="/topics.html"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link active" href="/reference.html" aria-current="page"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Reference</span><span class="header-separator">/</span><span class="header-topic">Consolidated notes</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/reference.html"><span aria-hidden="true">←</span> Reference</a><p class="eyebrow">Reference</p><h1 id="sde-foundations-consolidated-notes">SDE Foundations — Consolidated Notes</h1></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#define-the-job-before-optimizing-it">1. Define the job before optimizing it</a></li><li class="h2"><a href="#name-the-invariant-and-the-transition-boundary">2. Name the invariant and the transition boundary</a></li><li class="h2"><a href="#preserve-identity-across-time">3. Preserve identity across time</a></li><li class="h2"><a href="#separate-proposal-from-authority">4. Separate proposal from authority</a></li><li class="h2"><a href="#keep-evidence-stages-distinct">5. Keep evidence stages distinct</a></li><li class="h2"><a href="#treat-evaluation-as-a-deployment-model">6. Treat evaluation as a deployment model</a></li><li class="h2"><a href="#resource-feasibility-precedes-performance-claims">7. Resource feasibility precedes performance claims</a></li><li class="h2"><a href="#price-outcomes-not-impressive-components">8. Price outcomes, not impressive components</a></li><li class="h2"><a href="#choose-the-least-complex-adequate-autonomy">9. Choose the least complex adequate autonomy</a></li><li class="h2"><a href="#port-the-decision-specification-then-retest-behavior">10. Port the decision specification, then retest behavior</a></li><li class="h2"><a href="#the-reusable-decision-template">The reusable decision template</a></li></ol></nav></details><article class="prose"><p>This note compresses the library into a reusable engineering method. It is a map, not a replacement for the worked traces.</p>
+<h2 id="define-the-job-before-optimizing-it">1. Define the job before optimizing it</h2>
+<p>A system can look better because its denominator changed. State the eligible population, task identity, output contract, deadline, quality rule and missing-outcome policy before comparing designs. Count offered work, unresolved work, retries and late results. Component accuracy, throughput or token cost is meaningful only after connecting it to a complete outcome.</p>
+<p>Use <a href="/learn/f02.html">F02</a> for probabilities and expected loss, <a href="/learn/f03.html">F03</a> for fair measurement, and <a href="/learn/b02.html">B02</a> for cost per useful result.</p>
+<h2 id="name-the-invariant-and-the-transition-boundary">2. Name the invariant and the transition boundary</h2>
+<p>An invariant is a condition that must hold at every protected committed boundary. A correct transition checks its premises and changes protected state atomically. Checking before the boundary and acting later creates a race. A crash-safe write can still commit a decision based on stale information.</p>
+<p>Ask:</p>
+<ul>
+<li>What state is protected?</li>
+<li>Which transition can change it?</li>
+<li>Which reads are premises of that transition?</li>
+<li>Can two actors make individually valid but jointly invalid decisions?</li>
+<li>Which alternate path bypasses the guard?</li>
+</ul>
+<p>See <a href="/learn/f01.html">F01</a>, <a href="/learn/s03.html">S03</a>, <a href="/learn/c01.html">C01</a> and <a href="/learn/s06.html">S06</a>.</p>
+<h2 id="preserve-identity-across-time">3. Preserve identity across time</h2>
+<p>Logical object, revision, attempt, operation and business obligation are different identities. Keep immutable source bytes and exact revision references when later decisions must remain explainable. A digest can verify retrieved bytes but cannot replace the bytes. A “retry” with a new operation identity may duplicate an effect.</p>
+<p>For an unknown outcome, reconcile the original identity before retrying. A historical receipt proves what happened; permission to read it and permission to create a new effect are separate questions.</p>
+<p>See <a href="/learn/s02.html">S02</a>, <a href="/learn/s04.html">S04</a>, <a href="/learn/c01.html">C01</a> and <a href="/learn/c06.html">C06</a>.</p>
+<h2 id="separate-proposal-from-authority">4. Separate proposal from authority</h2>
+<p>Model output, user input and tool observations are proposals or data. Authority comes from authenticated context and current policy. Enforce tenant, action, object, revision, epoch, evidence and slot conditions at the effect boundary. A model-supplied actor field is not identity. A timeout is not permission, and an availability target cannot authorize disclosure.</p>
+<p>Use fail-safe defaults, complete mediation and least privilege as design checks. Test recovery tools, exports, repair scripts and administrative paths, not only the normal UI.</p>
+<p>See <a href="/learn/s06.html">S06</a>, <a href="/learn/a05.html">A05</a>, <a href="/learn/c04.html">C04</a> and <a href="/learn/c05.html">C05</a>.</p>
+<h2 id="keep-evidence-stages-distinct">5. Keep evidence stages distinct</h2>
+<p>A fact may exist in the corpus and still be absent from the index. A retrieved passage may be excluded from context. A cited passage may not support the claim. A supported claim may use a stale revision or be disclosed to the wrong principal.</p>
+<p>Inspect the chain:</p>
+<p><code>available source → eligible source → retrieved candidate → supplied context → claim → supported output → permitted disclosure</code></p>
+<p>Evaluation should preserve these intermediate artifacts so a failure can be located. Retrieval makes evidence available; it does not guarantee use, truth or permission.</p>
+<p>See <a href="/learn/a03.html">A03</a> and <a href="/learn/c06.html">C06</a>.</p>
+<h2 id="treat-evaluation-as-a-deployment-model">6. Treat evaluation as a deployment model</h2>
+<p>Random rows are often not independent deployment cases. Revisions, templates, organizations, suppliers and reviewer queues can create leakage or interference. Freeze tuning before final evaluation. Use the same cases for paired comparisons when possible, and choose the assignment unit around spillovers.</p>
+<p>Report uncertainty under the assumptions of the procedure. Randomization does not automatically justify every interval. Repeated retries of one case do not create independent evidence.</p>
+<p>See <a href="/learn/f03.html">F03</a>, <a href="/learn/a01.html">A01</a>, <a href="/learn/a05.html">A05</a> and <a href="/learn/c02.html">C02</a>.</p>
+<h2 id="resource-feasibility-precedes-performance-claims">7. Resource feasibility precedes performance claims</h2>
+<p>Track operations, bytes, working set, retained state, temporary workspace and queues separately. Memory feasibility does not establish latency. Throughput does not establish per-request deadlines. Average demand does not reconstruct bursts. Faster prompt processing may have little effect when decoding dominates.</p>
+<p>For LLM serving, separate weights, KV state and other memory; state the configuration behind every byte estimate. Count all offered work and define the clock. “Autoscaling” is incomplete without startup and routing evidence.</p>
+<p>See <a href="/learn/s01.html">S01</a>, <a href="/learn/s05.html">S05</a>, <a href="/learn/a04.html">A04</a> and <a href="/learn/c03.html">C03</a>.</p>
+<h2 id="price-outcomes-not-impressive-components">8. Price outcomes, not impressive components</h2>
+<p>Build mutually exclusive cost categories. Include failed attempts, review, support, idle purchased capacity, maintenance, setup, acquisition and dispute work where relevant. Divide by the unit the decision actually values. Cost per token, call or VM can improve while cost per verified timely result gets worse.</p>
+<p>Customer capacity value is not automatically cash savings. Contribution is not profit. A positive average can hide a capacity tier or severe loss. A free bundled feature can still impose workflow labor.</p>
+<p>See <a href="/learn/b01.html">B01</a>, <a href="/learn/b02.html">B02</a>, <a href="/learn/b03.html">B03</a>, <a href="/learn/c03.html">C03</a> and <a href="/learn/c04.html">C04</a>.</p>
+<h2 id="choose-the-least-complex-adequate-autonomy">9. Choose the least complex adequate autonomy</h2>
+<p>Autonomy describes who chooses the next step; authority describes what effects are permitted. A deterministic workflow may mutate state. A suggestion-only assistant may consume large human capacity. An action-taking agent can be acceptable only within an externally enforced action set, budget and effect boundary.</p>
+<p>Apply gates in order:</p>
+<ol type="1">
+<li>Authority and evidence integrity.</li>
+<li>Quality and deadline.</li>
+<li>Capacity.</li>
+<li>Expected loss and complete cost.</li>
+<li>Simplicity and operational burden.</li>
+</ol>
+<p>See <a href="/learn/a05.html">A05</a> and <a href="/learn/c05.html">C05</a>.</p>
+<h2 id="port-the-decision-specification-then-retest-behavior">10. Port the decision specification, then retest behavior</h2>
+<p>A common provider interface reduces adapter work but does not make retrieval, quality, latency, cost or permissions equivalent. Own source identities, grants, evaluation cases and effect receipts when those are central to the product. Treat indexes and caches as versioned derived state.</p>
+<p>During migration, export and restore evidence, rebuild derived state under a new configuration identity, shadow without effects, publish only complete revisions, and retain rollback long enough to reconcile. Judge a bundle by the complete customer job.</p>
+<p>See <a href="/learn/c06.html">C06</a>.</p>
+<h2 id="the-reusable-decision-template">The reusable decision template</h2>
+<p>For any architecture or product choice, write:</p>
+<ol type="1">
+<li><strong>Decision:</strong> the action and owner.</li>
+<li><strong>Complete job:</strong> population, identity, output, deadline and success.</li>
+<li><strong>Hard gates:</strong> authority, evidence, safety, quality and capacity.</li>
+<li><strong>Options:</strong> credible complete systems under shared assumptions.</li>
+<li><strong>Model:</strong> resources, probabilities, consequences and costs.</li>
+<li><strong>Trace:</strong> one normal path, one failure and one counterexample.</li>
+<li><strong>Changed constraint:</strong> alter one premise and revise honestly.</li>
+<li><strong>Falsifier:</strong> evidence that overturns the recommendation.</li>
+<li><strong>Unknowns:</strong> inputs requiring measurement or stakeholder authority.</li>
+</ol>
+<p>That template is the compact answer to the curriculum’s central question.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#define-the-job-before-optimizing-it">1. Define the job before optimizing it</a></li><li class="h2"><a href="#name-the-invariant-and-the-transition-boundary">2. Name the invariant and the transition boundary</a></li><li class="h2"><a href="#preserve-identity-across-time">3. Preserve identity across time</a></li><li class="h2"><a href="#separate-proposal-from-authority">4. Separate proposal from authority</a></li><li class="h2"><a href="#keep-evidence-stages-distinct">5. Keep evidence stages distinct</a></li><li class="h2"><a href="#treat-evaluation-as-a-deployment-model">6. Treat evaluation as a deployment model</a></li><li class="h2"><a href="#resource-feasibility-precedes-performance-claims">7. Resource feasibility precedes performance claims</a></li><li class="h2"><a href="#price-outcomes-not-impressive-components">8. Price outcomes, not impressive components</a></li><li class="h2"><a href="#choose-the-least-complex-adequate-autonomy">9. Choose the least complex adequate autonomy</a></li><li class="h2"><a href="#port-the-decision-specification-then-retest-behavior">10. Port the decision specification, then retest behavior</a></li><li class="h2"><a href="#the-reusable-decision-template">The reusable decision template</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

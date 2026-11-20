@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X01 — Hints, worked answers, and finite checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X01</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/x01.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">X01 <span aria-hidden="true">/</span> Worked companion</p><h1 id="x01-hints-worked-answers-and-finite-checks">Hints, worked answers, and finite checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/x01.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#delete-succeeds-and-an-old-value-returns">1. Delete succeeds and an old value returns</a></li><li class="h2"><a href="#ten-schedules-and-one-final-stale-fill">2. Ten schedules and one final stale fill</a></li><li class="h2"><a href="#three-premise-changes">3. Three premise changes</a></li><li class="h2"><a href="#ttl-arithmetic">4. TTL arithmetic</a></li><li class="h2"><a href="#load-and-equivalence">5. Load and equivalence</a></li><li class="h2"><a href="#a-defensible-policy">6. A defensible policy</a></li><li class="h2"><a href="#executable-finite-checks">Executable finite checks</a></li><li class="h2"><a href="#assessment-criteria">Assessment criteria</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X01 companion · 1.0 · 2026-11-20</td>
+</tr>
+<tr class="even">
+<td>Lesson</td>
+<td><a href="/learn/x01.html">Cache correctness, invalidation, and stale fills</a></td>
+</tr>
+<tr class="odd">
+<td>Experiment status</td>
+<td>Python checks below executed. They enumerate ten legal single-reader/single-writer schedules and explicit failure fixtures. No live cache or concurrent deployment tested.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="hints">Hints</h2>
+<p>For 1–2, distinguish where the reader holds its result from where the cache holds a value. For 3, change only one premise at a time. For 4, put observation, update, insertion and expiry on one clock. For 5, write source demand as offered reads multiplied by miss fraction. For 6, define what event makes a previous answer invalid.</p>
+<h2 id="delete-succeeds-and-an-old-value-returns">1. Delete succeeds and an old value returns</h2>
+<p>Start with database revision 7 and no cached value. A misses and reads 7. B commits 8 and deletes the cache. A then inserts its local 7. C starts after B has finished and reads 7 from cache. The defect is not a failed delete: the earlier request performs a later write. A second timed delete only moves the deadline unless it is tied to a proven maximum lifetime of all earlier fills and successfully delivered.</p>
+<h2 id="ten-schedules-and-one-final-stale-fill">2. Ten schedules and one final stale fill</h2>
+<p>Label token acquisition T, database read R, fill F, commit C and invalidation I. Require T &lt; R &lt; F and C &lt; I. There are ten ways to interleave chains of lengths three and two: choose three of five positions for the reader.</p>
+<p>In the unguarded model, T R C I F leaves revision 7 cached after invalidation. With an atomic generation check, F is rejected. If F happens before I, I clears the entry. If T happens after I, then R also happens after I and C; our latest-committed source-read assumption returns 8. These cases explain the result independently of enumeration.</p>
+<p>This does not guarantee immediate freshness after C: the history T R C F I temporarily exposes 7 before I. Nor does rejecting F stop the application returning its local 7 directly. The checked property is specifically cache state after I, not all response behavior.</p>
+<h2 id="three-premise-changes">3. Three premise changes</h2>
+<p>Late token: R observes 7, C commits 8, I advances generation, T obtains the new generation, F publishes 7. Fix the ordering or use an independently validated source revision.</p>
+<p>Lagging source: C, I, T, then R reads 7 from a delayed replica. F has a valid token but old data. Require a suitable source read or validated revision floor, and define behavior while the replica catches up.</p>
+<p>Forgotten generation: T obtains 0, R observes 7, C commits 8, I advances to 1. Metadata disappears and resets to 0. F passes. The missing premise is identity retention/non-reuse across the lifetime of outstanding work. An incarnation token is useful only if restart, eviction and failover actually preserve its uniqueness contract.</p>
+<h2 id="ttl-arithmetic">4. TTL arithmetic</h2>
+<p>With observation at 0, update at 1, fill at 120 and insertion TTL 30, expiry is 150. Observation age at insertion is 120 seconds. The cache could serve the obsolete revision during [120, 150), a 30-second interval whose end is nearly 149 seconds after the update. This assumes no later valid replacement or invalidation. An HTTP cache’s age rules are different; the original lesson explicitly limits this example to an insertion-based application TTL.</p>
+<h2 id="load-and-equivalence">5. Load and equivalence</h2>
+<p>At 1,000 reads/s, 5% misses imply 50 source queries/s; 20% misses imply 200 source queries/s. The multiplier is four. Offered traffic, retry traffic and refresh work must be measured separately before using this as a capacity estimate.</p>
+<p>Coalescing two requests just because their query strings match is unsafe if their tenants, permissions or required revisions differ. Even when one immutable blob can be shared, authorization to disclose it must be evaluated under the required contract. Under ideal coalescing of 100 equivalent requests, one source fetch suffices; a failed leader or retry storm changes that count.</p>
+<h2 id="a-defensible-policy">6. A defensible policy</h2>
+<p>For a “latest document” display, an explicitly declared bounded-age policy may be adequate if the user can tolerate it. Record source revision and observation time, reject fills with invalid generations, and measure invalidation delay and outdated responses. If the user requires read-your-write behavior, carry the committed revision and validate/bypass entries below it against an adequate source.</p>
+<p>For “may approve,” follow S06’s action-time authority boundary: an approval ordered after revocation must not commit under the revoked grant. A presentation cache is not that authority. On unavailable authority, defer the protected action under this policy. A policy allowing bounded revocation delay would be a different, explicitly weaker contract.</p>
+<p>Useful evidence includes source-read lag, guard-state recovery behavior, rejection rate, source saturation during cache outages and end-to-end latency with permission checks enabled. Correctness requirements and measured costs together can reverse the cache choice. No actual permission system is tested here.</p>
+<h2 id="executable-finite-checks">Executable finite checks</h2>
+<p>Run with Python 3. Each model step is atomic. Schedules omit network loss, multiple writers, replication, crash recovery and real concurrency. The negative fixtures deliberately violate one premise and must expose the defect. The unit tests establish behavior of this model, not a deployed protocol.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> permutations</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate(order, guarded):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    db, generation, cache <span class="op">=</span> <span class="dv">7</span>, <span class="dv">0</span>, <span class="va">None</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    token <span class="op">=</span> observed <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    invalidated <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    violations <span class="op">=</span> []</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> step <span class="kw">in</span> order:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> step <span class="op">==</span> <span class="st">"T"</span>:</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            token <span class="op">=</span> generation</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> step <span class="op">==</span> <span class="st">"R"</span>:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>            observed <span class="op">=</span> db</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> step <span class="op">==</span> <span class="st">"C"</span>:</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            db <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> step <span class="op">==</span> <span class="st">"I"</span>:</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>            generation <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            cache <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            invalidated <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> step <span class="op">==</span> <span class="st">"F"</span>:</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> guarded <span class="kw">or</span> token <span class="op">==</span> generation:</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                cache <span class="op">=</span> observed</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> invalidated <span class="kw">and</span> cache <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> cache <span class="op">&lt;</span> db:</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            violations.append(step)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cache, violations</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>orders <span class="op">=</span> [p <span class="cf">for</span> p <span class="kw">in</span> permutations(<span class="st">"TRFCI"</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> p.index(<span class="st">"T"</span>) <span class="op">&lt;</span> p.index(<span class="st">"R"</span>) <span class="op">&lt;</span> p.index(<span class="st">"F"</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>          <span class="kw">and</span> p.index(<span class="st">"C"</span>) <span class="op">&lt;</span> p.index(<span class="st">"I"</span>)]</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(orders) <span class="op">==</span> <span class="dv">10</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>bad <span class="op">=</span> [<span class="st">""</span>.join(p) <span class="cf">for</span> p <span class="kw">in</span> orders <span class="cf">if</span> simulate(p, <span class="va">False</span>)[<span class="dv">1</span>]]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bad <span class="op">==</span> [<span class="st">"TRCIF"</span>], bad</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(<span class="kw">not</span> simulate(p, <span class="va">True</span>)[<span class="dv">1</span>] <span class="cf">for</span> p <span class="kw">in</span> orders)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> simulate(<span class="st">"TRCIF"</span>, <span class="va">True</span>)[<span class="dv">0</span>] <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> simulate(<span class="st">"CITRF"</span>, <span class="va">True</span>)[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">8</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Broken ordering: source observation before token acquisition.</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> simulate(<span class="st">"RCITF"</span>, <span class="va">True</span>)[<span class="dv">0</span>] <span class="op">==</span> <span class="dv">7</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> simulate(<span class="st">"RCITF"</span>, <span class="va">True</span>)[<span class="dv">1</span>] <span class="op">==</span> [<span class="st">"F"</span>]</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> guarded_fill(generation, token, observed):</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> observed <span class="cf">if</span> token <span class="op">==</span> generation <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Fresh token, stale replica: token validity does not prove data freshness.</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> guarded_fill(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">7</span>) <span class="op">==</span> <span class="dv">7</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co"># A reset generation makes an old token valid again.</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> guarded_fill(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">7</span>) <span class="op">==</span> <span class="dv">7</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> guarded_fill(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">7</span>) <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fresh(now, inserted, ttl):</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> now <span class="op">&lt;</span> inserted <span class="op">+</span> ttl</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">100</span> <span class="op">+</span> <span class="dv">60</span> <span class="op">-</span> <span class="dv">1</span> <span class="op">==</span> <span class="dv">159</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">120</span> <span class="op">+</span> <span class="dv">30</span> <span class="op">-</span> <span class="dv">1</span> <span class="op">==</span> <span class="dv">149</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> fresh(<span class="dv">149</span>, <span class="dv">120</span>, <span class="dv">30</span>)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> fresh(<span class="dv">150</span>, <span class="dv">120</span>, <span class="dv">30</span>)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> fresh(<span class="dv">151</span>, <span class="dv">120</span>, <span class="dv">30</span>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> fresh(<span class="dv">120</span>, <span class="dv">120</span>, <span class="dv">0</span>)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">1000</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> Fraction(<span class="dv">95</span>, <span class="dv">100</span>)) <span class="op">==</span> <span class="dv">50</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">1000</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> Fraction(<span class="dv">80</span>, <span class="dv">100</span>)) <span class="op">==</span> <span class="dv">200</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> Fraction(<span class="dv">200</span>, <span class="dv">50</span>) <span class="op">==</span> <span class="dv">4</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PASS: 10 schedules; expected stale-fill counterexample; guarded invariant;"</span>)</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"late-token, replica and reset fixtures; TTL boundaries; exact load arithmetic"</span>)</span></code></pre></div>
+<h2 id="assessment-criteria">Assessment criteria</h2>
+<p>A useful answer reproduces the failure without appealing to a vague “race condition,” locates the atomic boundary, and names at least one assumption that the fix cannot enforce. A stronger transfer applies the same reasoning to a generated-answer cache or a mutable revision pointer. These criteria do not record your level automatically.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#delete-succeeds-and-an-old-value-returns">1. Delete succeeds and an old value returns</a></li><li class="h2"><a href="#ten-schedules-and-one-final-stale-fill">2. Ten schedules and one final stale fill</a></li><li class="h2"><a href="#three-premise-changes">3. Three premise changes</a></li><li class="h2"><a href="#ttl-arithmetic">4. TTL arithmetic</a></li><li class="h2"><a href="#load-and-equivalence">5. Load and equivalence</a></li><li class="h2"><a href="#a-defensible-policy">6. A defensible policy</a></li><li class="h2"><a href="#executable-finite-checks">Executable finite checks</a></li><li class="h2"><a href="#assessment-criteria">Assessment criteria</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

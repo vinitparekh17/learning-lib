@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>C04 — Worked analysis and reproducible checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">C04</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/c04.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">C04 <span aria-hidden="true">/</span> Worked companion</p><h1 id="c04-worked-analysis-and-reproducible-checks">Worked analysis and reproducible checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/c04.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#responsibility-and-revocation">1. Responsibility and revocation</a></li><li class="h2"><a href="#customer-economics-and-setup-feasibility">2. Customer economics and setup feasibility</a></li><li class="h2"><a href="#supplier-viability-and-overhead-sensitivity">3. Supplier viability and overhead sensitivity</a></li><li class="h2"><a href="#revised-constraint-and-maintenance-thresholds">4. Revised constraint and maintenance thresholds</a></li><li class="h2"><a href="#evidence-plan-and-operational-handoff">5. Evidence plan and operational handoff</a></li><li class="h2"><a href="#executed-conditional-checks">Executed conditional checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / title</td>
+<td>C04 answers · Product-boundary analysis</td>
+</tr>
+<tr class="even">
+<td>Revision / date</td>
+<td>1.0 · 2026-11-14</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td><a href="/learn/c04.html">C04 memo</a>, B01–B03, S06</td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Separate feasibility from preference and test a boundary choice against costs and authority</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>Uses the memo’s verified R19/R21/R11 passages; scenarios are original</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Exact arithmetic and finite decision checks executed; no customer or security experiment</td>
+</tr>
+<tr class="odd">
+<td>Assessment convention</td>
+<td>Criteria apply to future answers, not assumed learner mastery</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="responsibility-and-revocation">1. Responsibility and revocation</h2>
+<p><strong>Hint:</strong> Identify the person who performs work separately from the principal allowed to authorize an effect.</p>
+<p><strong>Worked analysis:</strong> The customer sponsor funds the work; the data owner authorizes processing; the preparation operator assembles evidence; the customer reviewer decides on payment. Hosted self-serve leaves exception operations with the customer. Managed adds supplier operators and scoped human access. Internal moves runtime recovery and maintenance to a customer owner. All three retain customer payment approval.</p>
+<p>A supplier analyst’s grant allows only the named tenant/case scope and operations. After revocation commits, a new protected read must fail under the memo’s contract. Identity still being authenticated does not restore authorization. Access checks need to cover exports, support tools, logs and recovery, not only the ordinary UI. Already disclosed information cannot be recalled by denying the next request; retained copies need separately defined handling.</p>
+<p>R11 gives principles; the actual revocation enforcement and trustworthy policy state are implementation premises. A generated statement that an administrator approved something does not create a grant. If current policy cannot be established, deny or defer the protected action rather than treating the uncertainty as permission. This can reduce availability while preserving the chosen authority rule.</p>
+<p><strong>Criteria:</strong> Distinguishes identity, authorization, data disclosure and new effects. Names an operational owner without granting it unnecessary payment authority.</p>
+<h2 id="customer-economics-and-setup-feasibility">2. Customer economics and setup feasibility</h2>
+<p><strong>Hint:</strong> Apply the setup cap after calculating value; do not delete setup cost when more hours become available.</p>
+<p><strong>Worked analysis:</strong> Baseline work is 100×8/60=40/3 hours/month, valued at 400 U. Recurring labor under the three options is 200,100,150 U/month. Including monthly fees/infrastructure gives recurring costs of 320,280,190 U/month. Net monthly benefit relative to baseline is therefore 80,120,210 U.</p>
+<p>Six-month benefits less setup are 480−120=360 U, 720−60=660 U and 1,260−360=900 U. With a four-hour onboarding cap, self-serve (4) and managed (2) fit; internal (12) does not. Assuming all other gates pass, managed maximizes modeled value among feasible candidates. The 240 U difference between internal and managed is an opportunity that cannot be realized with the initial setup allocation.</p>
+<p>These values do not prove actual cash savings. Fixed salaries may remain unchanged; released time needs a useful alternative use. Nor do they establish willingness to pay. Common quality and operational-cutoff assumptions must be tested. If one option attains its lower time only by omitting necessary evidence, its numbers are not comparable.</p>
+<p><strong>Criteria:</strong> Gets all three values, excludes the infeasible option, and distinguishes capacity value from observed cash or demand.</p>
+<h2 id="supplier-viability-and-overhead-sensitivity">3. Supplier viability and overhead sensitivity</h2>
+<p><strong>Hint:</strong> There are separate customer and supplier onboarding costs. They represent different parties’ work.</p>
+<p><strong>Worked analysis:</strong> Self-serve’s monthly contribution after the assigned overhead is 120−40−10=70 U. Across six paid months, subtracting 60 U onboarding and 200 U acquisition leaves 160 U. Managed’s corresponding contribution is 180−120−10=50 U; 300−90−200=10 U remains.</p>
+<p>For managed monthly overhead a, remainder is 6(60−a)−290=70−6a. Nonnegative remainder requires a≤35/3≈11.67 U/month. At a=12, remainder is −2 U, so managed fails the stated supplier gate. Self-serve’s value stays 360 U and its remainder is 160 U if its own overhead stays ten; it becomes the initial feasible choice. This isolated stress changes managed overhead only.</p>
+<p>The cost floor for a managed monthly fee at overhead ten is 120+10+290/6=1,070/6≈178.33 U. The assigned 180 U fee is only about 1.67 U above that floor. A price rise could help the supplier but reduce customer value or change adoption; it is a new offer, not an automatic repair. No total-company profitability is established, since the overhead allocation and omitted costs require actual reconciliation.</p>
+<p><strong>Criteria:</strong> Includes acquisition, supplier setup and overhead once; recognizes a narrow buffer and refuses to infer profitability from it.</p>
+<h2 id="revised-constraint-and-maintenance-thresholds">4. Revised constraint and maintenance thresholds</h2>
+<p><strong>Hint:</strong> Change available setup hours only for the primary reversal. Treat ongoing extra maintenance as a separate sensitivity.</p>
+<p><strong>Worked analysis:</strong> At twelve available hours, internal clears the setup gate. Its 900 U exceeds managed’s 660 and self-serve’s 360. The qualified operating owner and recurring allowance are unchanged premises. The additional eight available hours enable the option but do not lower its twelve-hour setup cost.</p>
+<p>If additional maintenance is x hours/month, internal value is 900−180x. It ties managed at x=240/180=4/3 hours/month. Below this, internal is preferable if all gates pass; above it, managed has greater value. At x=5, internal value reaches zero, equal to the incumbent. An option can remain better than doing nothing yet lose to another feasible option: x=2 gives internal 540 U, positive but below managed’s 660.</p>
+<p>Ties should be reported, not concealed with arbitrary precision. A real tie could be resolved by confidence, reversibility or a further test; these preferences are not built into this fixture. With no external processing permission and the initial four-hour cap, both hosted options fail authority and internal fails capacity. The incumbent is the only modeled feasible path. A new timeline, allocation or redacted-data offer requires fresh assumptions.</p>
+<p><strong>Criteria:</strong> Revises the recommendation, preserves counted labor, distinguishes two thresholds and accepts deferral when gates exclude every candidate.</p>
+<h2 id="evidence-plan-and-operational-handoff">5. Evidence plan and operational handoff</h2>
+<p><strong>Hint:</strong> State what could reject the recommended option before proposing more features.</p>
+<p><strong>Worked analysis:</strong> Confirm the resource allocation with the sponsor, processing permissions with the data owner and ongoing responsibility with each operator. Use a bounded set of permitted cases spanning routine work, missing records, changed revisions and exceptions. Compare complete evidence support and cutoff compliance on matched cases. Log customer and supplier effort separately; classify setup, recurring operations and exceptional rework without overlap. Count unresolved cases and failures rather than filtering them out of the denominator.</p>
+<p>An initial pilot should produce non-effecting drafts and exercise denied reads, revoked grants and unavailable policy. It should not authorize payments. Stop if an unauthorized disclosure/effect occurs or evidence identity cannot be preserved. Reconsider managed if overhead or support costs exceed the narrow supplier buffer. Reconsider internal if actual maintenance erases its advantage or the operating owner cannot sustain it. No sample size here certifies security, general market demand or long-term retention.</p>
+<p>For exit, assign an owner to export mappings, evidence identifiers, outstanding cases and runbooks. Verify that the receiving process can interpret the export. Revoke access and handle retained copies according to the agreed lifecycle rules. A deletion request and a completed deletion are different statuses. Migration effort belongs in the next option comparison. A useful pilot can justify another bounded investment without proving the whole service is viable at scale.</p>
+<p><strong>Criteria:</strong> Includes fair quality/cost measurement, authority tests, stop rules, alternative evidence and an actionable exit. Does not invent customer commitments or completed deployment tests.</p>
+<h2 id="executed-conditional-checks">Executed conditional checks</h2>
+<p>This standard-library script was executed during production. It checks the ledgers, exact boundaries and a finite decision grid. It does not implement authorization, measure real labor or validate demand. Permission and quality flags represent hypothetical gate outcomes; they are not security-test results.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> Q</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>H,n,b,w <span class="op">=</span> <span class="dv">6</span>,<span class="dv">100</span>,<span class="dv">8</span>,<span class="dv">30</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>spec <span class="op">=</span> {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'self'</span>: (<span class="dv">4</span>,<span class="dv">120</span>,<span class="dv">0</span>,<span class="dv">4</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'managed'</span>: (<span class="dv">2</span>,<span class="dv">180</span>,<span class="dv">0</span>,<span class="dv">2</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'internal'</span>: (<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">40</span>,<span class="dv">12</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> value(name,extra_internal<span class="op">=</span>Q(<span class="dv">0</span>)):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    t,fee,infra,setup<span class="op">=</span>spec[name]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    result<span class="op">=</span>H<span class="op">*</span>(Q(n<span class="op">*</span>(b<span class="op">-</span>t)<span class="op">*</span>w,<span class="dv">60</span>)<span class="op">-</span>fee<span class="op">-</span>infra)<span class="op">-</span>setup<span class="op">*</span>w</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">-</span>H<span class="op">*</span>w<span class="op">*</span>extra_internal <span class="cf">if</span> name<span class="op">==</span><span class="st">'internal'</span> <span class="cf">else</span> result</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remainder(name,overhead<span class="op">=</span>Q(<span class="dv">10</span>)):</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    fee,cost,setup<span class="op">=</span>(<span class="dv">120</span>,<span class="dv">40</span>,<span class="dv">60</span>) <span class="cf">if</span> name<span class="op">==</span><span class="st">'self'</span> <span class="cf">else</span> (<span class="dv">180</span>,<span class="dv">120</span>,<span class="dv">90</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> H<span class="op">*</span>(fee<span class="op">-</span>cost<span class="op">-</span>overhead)<span class="op">-</span>setup<span class="op">-</span><span class="dv">200</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> choose(cap,external<span class="op">=</span><span class="va">True</span>,extra_internal<span class="op">=</span>Q(<span class="dv">0</span>),managed_overhead<span class="op">=</span>Q(<span class="dv">10</span>),quality<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    eligible<span class="op">=</span>{<span class="st">'incumbent'</span>:Q(<span class="dv">0</span>)}</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name <span class="kw">in</span> spec:</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> quality <span class="kw">or</span> spec[name][<span class="dv">3</span>]<span class="op">&gt;</span>cap: <span class="cf">continue</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> name<span class="op">!=</span><span class="st">'internal'</span>:</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> external: <span class="cf">continue</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            a<span class="op">=</span>managed_overhead <span class="cf">if</span> name<span class="op">==</span><span class="st">'managed'</span> <span class="cf">else</span> Q(<span class="dv">10</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> remainder(name,a)<span class="op">&lt;</span><span class="dv">0</span>: <span class="cf">continue</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        eligible[name]<span class="op">=</span>value(name,extra_internal)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    best<span class="op">=</span><span class="bu">max</span>(eligible.values())</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {name <span class="cf">for</span> name,v <span class="kw">in</span> eligible.items() <span class="cf">if</span> v<span class="op">==</span>best}</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [value(k) <span class="cf">for</span> k <span class="kw">in</span> spec]<span class="op">==</span>[<span class="dv">360</span>,<span class="dv">660</span>,<span class="dv">900</span>]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> [remainder(<span class="st">'self'</span>),remainder(<span class="st">'managed'</span>)]<span class="op">==</span>[<span class="dv">160</span>,<span class="dv">10</span>]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> choose(<span class="dv">4</span>)<span class="op">==</span>{<span class="st">'managed'</span>}</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> choose(<span class="dv">12</span>)<span class="op">==</span>{<span class="st">'internal'</span>}</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> remainder(<span class="st">'managed'</span>,<span class="dv">12</span>)<span class="op">==-</span><span class="dv">2</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> choose(<span class="dv">4</span>,managed_overhead<span class="op">=</span><span class="dv">12</span>)<span class="op">==</span>{<span class="st">'self'</span>}</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> choose(<span class="dv">4</span>,external<span class="op">=</span><span class="va">False</span>)<span class="op">==</span>{<span class="st">'incumbent'</span>}</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> choose(<span class="dv">12</span>,external<span class="op">=</span><span class="va">False</span>)<span class="op">==</span>{<span class="st">'internal'</span>}</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> choose(<span class="dv">12</span>,quality<span class="op">=</span><span class="va">False</span>)<span class="op">==</span>{<span class="st">'incumbent'</span>}</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> remainder(<span class="st">'managed'</span>,Q(<span class="dv">35</span>,<span class="dv">3</span>))<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> Q(<span class="dv">120</span><span class="op">+</span><span class="dv">10</span>)<span class="op">+</span>Q(<span class="dv">290</span>,<span class="dv">6</span>)<span class="op">==</span>Q(<span class="dv">1070</span>,<span class="dv">6</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> value(<span class="st">'internal'</span>,Q(<span class="dv">4</span>,<span class="dv">3</span>))<span class="op">==</span><span class="dv">660</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> value(<span class="st">'internal'</span>,<span class="dv">5</span>)<span class="op">==</span><span class="dv">0</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> value(<span class="st">'internal'</span>,<span class="dv">2</span>)<span class="op">==</span><span class="dv">540</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> choose(<span class="dv">12</span>,extra_internal<span class="op">=</span>Q(<span class="dv">4</span>,<span class="dv">3</span>))<span class="op">==</span>{<span class="st">'internal'</span>,<span class="st">'managed'</span>}</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> delta <span class="kw">in</span> [Q(<span class="op">-</span><span class="dv">1</span>,<span class="dv">100</span>),Q(<span class="dv">0</span>),Q(<span class="dv">1</span>,<span class="dv">100</span>)]:</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (remainder(<span class="st">'managed'</span>,Q(<span class="dv">35</span>,<span class="dv">3</span>)<span class="op">+</span>delta)<span class="op">&gt;=</span><span class="dv">0</span>)<span class="op">==</span>(delta<span class="op">&lt;=</span><span class="dv">0</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (value(<span class="st">'internal'</span>,Q(<span class="dv">4</span>,<span class="dv">3</span>)<span class="op">+</span>delta)<span class="op">&gt;=</span><span class="dv">660</span>)<span class="op">==</span>(delta<span class="op">&lt;=</span><span class="dv">0</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 25 setup caps x 49 maintenance values x 2 permission states = 2450 cases.</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Extra maintenance ranges 0..4 hours/month in twelfths; all other gates fixed.</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>checks<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">25</span>):</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    cap<span class="op">=</span>Q(c,<span class="dv">2</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">49</span>):</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>Q(j,<span class="dv">12</span>)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> external <span class="kw">in</span> [<span class="va">False</span>,<span class="va">True</span>]:</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>            got<span class="op">=</span>choose(cap,external,x)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> cap<span class="op">&lt;</span><span class="dv">2</span>:</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>                want<span class="op">=</span>{<span class="st">'incumbent'</span>}</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> cap<span class="op">&lt;</span><span class="dv">12</span>:</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>                want<span class="op">=</span>{<span class="st">'managed'</span>} <span class="cf">if</span> external <span class="cf">else</span> {<span class="st">'incumbent'</span>}</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> <span class="kw">not</span> external:</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>                want<span class="op">=</span>{<span class="st">'internal'</span>}  <span class="co"># value remains positive throughout this grid</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> x<span class="op">&lt;</span>Q(<span class="dv">4</span>,<span class="dv">3</span>):</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>                want<span class="op">=</span>{<span class="st">'internal'</span>}</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> x<span class="op">==</span>Q(<span class="dv">4</span>,<span class="dv">3</span>):</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>                want<span class="op">=</span>{<span class="st">'internal'</span>,<span class="st">'managed'</span>}</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>                want<span class="op">=</span>{<span class="st">'managed'</span>}</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> got<span class="op">==</span>want,(cap,x,external,got,want)</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>            checks<span class="op">+=</span><span class="dv">1</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> checks<span class="op">==</span><span class="dv">2450</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: ledgers, overhead/maintenance boundaries, choice reversal, authority/quality gates, 2450 decision cases'</span>)</span></code></pre></div>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-14. Five worked analyses and executed exact decision checks.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#responsibility-and-revocation">1. Responsibility and revocation</a></li><li class="h2"><a href="#customer-economics-and-setup-feasibility">2. Customer economics and setup feasibility</a></li><li class="h2"><a href="#supplier-viability-and-overhead-sensitivity">3. Supplier viability and overhead sensitivity</a></li><li class="h2"><a href="#revised-constraint-and-maintenance-thresholds">4. Revised constraint and maintenance thresholds</a></li><li class="h2"><a href="#evidence-plan-and-operational-handoff">5. Evidence plan and operational handoff</a></li><li class="h2"><a href="#executed-conditional-checks">Executed conditional checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

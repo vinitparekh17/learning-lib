@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>F01 — Invariants, algorithms, and the cost of computation | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="F01">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">F01</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=F#track-F"><span aria-hidden="true">←</span> Foundations</a><p class="eyebrow">Foundations <span aria-hidden="true">/</span> F01</p><h1 id="f01-invariants-algorithms-and-the-cost-of-computation">Invariants, algorithms, and the cost of computation</h1><p class="article-description">Derive an optimization, prove its correctness, and state its cost assumptions</p>
+<div class="article-actions"><a class="button primary" href="#practice-and-transfer" >Jump to practice</a><a class="button secondary" href="#evidence-and-verification-ledger" >Evidence</a><a class="button secondary" href="/answers/f01.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#the-decision-what-information-makes-repeated-work-unnecessary">1. The decision: what information makes repeated work unnecessary?</a></li><li class="h2"><a href="#a-small-notation-bridge-and-a-precise-contract">2. A small notation bridge and a precise contract</a></li><li class="h2"><a href="#build-the-baseline-and-count-its-actual-work">3. Build the baseline and count its actual work</a></li><li class="h2"><a href="#derive-remembered-state-before-choosing-a-container">4. Derive remembered state before choosing a container</a></li><li class="h2"><a href="#the-speedup-has-conditions">5. The speedup has conditions</a></li><li class="h2"><a href="#change-the-constraint-and-revisit-the-representation">6. Change the constraint and revisit the representation</a></li><li class="h2"><a href="#practice-and-transfer">7. Practice and transfer</a></li><li class="h2"><a href="#reference-card">8. Reference card</a></li><li class="h2"><a href="#evidence-and-verification-ledger">9. Evidence and verification ledger</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision</td>
+<td>F01 / 1.0</td>
+</tr>
+<tr class="even">
+<td>Date</td>
+<td>2026-11-02</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>Basic loops and equality; sets and induction bridge below</td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Derive an optimization, prove its correctness, and state its cost assumptions</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R01 lecture notes 1, 2 and 4 opened; precise passages listed in §9</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Python equivalents and bounded exhaustive checks executed; see answer file for reproduction and scope</td>
+</tr>
+<tr class="odd">
+<td>State</td>
+<td>produced; formal curriculum Audit A still pending</td>
+</tr>
+<tr class="even">
+<td>Companion</td>
+<td><a href="/answers/f01.html">Hints and worked answers</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="the-decision-what-information-makes-repeated-work-unnecessary">1. The decision: what information makes repeated work unnecessary?</h2>
+<p>You receive a batch of document identifiers and need to know whether any identifier appears twice. This is a fictional study case. A duplicate identifier means equal keys under a declared rule; it does not automatically mean two documents contain identical text or two business actions are interchangeable.</p>
+<p>The useful question is: <strong>What can I retain from the processed input so that the next decision is cheaper?</strong> Start with a correct, straightforward procedure. Treat its repeated work as evidence about what information is missing. Then choose a representation that answers the repeated question efficiently.</p>
+<p>This pack develops one example deeply. Named algorithm patterns become easier to learn when you can explain why information may safely be retained or discarded. No diagnostic response or prior mathematical fluency is assumed.</p>
+<h2 id="a-small-notation-bridge-and-a-precise-contract">2. A small notation bridge and a precise contract</h2>
+<p>A sequence preserves order: <code>[8, 3, 6, 3]</code>. A set records membership without multiplicity: <code>{8, 3, 6}</code>. The expression <code>x in S</code> asks whether <code>S</code> contains <code>x</code>. A prefix <code>a[0:k]</code> contains positions 0 through k−1; it excludes position k. When k=0, the prefix is empty.</p>
+<p>An invariant is a statement that remains true at a particular program boundary. Specify that boundary: “before each outer iteration” is meaningful; “the values are correct” is too vague to check. An induction proof establishes a starting case and shows why one valid step preserves the claim. Repeating that argument covers every iteration, however large the input becomes.</p>
+<p>Our contract:</p>
+<ul>
+<li>Input: a finite sequence of n immutable keys, with a stable equality rule.</li>
+<li>Output: <code>True</code> exactly when there exist different positions i and j with equal keys.</li>
+<li>Empty and one-element sequences return <code>False</code>.</li>
+<li>The input stays unchanged; the output need not identify the matching positions.</li>
+</ul>
+<p>For cost analysis initially assume each key fits in a constant number of machine words, equality and hashing cost constant time, and array access costs constant time. These are model premises, not measured facts about arbitrary document strings. Long text and custom equality require another cost model.</p>
+<h2 id="build-the-baseline-and-count-its-actual-work">3. Build the baseline and count its actual work</h2>
+<p>Compare each new key with every earlier key:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> duplicate_pairs(a):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(a)):</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(j):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> a[i] <span class="op">==</span> a[j]:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span></code></pre></div>
+<p>The inner loop deliberately stops before j, so a key never matches itself. Before outer iteration j, if the function has not returned, the first j keys are pairwise distinct. During that iteration, the inner loop checks every possible earlier partner of <code>a[j]</code>. If a match is found, it supplies two different positions. If none is found, the prefix of length j+1 remains distinct. At termination the prefix is the whole sequence, so <code>False</code> is justified. The finite loop bounds establish termination separately from correctness.</p>
+<p>Count equality comparisons on an all-distinct input. The iterations perform 0, 1, 2, …, n−1 comparisons. Pair this sum with its reverse: each of the n positions sums to n−1. Therefore</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mn>2</mn></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+2C(n)=n(n-1),\qquad C(n)=\frac{n(n-1)}2.
+</annotation></semantics></math></p>
+<p>This is a derivation for this procedure, not a benchmark. At n=1,000 there are 499,500 comparisons; at n=2,000 there are 1,999,000. Doubling n almost quadruples the work. The no-duplicate case is worst-case quadratic, written Θ(n²). Θ describes a tight growth bound up to constant factors for sufficiently large n; O gives an upper bound. Neither notation states milliseconds.</p>
+<p>Early termination matters. <code>[8, 8]</code> needs one comparison; <code>[8, 3, 6, 3]</code> needs five: one at j=1, two at j=2, then two at j=3. A single fast example cannot establish a general cost claim. The baseline uses O(1) auxiliary space: the input already exists, and only loop indices and temporary references are added.</p>
+<h2 id="derive-remembered-state-before-choosing-a-container">4. Derive remembered state before choosing a container</h2>
+<p>At every step the expensive question is the same: “Does the next key occur anywhere in the prefix?” Repeated scanning reconstructs membership from scratch. For a yes/no answer, the earlier order and exact occurrence counts are irrelevant. The set of earlier keys is sufficient information.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> duplicate_seen(a):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    seen <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> a:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> x <span class="kw">in</span> seen:</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        seen.add(x)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span></code></pre></div>
+<p>Here <code>set()</code> is an illustrative Python implementation. The proof depends on the abstract operations membership and insertion. The performance depends on how those operations are implemented. A container named “set” could internally scan a list; naming the interface does not create a speedup. R01 lecture 2 makes this interface/representation distinction explicit.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Next position</th>
+<th style="text-align: right;">Key</th>
+<th>Set before membership check</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8</td>
+<td>{}</td>
+<td>Absent; insert 8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td>{8}</td>
+<td>Absent; insert 3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td>{8, 3}</td>
+<td>Absent; insert 6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td>{8, 3, 6}</td>
+<td>Present; return True</td>
+</tr>
+</tbody>
+</table>
+</div><p>The set does not tell us which earlier position contained 3. That information was deliberately discarded because our contract does not ask for it. A changed output contract may require a map from key to earlier index.</p>
+<p>Use the invariant: <strong>Before processing position k, if the algorithm is still running, <code>seen</code> equals the set of keys in <code>a[0:k]</code>, and that prefix has no duplicates.</strong></p>
+<p>At k=0 both claims hold. If the current key is in <code>seen</code>, the membership claim guarantees an earlier equal key, so returning <code>True</code> is sound. If it is absent, inserting it preserves exact membership and distinctness for the next prefix. If the loop ends, all n keys were processed without a repeat. Thus <code>False</code> is sound too. Conversely, if a duplicate exists, its later occurrence must encounter the earlier one in <code>seen</code>; the algorithm cannot miss it.</p>
+<p>A common bug inserts first, then checks membership. That checks against a state already containing the current item. A singleton <code>[8]</code> exposes the false positive. This is why an invariant belongs to a precise line boundary: changing statement order changes what the state means.</p>
+<h2 id="the-speedup-has-conditions">5. The speedup has conditions</h2>
+<p>An all-distinct input causes n membership calls and n insertion calls. If membership has expected constant cost and insertion has expected amortized constant cost, the total is expected O(n), with O(n) stored keys. With mandatory inspection of n keys on a distinct input, this becomes expected Θ(n) under our model. The expectation concerns the hashing model; it does not mean every input distribution has been measured.</p>
+<p>“Amortized” distributes occasional rebuilding costs across a sequence of operations. “Expected” averages over specified randomness. These are different qualifications. One expensive insertion can coexist with a linear expected total. R01 lecture 4, page 4, supplies the hash-table conditions; this pack does not claim that every language runtime implements exactly that design.</p>
+<p>A hash routes a key to a candidate storage location. <strong>Equal hashes do not establish equal keys.</strong> Consider a hypothetical table using <code>h(x)=x mod 10</code>: 1 and 11 route to the same bucket but are different. A correct collision-handling table retains enough information to compare actual keys. Keeping only these hash values would incorrectly report a duplicate.</p>
+<p>In a simple chained table, suppose every distinct key routes to one bucket. The next membership query scans an ever-longer chain. The accumulated work can again grow quadratically. Correctness survives if equality is checked; the promised performance does not. A constant hash is a concrete counterexample to an unconditional “hashing makes this linear” claim.</p>
+<p>Other boundaries require explicit decisions:</p>
+<ul>
+<li>If hashing a previously unseen string examines L characters, charging O(1) per key hides input-reading work. Include string lengths in the model and measure the target implementation.</li>
+<li>Equality and hashing must agree: keys considered equal must route compatibly. Keys must not change their relevant identity while stored.</li>
+<li>The mathematical contract assumes equality behaves consistently. Special numeric values, case folding, whitespace, and document revisions need a defined business rule before a container can enforce it.</li>
+<li>Exhausting memory is possible. An online algorithm can process one key at a time while still retaining growing state.</li>
+</ul>
+<h2 id="change-the-constraint-and-revisit-the-representation">6. Change the constraint and revisit the representation</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Constraint</th>
+<th>Defensible option</th>
+<th>Cost or changed guarantee</th>
+<th>Evidence that could reverse the choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Small batch, tight auxiliary memory</td>
+<td>Pairwise baseline</td>
+<td>Θ(n²) worst-case comparisons; O(1) extra space</td>
+<td>Actual batch sizes or latency become unacceptable</td>
+</tr>
+<tr class="even">
+<td>Large batch, sufficient memory, suitable keys</td>
+<td>Remembered membership with a hash set</td>
+<td>Expected linear total under stated conditions; O(n) extra keys</td>
+<td>Measured memory, collision behavior, key costs</td>
+</tr>
+<tr class="odd">
+<td>Known domain of U integer IDs</td>
+<td>U membership flags indexed by ID</td>
+<td>Initialize U flags, then scan: O(U+n) time; O(U) flags</td>
+<td>Domain grows or IDs become sparse/unbounded</td>
+</tr>
+<tr class="even">
+<td>Only last W items matter</td>
+<td>Explicit rolling-window contract</td>
+<td>May forget older duplicates; must manage expiration correctly</td>
+<td>Requirement actually means “ever seen”</td>
+</tr>
+<tr class="odd">
+<td>Arbitrary long stream, exact all-history answer</td>
+<td>Retain enough history, possibly externally</td>
+<td>Memory or external-storage cost grows with information retained</td>
+<td>Replays, bounded domain, approximation, or time-window requirements become acceptable</td>
+</tr>
+</tbody>
+</table>
+</div><p>The domain option follows directly from indexing: initialize every flag to false; on each valid ID inspect its flag, then set it. Domain validation is part of the contract. A tiny domain can make this attractive even when a general-purpose hash table is available.</p>
+<p>Bounded memory cannot be justified by silently forgetting old values. If a cache retains only the previous two keys, <code>[1, 2, 3, 1]</code> loses the first 1 before the last arrives. It answers a different question. For an exact deterministic all-history membership state over a finite universe, different seen subsets must be distinguishable: choose a key in their symmetric difference and append it; one history now contains a duplicate and the other does not. With at most b bits there are at most 2^b states. More distinguishable subsets than states force an error. This is an original counting argument for the stated one-pass model, not a blanket impossibility statement for replayable input or external storage.</p>
+<h2 id="practice-and-transfer">7. Practice and transfer</h2>
+<p>Allow roughly 30–45 minutes if useful; time is a planning suggestion, not an assessment score. Try these before opening the answers.</p>
+<ol type="1">
+<li>For <code>[4, 9, 1, 7, 9]</code>, trace both procedures. Count pairwise equality comparisons and abstract set membership calls. State each return value.</li>
+<li>Write the remembered-state invariant in your own words. Give initialization, preservation, return reasoning, and termination. Explain the singleton failure of inserting before checking.</li>
+<li>Calculate the baseline comparison count for n=100 and n=1,000 on all-distinct input. List the assumptions needed for the expected-linear alternative. Explain the difference between membership calls and key comparisons.</li>
+<li>Modify the contract to return a matching pair of positions. Specify the state and trace the same input. Give the time and space qualifications.</li>
+<li>You may retain only the previous two IDs. Explain what <code>[1, 2, 3, 1]</code> proves. Give two legitimate requirement or resource changes that permit a solution.</li>
+<li>In the recurring document service, two workers check the same ID simultaneously, both find it absent, and both perform a payment. Explain why this pack’s single-process proof does not establish duplicate-effect prevention. Write the stronger invariant you would need.</li>
+</ol>
+<p>Success means explaining the retained information, proof boundary, counted operation, and a failed assumption. Code alone is insufficient. This is the first technical pack; it builds on the initialization map’s themes of state and contracts. S02 will use stored representations to accelerate queries. S03/S04 will examine interleavings and failures. A03 will revisit what a representation retains or loses about evidence.</p>
+<h2 id="reference-card">8. Reference card</h2>
+<p>Write down: contract → baseline → repeated query → sufficient state → invariant → cost model → counterexample. For this example, the repeated query is prefix membership; the state is the set of earlier keys; the check happens before insertion. Pairwise comparison needs n(n−1)/2 comparisons on distinct input. A suitable hash set gives expected linear total work and linear extra keys under explicit assumptions. Tests can expose bugs; the invariant explains arbitrary lengths within the model.</p>
+<p>Open questions for application: What exactly counts as an equal document ID? How long must history survive? Are inputs adversarial? What is the key-size distribution? Is memory sufficient? These are requirements to resolve before deployment, not blockers to the learning pack. No production performance benchmark or concurrency guarantee is claimed.</p>
+<h2 id="evidence-and-verification-ledger">9. Evidence and verification ledger</h2>
+<p>Primary anchor: MIT 6.006, Spring 2020, instructors Erik Demaine, Jason Ku, Justin Solomon; R01 in the source register. Page numbers below are PDF pages, counting from 1. All three PDFs were opened on 2026-11-02. No empirical speedup from these notes is asserted here.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Claim / role</th>
+<th>Verified location</th>
+<th>Evidence type and limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>General correctness, induction, operation counting, asymptotic notation, Word-RAM assumptions</td>
+<td><a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/477c78e0af2df61fa205bcc6cb613ceb_MIT6_006S20_lec1.pdf">Lecture 1</a>, pp. 2–3, Correctness / Efficiency / Model of Computation</td>
+<td>Teaching definitions and model; not wall-clock predictions</td>
+</tr>
+<tr class="even">
+<td>Interface and implementation are distinct; amortization concerns sequences of operations</td>
+<td><a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/79a07dc1cb47d76dae2ffedc701e3d2b_MIT6_006S20_lec2.pdf">Lecture 2</a>, p. 1 Data Structure Interfaces; p. 4 Amortized Analysis</td>
+<td>Abstract operations and analysis technique</td>
+</tr>
+<tr class="odd">
+<td>Direct indexing trades space for lookup; collisions and chain length affect work; dynamic hashing has expected amortized bounds</td>
+<td><a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/ce9e94705b914598ce78a00a70a1f734_MIT6_006S20_lec4.pdf">Lecture 4</a>, pp. 2–4, Direct Access Array / Chaining / Universal / Dynamic</td>
+<td>Conditional theoretical analysis; not a claim about current runtime internals</td>
+</tr>
+<tr class="even">
+<td>Pairwise formula, loop proofs, traces, modified contracts, bounded-state argument</td>
+<td>§§2–7 of this pack</td>
+<td>Original derivations from explicit premises; fictional inputs</td>
+</tr>
+<tr class="odd">
+<td>Executable agreement and arithmetic</td>
+<td>Answer-file reproduction appendix</td>
+<td>Bounded exhaustive checks; no hardware-speed conclusion and no substitute for proof</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-02: original F01 pack; restricted scope to duplicate detection, exact membership, and cost assumptions. Two-pointer patterns deferred until a later question needs them.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/f01.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#passage-verification-2026-11-02-f01">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="F01"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/f02.html"><small>Next module · F02</small><strong>Probability, base rates, and decisions under uncertainty</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#the-decision-what-information-makes-repeated-work-unnecessary">1. The decision: what information makes repeated work unnecessary?</a></li><li class="h2"><a href="#a-small-notation-bridge-and-a-precise-contract">2. A small notation bridge and a precise contract</a></li><li class="h2"><a href="#build-the-baseline-and-count-its-actual-work">3. Build the baseline and count its actual work</a></li><li class="h2"><a href="#derive-remembered-state-before-choosing-a-container">4. Derive remembered state before choosing a container</a></li><li class="h2"><a href="#the-speedup-has-conditions">5. The speedup has conditions</a></li><li class="h2"><a href="#change-the-constraint-and-revisit-the-representation">6. Change the constraint and revisit the representation</a></li><li class="h2"><a href="#practice-and-transfer">7. Practice and transfer</a></li><li class="h2"><a href="#reference-card">8. Reference card</a></li><li class="h2"><a href="#evidence-and-verification-ledger">9. Evidence and verification ledger</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

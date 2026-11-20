@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>A03 — Hints, worked answers and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">A03</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/a03.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">A03 <span aria-hidden="true">/</span> Worked companion</p><h1 id="a03-hints-worked-answers-and-checks">Hints, worked answers and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/a03.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#candidate-and-context-trace">1. Candidate and context trace</a></li><li class="h2"><a href="#controlled-failure-isolation">2. Controlled failure isolation</a></li><li class="h2"><a href="#provenance-is-necessary-but-narrower-than-truth">3. Provenance is necessary but narrower than truth</a></li><li class="h2"><a href="#time-ingestion-and-permission-changes">4. Time, ingestion and permission changes</a></li><li class="h2"><a href="#two-marginalization-calculations">5. Two marginalization calculations</a></li><li class="h2"><a href="#stage-accounting-and-a-falsifiable-evaluation">6. Stage accounting and a falsifiable evaluation</a></li><li class="h2"><a href="#reproduce-the-executed-checks">Reproduce the executed checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Title</td>
+<td>Retrieval, external knowledge, and provenance — worked answers</td>
+</tr>
+<tr class="even">
+<td>ID / revision / date</td>
+<td>A03 answers · 1.0 · 2026-11-10</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>S02, S06, A01, A02 and <a href="/learn/a03.html">A03 core</a></td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Separate evidence availability, retrieval, context delivery and claim support</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R15 methods and R11 mediation; exact URLs/locators in core</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>Executed finite fixtures and exact arithmetic; no live search, generation or semantic entailment experiment</td>
+</tr>
+</tbody>
+</table>
+</div><p>These are reference solutions, not learner responses or mastery assessments.</p>
+<h2 id="hints">Hints</h2>
+<ol type="1">
+<li>Apply eligibility before interpreting a ranking; inspect the context actually supplied.</li>
+<li>Change one stage at a time while keeping the query and required evidence fixed.</li>
+<li>Read the claim’s temporal and business scope, not only its nouns.</li>
+<li>A missing index entry and a revoked grant call for different explanations.</li>
+<li>Compare sum-of-products with product-of-sums using the same probabilities.</li>
+<li>State every denominator. A component metric can improve while task success falls.</li>
+</ol>
+<h2 id="candidate-and-context-trace">1. Candidate and context trace</h2>
+<p>At t=20, the authoritative head is revision 3. <code>old</code> is stale for the current query; <code>other</code> is a different tenant. Eligible candidates are <code>note</code> at 93 and <code>new</code> at 88. Top-1 is [<code>note</code>]; top-2 is [<code>note</code>,<code>new</code>]. Keeping only the first candidate loses the delivery evidence even with k=2. The declared field-aware selector chooses <code>new</code> because it contains the requested field.</p>
+<p>For this exact tenant/document/revision/field question, direct fact lookup is the natural baseline and returns Y with its frozen locator. More general search might help with paraphrases or unstructured documents, but that benefit is not demonstrated by this fixture. If multiple eligible passages claim conflicting delivery values, an explicit resolution rule is required; the field-aware selector alone does not resolve truth.</p>
+<p><strong>Criterion:</strong> Separate eligibility, candidate recall and context sufficiency; no confidence interpretation of scores.</p>
+<h2 id="controlled-failure-isolation">2. Controlled failure isolation</h2>
+<p>Missing evidence: remove <code>new</code> from the indexed corpus while retaining the authoritative manifest expectation. Compare expected versus indexed revision contents; k changes cannot fix it.</p>
+<p>Present but not retrieved: restore <code>new</code>, use k=1, and observe only <code>note</code>. Force <code>new</code> into the candidate set to distinguish a retrieval miss from downstream problems.</p>
+<p>Retrieved but dropped: use k=2, then retain only score-first <code>note</code>. Compare candidate IDs with actual context IDs. Supply <code>new</code> directly to the answering component as a diagnostic, without calling that oracle run deployed performance.</p>
+<p>Supplied but ignored: context includes <code>new</code>, yet the answer states delivery X. Inspect the exact model input and output and their claim-level comparison. A higher-recall retriever cannot fix this already-sufficient context on its own.</p>
+<p>Cited without support: retain context [<code>new</code>] and emit “Payment is settled” with that citation. The locator resolves, but the fixture contains no settlement fact. Validate the claim–passage relationship rather than counting citation syntax.</p>
+<p><strong>Criterion:</strong> One controlled intervention per boundary, with observable artifacts. Real cases can contain several failures; a triage label is not proof of a unique root cause.</p>
+<h2 id="provenance-is-necessary-but-narrower-than-truth">3. Provenance is necessary but narrower than truth</h2>
+<p><code>old</code> supports “revision 2 listed X” if the old bytes and locator resolve and the reader may access them. It does not support the current-state claim at t=20, because the head is revision 3. <code>new</code> supports “revision 3 lists Y,” and supports the current published-reference answer only with the authoritative head/time link. Neither passage supports settlement.</p>
+<p>A claim “X” cited to <code>new</code> fails the assigned fact comparison. A claim “payment settled” cited to <code>new</code> fails even though the citation is syntactically valid and current. An authentic passage can still be factually wrong about the world. Distinguish “the source states Y” from independently verified delivery.</p>
+<p>Keep exact tenant/document/revision/passage identity, bytes, rendering/extraction version and locator. Replacing old evidence with current bytes destroys historical reproducibility. A digest is an integrity check, not a substitute for retained content. Multiple claims need individual coverage; missing support is not repaired by adding more unrelated citations.</p>
+<p><strong>Criterion:</strong> Correct scope, source identity and permission; no inference from link existence to semantic support or physical truth.</p>
+<h2 id="time-ingestion-and-permission-changes">4. Time, ingestion and permission changes</h2>
+<p>At t=10, revision 2 is the published head; X is the answer for that historical state, assuming current permission to view its retained evidence. The query-time snapshot and the disclosure-time access decision are different controls.</p>
+<p>At t=20 with revision 3 selected but <code>new</code> absent from the index, report current evidence unavailable, or perform an authorized direct lookup. An older answer is acceptable only as an explicitly labeled older result under a contract that allows it. Quietly returning X as current fails.</p>
+<p>If permission is revoked before display, withhold the protected content under the selected immediate-disclosure policy. A previously allowed retrieval or cached answer is insufficient. An unavailable policy check also does not establish permission. Coordinating the check with disclosure is a deployment requirement, not a feature proved by the fixture’s Boolean grant.</p>
+<p><strong>Criterion:</strong> Distinguish source publication, index readiness, query time and authorization freshness. Do not present delayed ingestion as “no such fact exists.”</p>
+<h2 id="two-marginalization-calculations">5. Two marginalization calculations</h2>
+<p>For the fixed target sequence, sequence-level mixing gives 0.6×0.8×0.5 + 0.4×0.2×0.9 = 0.24+0.072=0.312. Token-level mixing gives (0.48+0.08)×(0.30+0.36)=0.56×0.66=0.3696. Their difference is 0.0576. The product-of-sums includes cross-passage contributions; it does not mean an observed output is guaranteed to combine correct facts.</p>
+<p>The second-token probabilities are conditional on the same specified first-token prefix, not unconditional token frequencies. The two passages form the entire normalized toy distribution here. The paper uses a top-K approximation; these numbers are not its reported outputs. For a single-token target the two forms coincide, as summing over the same one-step terms yields the same result.</p>
+<p>Retrieval weights concern passages given a query; A02 attention weights mix representations over positions; a correctness assessment concerns an answer’s claims against evidence and reality. Matching a mathematical normalization pattern does not equate these targets.</p>
+<p><strong>Criterion:</strong> Correct conditioning, arithmetic and interpretation; no fabricated measured model accuracy.</p>
+<h2 id="stage-accounting-and-a-falsifiable-evaluation">6. Stage accounting and a falsifiable evaluation</h2>
+<p>Corpus coverage is 16/20=80%. Conditional candidate hit rate is 12/16=75%. Retention of sufficient evidence is 10/12≈83.33%. Supported completion after sufficient context is 7/10=70%. Multiplying yields 7/20=35%, because the nested counts cancel. No independence assumption is needed. Overall candidate hit rate is 12/20=60%, a different denominator from 75%.</p>
+<p>For a higher-recall candidate, freeze the same eligible query population, target revisions, permissions, corpus snapshot, context budget and downstream procedure. Include new documents/groups according to deployment, keeping revisions together. Measure sufficient-evidence retrieval and actual selected-context sufficiency, supported answer completion, unauthorized exposures, abstentions, latency and cost. Keep missing/unanswered cases in the declared outcome population.</p>
+<p>A retriever could increase candidate recall while adding distractions that crowd out the required evidence under the context budget. It could improve recall on authorized cases yet expose another tenant’s data. Either can invalidate deployment. Use direct lookup as the baseline for exact field questions, and a separate relevance/support rubric for open-ended questions. Independent adjudication of contested support cases is needed; our hand-assigned fact map is not that adjudication system.</p>
+<p><strong>Criterion:</strong> Nested denominators, comparable policies and a concrete way the seemingly better component can fail the full contract.</p>
+<h2 id="reproduce-the-executed-checks">Reproduce the executed checks</h2>
+<p>This code implements only the declared fixture rules. The <code>facts</code> relation is an oracle supplied by the author, not inferred from prose. Authorization and head selection are sequential model inputs; concurrent policy changes, actual identity verification and index/storage failures are not simulated. Fixed rankings are not search-engine measurements.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fractions <span class="im">import</span> Fraction <span class="im">as</span> F</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> permutations</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># (tenant, document, revision, field, value) is the exact fact identity.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> passage(pid,tenant,rev,score,facts):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">dict</span>(<span class="bu">id</span><span class="op">=</span>pid,tenant<span class="op">=</span>tenant,doc<span class="op">=</span><span class="st">'D17'</span>,rev<span class="op">=</span>rev,score<span class="op">=</span>score,facts<span class="op">=</span>facts)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>corpus<span class="op">=</span>[</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    passage(<span class="st">'old'</span>,<span class="st">'A'</span>,<span class="dv">2</span>,<span class="dv">97</span>,{<span class="st">'delivery'</span>:<span class="st">'X'</span>}),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    passage(<span class="st">'other'</span>,<span class="st">'B'</span>,<span class="dv">3</span>,<span class="dv">95</span>,{<span class="st">'delivery'</span>:<span class="st">'Z'</span>}),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    passage(<span class="st">'note'</span>,<span class="st">'A'</span>,<span class="dv">3</span>,<span class="dv">93</span>,{}),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    passage(<span class="st">'new'</span>,<span class="st">'A'</span>,<span class="dv">3</span>,<span class="dv">88</span>,{<span class="st">'delivery'</span>:<span class="st">'Y'</span>}),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> head(t):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> t<span class="op">&lt;</span><span class="dv">5</span>: <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span> <span class="cf">if</span> t<span class="op">&lt;</span><span class="dv">15</span> <span class="cf">else</span> <span class="dv">3</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eligible(p,t,grant<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> grant <span class="kw">and</span> p[<span class="st">'tenant'</span>]<span class="op">==</span><span class="st">'A'</span> <span class="kw">and</span> p[<span class="st">'doc'</span>]<span class="op">==</span><span class="st">'D17'</span> <span class="kw">and</span> p[<span class="st">'rev'</span>]<span class="op">==</span>head(t)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> candidates(rows,t,k,grant<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>((p <span class="cf">for</span> p <span class="kw">in</span> rows <span class="cf">if</span> eligible(p,t,grant)),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                  key<span class="op">=</span><span class="kw">lambda</span> p:(<span class="op">-</span>p[<span class="st">'score'</span>],p[<span class="st">'id'</span>]))[:k]</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> select(rows,field<span class="op">=</span><span class="st">'delivery'</span>):</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>(rows,key<span class="op">=</span><span class="kw">lambda</span> p:(field <span class="kw">not</span> <span class="kw">in</span> p[<span class="st">'facts'</span>],<span class="op">-</span>p[<span class="st">'score'</span>],p[<span class="st">'id'</span>]))[:<span class="dv">1</span>]</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ids(rows):<span class="cf">return</span> [p[<span class="st">'id'</span>] <span class="cf">for</span> p <span class="kw">in</span> rows]</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> supports(claim,p):</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    tenant,doc,rev,field,value<span class="op">=</span>claim</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (tenant,doc,rev)<span class="op">==</span>(p[<span class="st">'tenant'</span>],p[<span class="st">'doc'</span>],p[<span class="st">'rev'</span>]) <span class="kw">and</span> p[<span class="st">'facts'</span>].get(field)<span class="op">==</span>value</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> disclose(claim,citation,context,t,grant<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    p<span class="op">=</span><span class="bu">next</span>((p <span class="cf">for</span> p <span class="kw">in</span> context <span class="cf">if</span> p[<span class="st">'id'</span>]<span class="op">==</span>citation),<span class="va">None</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">bool</span>(p <span class="kw">and</span> eligible(p,t,grant) <span class="kw">and</span> supports(claim,p))</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>claim<span class="op">=</span>(<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">3</span>,<span class="st">'delivery'</span>,<span class="st">'Y'</span>)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ids(candidates(corpus,<span class="dv">20</span>,<span class="dv">1</span>))<span class="op">==</span>[<span class="st">'note'</span>]</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ids(candidates(corpus,<span class="dv">20</span>,<span class="dv">2</span>))<span class="op">==</span>[<span class="st">'note'</span>,<span class="st">'new'</span>]</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>context<span class="op">=</span>select(candidates(corpus,<span class="dv">20</span>,<span class="dv">2</span>))</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ids(context)<span class="op">==</span>[<span class="st">'new'</span>] <span class="kw">and</span> disclose(claim,<span class="st">'new'</span>,context,<span class="dv">20</span>)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> disclose(claim,<span class="st">'new'</span>,context,<span class="dv">20</span>,<span class="va">False</span>) <span class="co"># revoked before disclosure</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> candidates(corpus,<span class="dv">20</span>,<span class="dv">2</span>,<span class="va">False</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ids(candidates(corpus,<span class="dv">10</span>,<span class="dv">2</span>))<span class="op">==</span>[<span class="st">'old'</span>]</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> head(<span class="dv">4</span>) <span class="kw">is</span> <span class="va">None</span> <span class="kw">and</span> head(<span class="dv">5</span>)<span class="op">==</span><span class="dv">2</span> <span class="kw">and</span> head(<span class="dv">14</span>)<span class="op">==</span><span class="dv">2</span> <span class="kw">and</span> head(<span class="dv">15</span>)<span class="op">==</span><span class="dv">3</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> candidates(corpus,<span class="dv">4</span>,<span class="dv">4</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>old<span class="op">=</span>corpus[<span class="dv">0</span>]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> supports((<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">2</span>,<span class="st">'delivery'</span>,<span class="st">'X'</span>),old)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> disclose((<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">2</span>,<span class="st">'delivery'</span>,<span class="st">'X'</span>),<span class="st">'old'</span>,[old],<span class="dv">20</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> disclose((<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">2</span>,<span class="st">'delivery'</span>,<span class="st">'X'</span>),<span class="st">'old'</span>,[old],<span class="dv">10</span>)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> disclose((<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">3</span>,<span class="st">'payment'</span>,<span class="st">'settled'</span>),<span class="st">'new'</span>,context,<span class="dv">20</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> disclose((<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">3</span>,<span class="st">'delivery'</span>,<span class="st">'X'</span>),<span class="st">'new'</span>,context,<span class="dv">20</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> disclose(claim,<span class="st">'invented'</span>,context,<span class="dv">20</span>)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> disclose(claim,<span class="st">'new'</span>,[],<span class="dv">20</span>)</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtering only after global top-1 loses eligible results.</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>global_first<span class="op">=</span><span class="bu">sorted</span>(corpus,key<span class="op">=</span><span class="kw">lambda</span> p:<span class="op">-</span>p[<span class="st">'score'</span>])[:<span class="dv">1</span>]</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> [p <span class="cf">for</span> p <span class="kw">in</span> global_first <span class="cf">if</span> eligible(p,<span class="dv">20</span>)]</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(candidates(corpus,<span class="dv">20</span>,<span class="dv">1</span>))<span class="op">==</span><span class="dv">1</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># A second tenant's score cannot alter the result under this fixture's prefilter.</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> score <span class="kw">in</span> [<span class="op">-</span><span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">1000</span>]:</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    changed<span class="op">=</span>[<span class="bu">dict</span>(p,score<span class="op">=</span>score) <span class="cf">if</span> p[<span class="st">'id'</span>]<span class="op">==</span><span class="st">'other'</span> <span class="cf">else</span> p <span class="cf">for</span> p <span class="kw">in</span> corpus]</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> ids(select(candidates(changed,<span class="dv">20</span>,<span class="dv">2</span>)))<span class="op">==</span>[<span class="st">'new'</span>]</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage order is irrelevant because ranking has an explicit tie rule.</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> rows <span class="kw">in</span> permutations(corpus):</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> ids(select(candidates(rows,<span class="dv">20</span>,<span class="dv">2</span>)))<span class="op">==</span>[<span class="st">'new'</span>]</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> diagnose(rows,cands,ctx,answer,citation):</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>(eligible(p,<span class="dv">20</span>) <span class="kw">and</span> supports(claim,p) <span class="cf">for</span> p <span class="kw">in</span> rows):<span class="cf">return</span> <span class="st">'corpus'</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>(supports(claim,p) <span class="cf">for</span> p <span class="kw">in</span> cands):<span class="cf">return</span> <span class="st">'retrieval'</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>(supports(claim,p) <span class="cf">for</span> p <span class="kw">in</span> ctx):<span class="cf">return</span> <span class="st">'selection'</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> disclose(answer,citation,ctx,<span class="dv">20</span>):<span class="cf">return</span> <span class="st">'answer/support'</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'success'</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>missing<span class="op">=</span>[p <span class="cf">for</span> p <span class="kw">in</span> corpus <span class="cf">if</span> p[<span class="st">'id'</span>]<span class="op">!=</span><span class="st">'new'</span>]</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>one<span class="op">=</span>candidates(corpus,<span class="dv">20</span>,<span class="dv">1</span>)<span class="op">;</span>two<span class="op">=</span>candidates(corpus,<span class="dv">20</span>,<span class="dv">2</span>)</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> diagnose(missing,candidates(missing,<span class="dv">20</span>,<span class="dv">4</span>),[],claim,<span class="st">'new'</span>)<span class="op">==</span><span class="st">'corpus'</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> diagnose(corpus,one,one,claim,<span class="st">'new'</span>)<span class="op">==</span><span class="st">'retrieval'</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> diagnose(corpus,two,two[:<span class="dv">1</span>],claim,<span class="st">'new'</span>)<span class="op">==</span><span class="st">'selection'</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> diagnose(corpus,two,context,(<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">3</span>,<span class="st">'delivery'</span>,<span class="st">'X'</span>),<span class="st">'new'</span>)<span class="op">==</span><span class="st">'answer/support'</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> diagnose(corpus,two,context,(<span class="st">'A'</span>,<span class="st">'D17'</span>,<span class="dv">3</span>,<span class="st">'payment'</span>,<span class="st">'settled'</span>),<span class="st">'new'</span>)<span class="op">==</span><span class="st">'answer/support'</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> diagnose(corpus,two,context,claim,<span class="st">'new'</span>)<span class="op">==</span><span class="st">'success'</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Enough candidate depth cannot recover physically missing evidence.</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">6</span>):</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="kw">not</span> <span class="bu">any</span>(supports(claim,p) <span class="cf">for</span> p <span class="kw">in</span> candidates(missing,<span class="dv">20</span>,k))</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>seq<span class="op">=</span>F(<span class="dv">3</span>,<span class="dv">5</span>)<span class="op">*</span>F(<span class="dv">4</span>,<span class="dv">5</span>)<span class="op">*</span>F(<span class="dv">1</span>,<span class="dv">2</span>)<span class="op">+</span>F(<span class="dv">2</span>,<span class="dv">5</span>)<span class="op">*</span>F(<span class="dv">1</span>,<span class="dv">5</span>)<span class="op">*</span>F(<span class="dv">9</span>,<span class="dv">10</span>)</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>tok<span class="op">=</span>(F(<span class="dv">3</span>,<span class="dv">5</span>)<span class="op">*</span>F(<span class="dv">4</span>,<span class="dv">5</span>)<span class="op">+</span>F(<span class="dv">2</span>,<span class="dv">5</span>)<span class="op">*</span>F(<span class="dv">1</span>,<span class="dv">5</span>))<span class="op">*</span>(F(<span class="dv">3</span>,<span class="dv">5</span>)<span class="op">*</span>F(<span class="dv">1</span>,<span class="dv">2</span>)<span class="op">+</span>F(<span class="dv">2</span>,<span class="dv">5</span>)<span class="op">*</span>F(<span class="dv">9</span>,<span class="dv">10</span>))</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> seq<span class="op">==</span>F(<span class="dv">312</span>,<span class="dv">1000</span>) <span class="kw">and</span> tok<span class="op">==</span>F(<span class="dv">3696</span>,<span class="dv">10000</span>) <span class="kw">and</span> tok<span class="op">-</span>seq<span class="op">==</span>F(<span class="dv">576</span>,<span class="dv">10000</span>)</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>rates<span class="op">=</span>[F(<span class="dv">16</span>,<span class="dv">20</span>),F(<span class="dv">12</span>,<span class="dv">16</span>),F(<span class="dv">10</span>,<span class="dv">12</span>),F(<span class="dv">7</span>,<span class="dv">10</span>)]</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>product<span class="op">=</span>F(<span class="dv">1</span>)</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> rate <span class="kw">in</span> rates:product<span class="op">*=</span>rate</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> product<span class="op">==</span>F(<span class="dv">7</span>,<span class="dv">20</span>) <span class="kw">and</span> <span class="bu">sum</span>([<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">7</span>])<span class="op">==</span><span class="dv">20</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'PASS: time boundaries, eligibility, ranking/selection, five failure fixtures,'</span>)</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'revocation/citation checks, 24 orderings, score perturbations, marginalization and stage rates.'</span>)</span></code></pre></div>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-10. Six reference answers and executed fixture checks; no learner performance inferred.</li>
+</ul>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#hints">Hints</a></li><li class="h2"><a href="#candidate-and-context-trace">1. Candidate and context trace</a></li><li class="h2"><a href="#controlled-failure-isolation">2. Controlled failure isolation</a></li><li class="h2"><a href="#provenance-is-necessary-but-narrower-than-truth">3. Provenance is necessary but narrower than truth</a></li><li class="h2"><a href="#time-ingestion-and-permission-changes">4. Time, ingestion and permission changes</a></li><li class="h2"><a href="#two-marginalization-calculations">5. Two marginalization calculations</a></li><li class="h2"><a href="#stage-accounting-and-a-falsifiable-evaluation">6. Stage accounting and a falsifiable evaluation</a></li><li class="h2"><a href="#reproduce-the-executed-checks">Reproduce the executed checks</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

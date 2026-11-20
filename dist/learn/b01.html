@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>B01 — Customer problems, alternatives, and evidence of demand | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="B01">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 26</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">B01</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=B#track-B"><span aria-hidden="true">←</span> Technology business</a><p class="eyebrow">Technology business <span aria-hidden="true">/</span> B01</p><h1 id="b01-customer-problems-alternatives-and-evidence-of-demand">Customer problems, alternatives, and evidence of demand</h1><p class="article-description">Form a falsifiable demand hypothesis and choose evidence that changes a build decision</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f03.html" data-chip="F03">F03</a></div></div>
+<div class="article-actions"><a class="button primary" href="#bounded-exercise-and-reference-card" >Jump to practice</a><a class="button secondary" href="#evidence-ledger-and-limitations" >Evidence</a><a class="button secondary" href="/answers/b01.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#the-engineering-decision-before-implementation">1. The engineering decision before implementation</a></li><li class="h2"><a href="#separate-the-claims-that-a-product-idea-compresses">2. Separate the claims that a product idea compresses</a></li><li class="h2"><a href="#worked-case-find-the-decision-bottleneck">3. Worked case: find the decision bottleneck</a></li><li class="h2"><a href="#write-the-hypothesis-before-collecting-convenient-evidence">4. Write the hypothesis before collecting convenient evidence</a></li><li class="h2"><a href="#prepare-an-interview-that-reconstructs-work">5. Prepare an interview that reconstructs work</a></li><li class="h2"><a href="#keep-evidence-traceable-through-interpretation">6. Keep evidence traceable through interpretation</a></li><li class="h2"><a href="#commitments-answer-different-questions">7. Commitments answer different questions</a></li><li class="h2"><a href="#trade-offs-and-the-next-smallest-test">8. Trade-offs and the next smallest test</a></li><li class="h2"><a href="#bounded-exercise-and-reference-card">9. Bounded exercise and reference card</a></li><li class="h2"><a href="#evidence-ledger-and-limitations">10. Evidence ledger and limitations</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision</td>
+<td>B01 / 1.0</td>
+</tr>
+<tr class="even">
+<td>Date</td>
+<td>2026-11-02</td>
+</tr>
+<tr class="odd">
+<td>Prerequisites</td>
+<td>None; basic arithmetic bridge included; revisit after F03</td>
+</tr>
+<tr class="even">
+<td>Capability developed</td>
+<td>Form a falsifiable demand hypothesis and choose evidence that changes a build decision</td>
+</tr>
+<tr class="odd">
+<td>Source-check status</td>
+<td>R19 primary transcript inspected; timestamp locators in §10</td>
+</tr>
+<tr class="even">
+<td>Experiment status</td>
+<td>No interviews, outreach, trials, or market experiment conducted; illustrative arithmetic checked</td>
+</tr>
+<tr class="odd">
+<td>Companion</td>
+<td><a href="/answers/b01.html">Hints and worked answers</a></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="the-engineering-decision-before-implementation">1. The engineering decision before implementation</h2>
+<p>Suppose you can build a service that reads documents, extracts supporting facts, proposes an action, and waits for human approval. Which part deserves your next week of engineering effort? A convincing demo answers whether a mechanism can work on selected inputs. To allocate effort, you also need to identify a person with a consequential problem, their existing alternative, and the conditions under which they would adopt a change.</p>
+<p>The output of this pack is a small evidence plan. It should make a decision possible even when the answer is to postpone building. No business experience is assumed. A <strong>hypothesis</strong> is a claim you can investigate; <strong>falsifiable</strong> means you can name observations that would count against it. A <strong>segment</strong> is a defined group sharing relevant circumstances. A <strong>commitment</strong> is a concrete action someone takes, with its terms and cost recorded.</p>
+<p>Use the source narrowly. In R19, Eric Migicovsky recommends investigating specific past episodes, existing attempts, and shortcomings; he also discusses costs, recurrence, budget, and authority. His warning about hypothetical enthusiasm is useful for planning interviews. These are practitioner recommendations from a startup context, not experimental proof of a successful discovery method. The exercises, decision rules, and numerical example below are original teaching designs. They do not establish market demand.</p>
+<h2 id="separate-the-claims-that-a-product-idea-compresses">2. Separate the claims that a product idea compresses</h2>
+<p>“Teams need document AI” leaves several different uncertainties hidden. Unpack the statement before deciding what to build:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Claim</th>
+<th>Evidence you would seek</th>
+<th>What remains unproved</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A recurring problem exists</td>
+<td>Recent episode, workflow trace, consequence</td>
+<td>Whether your proposed intervention helps</td>
+</tr>
+<tr class="even">
+<td>The problem matters enough to address</td>
+<td>Current resources spent, missed objective, active workaround</td>
+<td>Whether it outranks other priorities</td>
+</tr>
+<tr class="odd">
+<td>Someone can authorize a change</td>
+<td>Named decision role and actual approval path</td>
+<td>Whether that person will fund this offer</td>
+</tr>
+<tr class="even">
+<td>Your offer improves the outcome</td>
+<td>Agreed trial against the current process</td>
+<td>Whether improvement survives ordinary operation</td>
+</tr>
+<tr class="odd">
+<td>The customer will adopt and pay</td>
+<td>Specific authorized commitment on stated terms</td>
+<td>Whether use repeats and delivery is sustainable</td>
+</tr>
+</tbody>
+</table>
+</div><p>A clerk, a budget owner, and a data approver may be different people. In a small firm one person may fill all three roles. Record the roles rather than assuming an organization chart. For an internal developer tool, substitute the team that owns the workflow and the manager allocating engineering time; payment is not the only meaningful resource commitment.</p>
+<p>Keep the existing alternative visible. A spreadsheet, a knowledgeable employee, postponement, and tolerating errors all compete with a proposed service. An alternative can be imperfect yet preferable after accounting for migration, trust, training, and ongoing review. Those costs are questions to investigate, not reasons to dismiss the idea automatically.</p>
+<h2 id="worked-case-find-the-decision-bottleneck">3. Worked case: find the decision bottleneck</h2>
+<p><strong>Entire case is hypothetical. No customer observations, quotes, or willingness-to-pay measurements are reported.</strong> Imagine a purchasing team that matches supplier invoices with delivery records before a manager approves payment. Your proposed service extracts evidence and flags mismatches; the manager remains responsible for approval.</p>
+<p>Start with a workflow, not an architecture: receipt → matching → resolving exceptions → approval → payment. For each stage, ask what triggers it, who acts, what data they need, and what a delay or mistake changes. If approval waits two days while matching takes minutes, faster extraction might leave the important delay untouched. Conversely, if clerks spend hours assembling evidence needed for approval, the same mechanism may address the constraint. The workflow tells you which question to investigate next.</p>
+<p>Now make an explicit hypothetical model. Assume 120 invoices per week, 8 active handling minutes per invoice, and labor valued at ₹300 per hour. Then baseline active work is 120×8/60 = 16 hours per week, valued at ₹4,800. This is an assigned labor-value estimate, not an observed cash expense removable from a budget.</p>
+<p>Assume a proposed process needs 3 review minutes per invoice plus 2 hours of weekly maintenance and exception support. It uses 120×3/60 + 2 = 8 hours weekly. Potential released capacity is 8 hours, valued at ₹2,400 per week. With 12 hours of onboarding spread across an explicitly chosen eight-week assessment period, the additional burden is 1.5 hours per week. Net capacity value over that period is therefore (8−1.5)×₹300 = ₹1,950 weekly, before a service fee or unmodeled costs.</p>
+<p>If the current process actually needs only 4 minutes per invoice, its baseline is 8 hours. The proposed recurring process also needs 8 hours; onboarding makes the eight-week comparison worse by 1.5 hours weekly. One uncertain baseline parameter reverses the apparent benefit. The next useful evidence may be a workflow observation rather than a more capable extraction model.</p>
+<p>This model has deliberate limits. It assumes comparable invoice mix and outcome quality, no overlapping time categories, and an agreed value for released time. It excludes error consequences, waiting-time value, and price. You cannot call ₹1,950 a price ceiling or forecast revenue from it: the buyer may value another outcome, lack a usable budget, or reject the operational risk. B02 will develop the economics more fully.</p>
+<h2 id="write-the-hypothesis-before-collecting-convenient-evidence">4. Write the hypothesis before collecting convenient evidence</h2>
+<p>A working hypothesis for the fictional case is:</p>
+<blockquote>
+<p>Among purchasing teams handling 100–200 invoices weekly with manual matching, matching work is a material constraint; at least one authorized team will commit to a bounded evidence-assistance trial if source traceability and human approval are preserved.</p>
+</blockquote>
+<p>This contains two claims: the problem matters and an offer can earn a trial. Investigate them separately. For a small first investigation, propose five conversations across at least three organizations, including operators and decision makers. This is a manageable learning batch chosen for the exercise, not a statistically sufficient sample or a universal quota.</p>
+<p>Before starting, define a decision rule. For example: proceed to designing one trial only if at least two independent organizations can describe recent costly matching episodes and one authorized sponsor agrees to supply permitted sample cases, a reviewer, a date, and a success criterion. If matching is consistently quick or the dominant delay lies elsewhere, revise the problem definition. If operators report pain but the sponsor cannot authorize data access, investigate that dependency before building the trial.</p>
+<p>These are gates for a limited next investment. Passing them does not validate a market. Missing them may expose a poor recruitment channel or a misdefined segment rather than prove that nobody needs the product. Record the reason for each outcome instead of collapsing all refusals into a single number.</p>
+<h2 id="prepare-an-interview-that-reconstructs-work">5. Prepare an interview that reconstructs work</h2>
+<p>The following is an original short guide for the invoice case. Adapt the nouns to a workflow you can legitimately observe. Keep questions neutral enough to permit “this is already easy.”</p>
+<ol type="1">
+<li>Walk me through the most recent invoice that needed additional checking. What happened first and next?</li>
+<li>Which records or people did you need at each step? What did you do while waiting?</li>
+<li>Which parts required your active attention, and how would we check that estimate?</li>
+<li>What happened if the check was delayed or wrong? Can you identify an actual recent consequence?</li>
+<li>Over a defined recent period, how many cases were routine and how many needed exceptions?</li>
+<li>What changes have you already tried? Which parts of the current process would you keep?</li>
+<li>Describe the last time a new tool or service entered this workflow. Who approved it, and what slowed adoption?</li>
+<li>What is missing from my reconstruction? Who else sees a different part of the process?</li>
+</ol>
+<p>Use a separate, clearly signaled offer discussion if proposing a trial later. A research interview and a purchase decision have different purposes. The plan in this file authorizes neither contact nor collection of customer data; it is study material. Any future observation should use permitted examples, and recording requires the participant’s agreement.</p>
+<h2 id="keep-evidence-traceable-through-interpretation">6. Keep evidence traceable through interpretation</h2>
+<p>Use one row per episode or commitment. Preserve the person’s account and your interpretation separately. The following blank structure is reusable without pretending that an interview occurred:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>What to record</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Episode ID / date / source</td>
+<td>A stable reference; when the work happened; whose perspective it represents</td>
+</tr>
+<tr class="even">
+<td>Role and context</td>
+<td>Operator, buyer, approver; relevant workload and constraints</td>
+</tr>
+<tr class="odd">
+<td>Account and supporting artifact</td>
+<td>What was reported; what was directly observed; permitted document or log reference</td>
+</tr>
+<tr class="even">
+<td>Measurement status</td>
+<td>Measured, estimated by participant, derived, or unknown</td>
+</tr>
+<tr class="odd">
+<td>Alternative and consequence</td>
+<td>What happened without your offer; what it cost or prevented</td>
+</tr>
+<tr class="even">
+<td>Interpretation</td>
+<td>Your explanation, explicitly separated from the account</td>
+</tr>
+<tr class="odd">
+<td>Rival explanation</td>
+<td>A plausible reason the evidence could mean something else</td>
+</tr>
+<tr class="even">
+<td>Next check</td>
+<td>The smallest observation that would distinguish those explanations</td>
+</tr>
+</tbody>
+</table>
+</div><p>“Three employees described the same failure” may be three perspectives on one episode. It is not necessarily three independent occurrences or customers. If a participant estimates two hours, record an estimate; do not silently promote it to a timing measurement. If notes disagree, preserve the disagreement and identify whether they refer to different work types, dates, or definitions.</p>
+<p>The distinction resembles F01’s discipline of stating what a representation contains. Here, however, there is no proof that a sample of conversations represents a whole market. Keeping a faithful record improves the reasoning process without removing sampling and interpretation uncertainty.</p>
+<h2 id="commitments-answer-different-questions">7. Commitments answer different questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Signal</th>
+<th>Legitimate inference</th>
+<th>Counterexample / next check</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Compliment</td>
+<td>Positive conversational reaction</td>
+<td>Courtesy; ask what concrete problem it relates to</td>
+</tr>
+<tr class="even">
+<td>Stated future interest</td>
+<td>A claim of intent under imagined conditions</td>
+<td>Priority changes when actual terms arrive</td>
+</tr>
+<tr class="odd">
+<td>Agreed trial</td>
+<td>Willingness to allocate specified resources</td>
+<td>Free consulting or curiosity; record workload, owner, success criteria</td>
+</tr>
+<tr class="even">
+<td>Payment</td>
+<td>A transaction under known terms</td>
+<td>Exceptional discount or bespoke work; inspect scope and repeatability</td>
+</tr>
+<tr class="odd">
+<td>Repeated voluntary use</td>
+<td>Continued use within observed conditions</td>
+<td>Mandate or dependency; investigate whether the intended benefit occurs</td>
+</tr>
+</tbody>
+</table>
+</div><p>This is a question-specific comparison, not a universal numeric ranking. A token payment from a friend can be weaker evidence for your target segment than a carefully scoped trial with its actual buyer. Repeated use does not automatically establish profitability. A data-access refusal does not automatically establish lack of need.</p>
+<p>Counterexample: five friendly developers praise a purchasing demo; none performs invoice matching or controls its budget. The evidence supports demo appeal in that group. It cannot support a claim that purchasing managers will adopt it. Another counterexample: a manager funds a trial primarily to obtain custom integration services. That transaction may support a services offer while leaving a self-serve product hypothesis unresolved.</p>
+<h2 id="trade-offs-and-the-next-smallest-test">8. Trade-offs and the next smallest test</h2>
+<p>Interview first when the workflow and constraint are unclear. Observe a permitted real episode when estimates or handoffs matter. Use a bounded prototype trial when the outcome and decision owner are clear but feasibility or workflow fit is uncertain. Consider a manual demonstration of the proposed output when it can test usefulness cheaply, while recording human effort so later economics do not mistake it for automated delivery.</p>
+<p>Change the plan when evidence changes. If the tool saves handling time but review becomes harder, redefine the outcome around total correct completion. If the buyer cannot adopt external software, examine an internal option or a different segment rather than assuming more accuracy removes the blocker. If current alternatives already meet the objective, investigate another unsolved part of the workflow or stop investing.</p>
+<p>F03 will examine sampling and causal claims. A05 will connect evaluations to complete customer tasks. B03 will test adoption paths and product boundaries. B01 contributes the problem definition and explicit unknowns those later models need.</p>
+<h2 id="bounded-exercise-and-reference-card">9. Bounded exercise and reference card</h2>
+<p>Spend approximately 30–45 minutes preparing a one-page plan; this duration is only a suggestion. Choose a business workflow you can observe, or retain the fictional invoice case. Do not conduct outreach as part of this exercise.</p>
+<ol type="1">
+<li>Define the segment, trigger, user, buyer, current alternative, and consequential outcome. Mark unknown roles.</li>
+<li>Write a falsifiable problem hypothesis and a separate trial/adoption hypothesis. Name evidence against each.</li>
+<li>Draft six neutral questions about a recent episode, including cost, alternatives, and the approval process.</li>
+<li>Recalculate the hypothetical model at 8 and 4 baseline minutes. Explain why released capacity is not automatically cash savings or willingness to pay.</li>
+<li>Classify these fictional signals: developer praise; a clerk’s estimate of weekly burden; a sponsor’s dated trial commitment; payment for a custom integration; repeated use required by a manager. State what each leaves unknown.</li>
+<li>Write proceed/revise/stop criteria and a response to this change: matching is quick, but missing delivery records delay approval for two days.</li>
+</ol>
+<p>Reference card: name the segment → reconstruct an episode → map roles and alternatives → separate observation from inference → state a rival explanation → request evidence relevant to one next decision. A small sample informs a next step; it does not by itself measure market prevalence. Unknowns stay unknown until evidence changes them.</p>
+<h2 id="evidence-ledger-and-limitations">10. Evidence ledger and limitations</h2>
+<p>Primary source R19: <a href="https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/">YC, Startup School Week 1 Recap: Kevin Hale and Eric Migicovsky</a>, published 2019-09-04; transcript inspected 2026-11-02. Timestamp ranges identify transcript passages, not new claims of video playback.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Supported source role</th>
+<th>Verified locator</th>
+<th>Evidence boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Specific past episodes and listening</td>
+<td>Migicovsky segment 17:03–20:25</td>
+<td>Practitioner guidance</td>
+</tr>
+<tr class="even">
+<td>Existing attempts and alternatives</td>
+<td>20:25–25:41</td>
+<td>Interview prompts, not measured demand</td>
+</tr>
+<tr class="odd">
+<td>Cost, recurrence, budget, authority</td>
+<td>30:31–33:44</td>
+<td>First-customer selection advice</td>
+</tr>
+<tr class="even">
+<td>Caution about compliments and hypotheticals</td>
+<td>38:21 through segment end</td>
+<td>Qualitative advice</td>
+</tr>
+<tr class="odd">
+<td>Startup-investor context</td>
+<td>Hale 02:13–03:49</td>
+<td>Growth-oriented lens; not a requirement for every business</td>
+</tr>
+<tr class="even">
+<td>Numerical case, evidence table, gates, questions, counterexamples</td>
+<td>Original §§2–9 and answers</td>
+<td>Hypothetical teaching design and conditional derivation</td>
+</tr>
+</tbody>
+</table>
+</div><p>No current market size, conversion rate, validated pricing, or customer behavior is asserted. Source anecdotes are not treated as causal proof; its later product-market-fit percentage discussion is not used as a universal threshold. Remaining empirical questions concern the chosen segment, actual workload, authority, adoption constraints, and repeat behavior. They do not block producing the next curriculum pack. Audit A remains pending.</p>
+<h2 id="revision-history">Revision history</h2>
+<ul>
+<li>1.0 — 2026-11-02: original B01 pack and separate worked answers; no interviews or outreach performed.</li>
+</ul>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/b01.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/sources.html#passage-verification-2026-11-02-b01">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="B01"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/a05.html"><small>Previous module · A05</small><strong>Evaluation, workflows, and controlled autonomy</strong></a><a href="/learn/b02.html"><small>Next module · B02</small><strong>Unit economics, pricing units, and sensitivity</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#the-engineering-decision-before-implementation">1. The engineering decision before implementation</a></li><li class="h2"><a href="#separate-the-claims-that-a-product-idea-compresses">2. Separate the claims that a product idea compresses</a></li><li class="h2"><a href="#worked-case-find-the-decision-bottleneck">3. Worked case: find the decision bottleneck</a></li><li class="h2"><a href="#write-the-hypothesis-before-collecting-convenient-evidence">4. Write the hypothesis before collecting convenient evidence</a></li><li class="h2"><a href="#prepare-an-interview-that-reconstructs-work">5. Prepare an interview that reconstructs work</a></li><li class="h2"><a href="#keep-evidence-traceable-through-interpretation">6. Keep evidence traceable through interpretation</a></li><li class="h2"><a href="#commitments-answer-different-questions">7. Commitments answer different questions</a></li><li class="h2"><a href="#trade-offs-and-the-next-smallest-test">8. Trade-offs and the next smallest test</a></li><li class="h2"><a href="#bounded-exercise-and-reference-card">9. Bounded exercise and reference card</a></li><li class="h2"><a href="#evidence-ledger-and-limitations">10. Evidence ledger and limitations</a></li><li class="h2"><a href="#revision-history">Revision history</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>
