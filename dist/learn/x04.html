@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X04 — Information gain and choosing the next experiment | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="X04">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 28</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X04</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=X#track-X"><span aria-hidden="true">←</span> Extensions</a><p class="eyebrow">Extensions <span aria-hidden="true">/</span> X04</p><h1 id="x04-information-gain-and-choosing-the-next-experiment">Information gain and choosing the next experiment</h1><p class="article-description">Choose the next measurement by how well its possible outcomes distinguish live explanations and improve the next decision.</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f02.html" data-chip="F02">F02</a><a class="module-chip" href="/learn/f03.html" data-chip="F03">F03</a><a class="module-chip" href="/learn/b01.html" data-chip="B01">B01</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-deployment-questions" >Evidence</a><a class="button secondary" href="/answers/x04.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#a-measurement-can-be-accurate-and-still-be-useless">A measurement can be accurate and still be useless</a></li><li class="h2"><a href="#compare-experiments-before-running-them">Compare experiments before running them</a></li><li class="h2"><a href="#information-is-not-the-decision">Information is not the decision</a></li><li class="h2"><a href="#ai-engineering-decision-predict-a-large-run-from-small-runs">AI engineering decision — predict a large run from small runs</a></li><li class="h2"><a href="#a-practical-experiment-card">A practical experiment card</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-deployment-questions">Evidence and deployment questions</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X04 · 1.0 · 21 November 2026</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>F02 base rates, F03 measurement and B01 customer evidence</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Choose the next measurement by how well its possible outcomes distinguish live explanations and improve the next decision.</td>
+</tr>
+<tr class="even">
+<td>Evidence</td>
+<td>XR07–XR09. Primary passages and scope below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment</td>
+<td>Bayesian updates, entropy, decision value and cost checks in the <a href="/answers/x04.html">worked companion</a>.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="a-measurement-can-be-accurate-and-still-be-useless">A measurement can be accurate and still be useless</h2>
+<p>An AI retrieval system’s supported-answer rate falls from 78% to 62%. A dashboard confirms the fall precisely. That measurement establishes the symptom, but it does not identify whether the retriever stopped finding evidence, the generator stopped using available evidence, or the evaluation labels changed. If all three explanations predicted the same dashboard result, repeating it teaches little.</p>
+<p>The next experiment should have outcomes that the competing explanations predict differently. Write the hypotheses and predicted outcomes before collecting more data. This prevents an attractive result from rewriting the question after the fact.</p>
+<p>For a discrete set of hypotheses with probabilities <code>p(h)</code>, uncertainty in bits is</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>H</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>−</mi><munder><mo>∑</mo><mi>h</mi></munder><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mo>log</mo><mn>2</mn></msub><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+H(H)=-\sum_h p(h)\log_2 p(h).
+</annotation></semantics></math></p>
+<p>Shannon introduced this entropy as a measure of choice under a probability distribution. With base two, the units are bits. The maximum for two possibilities occurs when both are equally likely; certainty has zero entropy. <a href="https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf">Shannon 1948, part I, §§1 and 6</a></p>
+<p>An experiment <code>E</code> can produce outcomes <code>y</code>. Its expected information gain is the prior entropy minus the expected posterior entropy:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>EIG</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>H</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><munder><mo>∑</mo><mi>y</mi></munder><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>H</mi><mo>∣</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\operatorname{EIG}(E)=H(H)-\sum_y p(y)H(H\mid y).
+</annotation></semantics></math></p>
+<p>Lindley applied Shannon’s measure to experiments by comparing knowledge before and after an observation, then averaging over possible observations. He also distinguished experiments intended to gain knowledge from decision problems involving losses. <a href="https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-27/issue-4/On-a-Measure-of-the-Information-Provided-by-an-Experiment/10.1214/aoms/1177728069.full">Lindley 1956, pp. 986–990, especially definitions 1–2</a></p>
+<h2 id="compare-experiments-before-running-them">Compare experiments before running them</h2>
+<p>Use this invented incident model:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Hypothesis</th>
+<th style="text-align: right;">Prior</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R</code></td>
+<td style="text-align: right;">0.50</td>
+<td>Retrieved evidence is missing or wrong</td>
+</tr>
+<tr class="even">
+<td><code>G</code></td>
+<td style="text-align: right;">0.30</td>
+<td>Evidence is present but generation or prompting fails</td>
+</tr>
+<tr class="odd">
+<td><code>L</code></td>
+<td style="text-align: right;">0.20</td>
+<td>The evaluation labels or scoring pipeline drifted</td>
+</tr>
+</tbody>
+</table>
+</div><p>For each candidate experiment, estimate the probability of its named positive outcome under each hypothesis. These likelihoods are invented teaching inputs. In production, derive them from historical incidents, calibrated simulations or a pilot and retain uncertainty about them.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Candidate</th>
+<th>Positive outcome</th>
+<th style="text-align: right;"><code>P(+|R)</code></th>
+<th style="text-align: right;"><code>P(+|G)</code></th>
+<th style="text-align: right;"><code>P(+|L)</code></th>
+<th style="text-align: right;">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A · inspect evidence on sampled failures</td>
+<td>Evidence required by the label is absent</td>
+<td style="text-align: right;">0.80</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">20 engineer-minutes</td>
+</tr>
+<tr class="even">
+<td>B · replay with a stronger generator</td>
+<td>Supported-answer score recovers</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.80</td>
+<td style="text-align: right;">0.30</td>
+<td style="text-align: right;">90 engineer-minutes plus inference</td>
+</tr>
+<tr class="odd">
+<td>C · repeat the aggregate evaluation</td>
+<td>Score remains low</td>
+<td style="text-align: right;">0.70</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">0.80</td>
+<td style="text-align: right;">10 engineer-minutes</td>
+</tr>
+</tbody>
+</table>
+</div><p>Candidate A has expected information gain of about 0.212 bits. A positive result moves the posterior to approximately <code>(R=.714, G=.107, L=.179)</code>; a negative result moves it to <code>(R=.227, G=.545, L=.227)</code>. Candidate B yields about 0.307 bits, but costs more. Candidate C yields only about 0.017 bits because all three explanations commonly predict another low score.</p>
+<p>Dividing bits by minutes can expose obviously weak measurements: A provides roughly 0.0106 modeled bits per engineer-minute, B 0.0034 and C 0.0017. This is a rough scheduling aid, not a universal utility function. One bit about an irrelevant parameter may be worth less than a small probability shift across a deployment threshold.</p>
+<h2 id="information-is-not-the-decision">Information is not the decision</h2>
+<p>Suppose choosing the wrong repair costs 100 equal loss units and the correct repair costs zero. Before testing, the best action is to address <code>R</code>, with expected loss 50. After each outcome, choose the repair for the most probable hypothesis.</p>
+<p>Candidate A reduces expected loss to 36, so its expected value of sample information is 14 loss units before experiment cost. Candidate B reduces it to 31, worth 19 loss units. Candidate C changes posterior probabilities slightly but leaves <code>R</code> as the best action after either outcome. Its decision value is zero under this simplified equal-loss model.</p>
+<p>The distinction matters:</p>
+<ul>
+<li>Use expected information gain when reducing uncertainty is itself the goal or when future decisions are not yet specified.</li>
+<li>Use expected decision-loss reduction when the action set, stakes and costs can be stated.</li>
+<li>Subtract experiment time, monetary cost, user exposure and delay cost before choosing.</li>
+<li>Prefer a fast reversible probe when a delayed decision is expensive, even if a slower study eventually returns more information.</li>
+</ul>
+<p>The probabilities do not become objective because they appear in a formula. Record whose beliefs they represent, what evidence informed them and how sensitive the ranking is to plausible alternatives.</p>
+<h2 id="ai-engineering-decision-predict-a-large-run-from-small-runs">AI engineering decision — predict a large run from small runs</h2>
+<p>The GPT‑4 project faced an expensive constraint: extensive model-specific tuning was infeasible at the scale of the final training run. The team therefore developed infrastructure and optimization methods intended to behave predictably across scales. They fitted a power-law loss model using runs with the same methodology and at most 10,000 times less compute. The prediction was made shortly after the final run started without partial results, and the report says it predicted final loss with high accuracy. <a href="https://cdn.openai.com/papers/gpt-4.pdf">GPT‑4 Technical Report, §3 and §3.1</a></p>
+<p>They also registered predictions for a subset of HumanEval before training completed, extrapolating from models using at most 1,000 times less compute. Predictions were accurate for the reported subset and almost as good across five other difficulty buckets, with an exception on the easiest bucket. The report explicitly notes that some capabilities remained hard to predict. <a href="https://cdn.openai.com/papers/gpt-4.pdf">GPT‑4 Technical Report, §3.2 and figures 1–3</a></p>
+<p>The engineering choice was not merely “train a smaller model.” The small runs preserved the training methodology, the team selected metrics with measurable scale behavior, fitted a relationship, and tested a registered prediction against a held-out full run. This converted many cheaper experiments into evidence about a decision too expensive to repeat freely.</p>
+<p>To transfer the approach, verify that the proposed small experiment preserves the mechanism expected to scale. Track residuals across scales, prediction intervals, changes in data and optimizer behavior, and tasks that violate the fitted relationship. Register the prediction and decision threshold before observing the target run. A reliable loss curve does not prove reliable safety, factuality or product utility.</p>
+<h2 id="a-practical-experiment-card">A practical experiment card</h2>
+<p>Before spending the next hour or compute budget, write:</p>
+<ol type="1">
+<li><strong>Decision:</strong> What action and deadline will this result inform?</li>
+<li><strong>Live hypotheses:</strong> Which explanations remain plausible, with rough priors?</li>
+<li><strong>Outcome model:</strong> What would each hypothesis predict for every material result?</li>
+<li><strong>Update rule:</strong> How will the result change belief and action?</li>
+<li><strong>Cost and exposure:</strong> What resources, users and opportunity costs are involved?</li>
+<li><strong>Validity boundary:</strong> Which mismatch would make the result irrelevant to production?</li>
+<li><strong>Stop rule:</strong> What result is sufficient to act, escalate or abandon the line of inquiry?</li>
+</ol>
+<p>An experiment that has no credible path from result to changed belief or changed action is instrumentation, observation or ritual. It can still be useful, but it should not displace a discriminating test.</p>
+<h2 id="practice">Practice</h2>
+<p>All probabilities, costs and incident details below are invented.</p>
+<ol type="1">
+<li>Reproduce candidate A’s positive-outcome probability, both posteriors and expected information gain.</li>
+<li>Compare A and B by information gain per engineer-minute. Then explain why this ratio can rank the wrong experiment.</li>
+<li>Show that candidate C has positive information gain but zero decision value under the equal-loss repair model.</li>
+<li>Design the first experiment for a RAG system whose answer quality fell after an index and prompt release happened together. State hypotheses, predicted outcomes, cost and stop rule.</li>
+<li>A small model predicts final training loss accurately but misses a safety capability. Identify which transfer premise failed and which additional experiment is needed.</li>
+</ol>
+<h2 id="evidence-and-deployment-questions">Evidence and deployment questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Inspected locator</th>
+<th>Application boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XR07 · Claude E. Shannon</td>
+<td><a href="https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf">A Mathematical Theory of Communication</a>, part I, §§1 and 6</td>
+<td>Defines entropy for a probability distribution. Applying it to engineering hypotheses requires an explicit probabilistic observation model.</td>
+</tr>
+<tr class="even">
+<td>XR08 · D. V. Lindley</td>
+<td><a href="https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-27/issue-4/On-a-Measure-of-the-Information-Provided-by-an-Experiment/10.1214/aoms/1177728069.full">On a Measure of the Information Provided by an Experiment</a>, pp. 986–990, definitions 1–2</td>
+<td>Connects prior-to-posterior change with expected information and separates knowledge from decision-loss formulations. The incident likelihoods are original teaching assumptions.</td>
+</tr>
+<tr class="odd">
+<td>XR09 · OpenAI</td>
+<td><a href="https://cdn.openai.com/papers/gpt-4.pdf">GPT‑4 Technical Report</a>, §3, §§3.1–3.2 and figures 1–3</td>
+<td>Documents a large-scale AI engineering choice, successful predictions and exceptions. It does not establish that every capability or training regime scales predictably.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Before acting on an experiment ranking, inspect sensitivity to the priors and likelihoods, verify the result can arrive before the decision deadline, and check that the sampled population, traffic, data, model and evaluation correspond to the production decision.</p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/x04.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/extensions.html#extension-evidence-register">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="X04"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/x03.html"><small>Previous module · X03</small><strong>Approximate membership and the price of forgetting</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#a-measurement-can-be-accurate-and-still-be-useless">A measurement can be accurate and still be useless</a></li><li class="h2"><a href="#compare-experiments-before-running-them">Compare experiments before running them</a></li><li class="h2"><a href="#information-is-not-the-decision">Information is not the decision</a></li><li class="h2"><a href="#ai-engineering-decision-predict-a-large-run-from-small-runs">AI engineering decision — predict a large run from small runs</a></li><li class="h2"><a href="#a-practical-experiment-card">A practical experiment card</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-deployment-questions">Evidence and deployment questions</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

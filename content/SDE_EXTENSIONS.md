@@ -12,6 +12,8 @@ The original 24-module curriculum and four audits form a completed first edition
 | [X02 worked companion](SDE_X02_answers.md) | Reproduce queue and deadline calculations | X02 practice | Produced and checked |
 | [X03 — Approximate membership and the price of forgetting](SDE_X03.md) | Price avoided negative work while preserving snapshot completeness | F01, F02, S02 | Produced and checked |
 | [X03 worked companion](SDE_X03_answers.md) | Reproduce sizing, load and stale-snapshot decisions | X03 practice | Produced and checked |
+| [X04 — Information gain and choosing the next experiment](SDE_X04.md) | Choose a discriminating measurement and price its decision value | F02, F03, B01 | Produced and checked |
+| [X04 worked companion](SDE_X04_answers.md) | Reproduce Bayesian updates, entropy and decision-loss checks | X04 practice | Produced and checked |
 
 X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.
 
@@ -21,8 +23,7 @@ These are proposed work items, not completed lessons or a claim that sources hav
 
 | Order | Proposed extension | Why it compounds | Entry points |
 | --- | --- | --- | --- |
-| Next | X04 — Information gain and choosing the next experiment | Choose a useful measurement when several explanations fit the evidence | F02, F03, B01 |
-| Review | Extension audit | Recheck X01–X04 claims, companion mappings, source boundaries and site navigation | Completed extensions |
+| Next | Extension audit | Recheck X01–X04 claims, companion mappings, source boundaries and site navigation | Completed extensions |
 
 ## How continued work is maintained
 
@@ -40,8 +41,13 @@ Keep the original R01–R24 identities stable. New extension sources use XR iden
 | XR04 | [Mike Ulrich, “Addressing Cascading Failures,” Google SRE](https://sre.google/sre-book/addressing-cascading-failures/), “Retries” and “Queue Management”; inspected 2026-11-20 | Retry feedback, aggregate limits and waiting costs; no universal retry budget |
 | XR05 | [Burton H. Bloom, “Space/Time Trade-offs in Hash Coding with Allowable Errors,” CACM 13(7), 1970](https://courses.cs.washington.edu/courses/csep521/21wi/readings/bloom_cacm.pdf), printed pp. 422–423 and 425–426, equations 16–17 and Table I; inspected 2026-11-20 | Original one-sided membership model and analytical trade-off; deployment freshness is outside scope |
 | XR06 | [Chang et al., “Bigtable: A Distributed Storage System for Structured Data,” OSDI 2006](https://research.google.com/archive/bigtable-osdi06.pdf), §6 “Bloom filters,” proceedings p. 211 / PDF printed p. 7; inspected 2026-11-20 | Deployed SSTable decision and qualitative disk-seek outcome; no universal percentage or sizing rule |
+| XR07 | [Claude E. Shannon, “A Mathematical Theory of Communication,” Bell System Technical Journal 27, 1948](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf), part I, §§1 and 6; inspected 2026-11-21 | Entropy of a probability distribution; engineering hypothesis likelihoods remain model inputs |
+| XR08 | [D. V. Lindley, “On a Measure of the Information Provided by an Experiment,” Annals of Mathematical Statistics 27(4), 1956](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-27/issue-4/On-a-Measure-of-the-Information-Provided-by-an-Experiment/10.1214/aoms/1177728069.full), pp. 986–990, definitions 1–2; inspected 2026-11-21 | Prior-to-posterior expected information and experimental-design framing; distinct from a specified loss function |
+| XR09 | [OpenAI, GPT‑4 Technical Report, 2023](https://cdn.openai.com/papers/gpt-4.pdf), §3, §§3.1–3.2 and figures 1–3; inspected 2026-11-21 | Small-run scaling evidence, registered predictions, observed success and exceptions; no claim that every capability scales predictably |
 
 ## Change record
+
+21 November 2026 · Added X04 and five worked analyses. XR07–XR08 ground entropy and expected information; XR09 documents GPT‑4 small-run scaling predictions, their compute gap and reported exceptions. Checked all posterior, information-gain, decision-loss and cost-efficiency calculations. The X01–X04 extension audit is next.
 
 20 November 2026 · Added X03 and five worked analyses. XR05 is Bloom's original one-sided membership construction and trade-off; XR06 is Google's Bigtable account of using filters to avoid SSTable disk seeks. Checked the sizing, expected-load, incremental-memory and version-mismatch examples. X04 is next.
 
