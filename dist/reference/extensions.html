@@ -59,49 +59,55 @@
 <td><a href="/learn/x01.html">X01 — Cache correctness</a></td>
 <td>Reject late fills and distinguish freshness, ordering and authority</td>
 <td>F01, S02, S03</td>
-<td>Produced and checked; not yet independently audited</td>
+<td>Produced, checked and audited</td>
 </tr>
 <tr class="even">
 <td><a href="/answers/x01.html">X01 worked companion</a></td>
 <td>Reconstruct failure histories, compare ten schedules and test boundary cases</td>
 <td>Attempt X01 practice first</td>
-<td>Produced and checked</td>
+<td>Produced, checked and mapping-audited</td>
 </tr>
 <tr class="odd">
 <td><a href="/learn/x02.html">X02 — When does a retry prevent recovery?</a></td>
 <td>Budget recovery capacity and remaining time</td>
 <td>S05, S06, C03</td>
-<td>Produced and checked</td>
+<td>Produced, checked and audited</td>
 </tr>
 <tr class="even">
 <td><a href="/answers/x02.html">X02 worked companion</a></td>
 <td>Reproduce queue and deadline calculations</td>
 <td>X02 practice</td>
-<td>Produced and checked</td>
+<td>Produced, checked and mapping-audited</td>
 </tr>
 <tr class="odd">
 <td><a href="/learn/x03.html">X03 — Approximate membership and the price of forgetting</a></td>
 <td>Price avoided negative work while preserving snapshot completeness</td>
 <td>F01, F02, S02</td>
-<td>Produced and checked</td>
+<td>Produced, checked and audited</td>
 </tr>
 <tr class="even">
 <td><a href="/answers/x03.html">X03 worked companion</a></td>
 <td>Reproduce sizing, load and stale-snapshot decisions</td>
 <td>X03 practice</td>
-<td>Produced and checked</td>
+<td>Produced, checked and mapping-audited</td>
 </tr>
 <tr class="odd">
 <td><a href="/learn/x04.html">X04 — Information gain and choosing the next experiment</a></td>
 <td>Choose a discriminating measurement and price its decision value</td>
 <td>F02, F03, B01</td>
-<td>Produced and checked</td>
+<td>Produced, checked and audited</td>
 </tr>
 <tr class="even">
 <td><a href="/answers/x04.html">X04 worked companion</a></td>
 <td>Reproduce Bayesian updates, entropy and decision-loss checks</td>
 <td>X04 practice</td>
-<td>Produced and checked</td>
+<td>Produced, checked and mapping-audited</td>
+</tr>
+<tr class="odd">
+<td><a href="/reference/extension-audit-01.html">Extension audit 01</a></td>
+<td>Recheck evidence boundaries, exercise mappings, examples and generated navigation</td>
+<td>X01–X04</td>
+<td>Passed on 21 November 2026</td>
 </tr>
 </tbody>
 </table>
@@ -126,9 +132,21 @@
 <tbody>
 <tr class="odd">
 <td>Next</td>
-<td>Extension audit</td>
-<td>Recheck X01–X04 claims, companion mappings, source boundaries and site navigation</td>
-<td>Completed extensions</td>
+<td>X05 — Safe data and schema migrations without split-brain truth</td>
+<td>Protect durable state through expand/migrate/contract, backfill validation and rollback</td>
+<td>S02, S03, S04, C03</td>
+</tr>
+<tr class="even">
+<td>Then</td>
+<td>X06 — AI release gates under distribution shift</td>
+<td>Connect offline slices, shadow traffic, canaries, guardrails and rollback</td>
+<td>F03, A01, A04, C05, X04</td>
+</tr>
+<tr class="odd">
+<td>Review</td>
+<td>Extension audit 02</td>
+<td>Recheck X05–X06 evidence boundaries, examples and navigation before selecting more work</td>
+<td>X05–X06</td>
 </tr>
 </tbody>
 </table>
@@ -198,6 +216,7 @@
 </tbody>
 </table>
 </div><h2 id="change-record">Change record</h2>
+<p>21 November 2026 · Completed <a href="/reference/extension-audit-01.html">Extension audit 01</a>. Re-inspected XR01–XR09 boundaries, verified 20 practice-to-answer mappings, executed all four companion Python checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X05 and X06 only for the concrete mutation-safety and AI-release gaps recorded in the audit; audit 02 follows that mini-batch.</p>
 <p>21 November 2026 · Added X04 and five worked analyses. XR07–XR08 ground entropy and expected information; XR09 documents GPT‑4 small-run scaling predictions, their compute gap and reported exceptions. Checked all posterior, information-gain, decision-loss and cost-efficiency calculations. The X01–X04 extension audit is next.</p>
 <p>20 November 2026 · Added X03 and five worked analyses. XR05 is Bloom’s original one-sided membership construction and trade-off; XR06 is Google’s Bigtable account of using filters to avoid SSTable disk seeks. Checked the sizing, expected-load, incremental-memory and version-mismatch examples. X04 is next.</p>
 <p>20 November 2026 · Added X02 and four worked analyses. XR03 is Marc Brooker’s AWS Builders’ Library account of burst timing on EBS and Lambda. XR04 is Google SRE chapter 22 on retry feedback. The lesson records passage locators. Checked the synthetic queue, deadline and attempt calculations. X03 is next.</p>

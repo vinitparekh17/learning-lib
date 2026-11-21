@@ -6,14 +6,15 @@ The original 24-module curriculum and four audits form a completed first edition
 
 | Module | Capability | Prerequisites | State |
 | --- | --- | --- | --- |
-| [X01 — Cache correctness](SDE_X01.md) | Reject late fills and distinguish freshness, ordering and authority | F01, S02, S03 | Produced and checked; not yet independently audited |
-| [X01 worked companion](SDE_X01_answers.md) | Reconstruct failure histories, compare ten schedules and test boundary cases | Attempt X01 practice first | Produced and checked |
-| [X02 — When does a retry prevent recovery?](SDE_X02.md) | Budget recovery capacity and remaining time | S05, S06, C03 | Produced and checked |
-| [X02 worked companion](SDE_X02_answers.md) | Reproduce queue and deadline calculations | X02 practice | Produced and checked |
-| [X03 — Approximate membership and the price of forgetting](SDE_X03.md) | Price avoided negative work while preserving snapshot completeness | F01, F02, S02 | Produced and checked |
-| [X03 worked companion](SDE_X03_answers.md) | Reproduce sizing, load and stale-snapshot decisions | X03 practice | Produced and checked |
-| [X04 — Information gain and choosing the next experiment](SDE_X04.md) | Choose a discriminating measurement and price its decision value | F02, F03, B01 | Produced and checked |
-| [X04 worked companion](SDE_X04_answers.md) | Reproduce Bayesian updates, entropy and decision-loss checks | X04 practice | Produced and checked |
+| [X01 — Cache correctness](SDE_X01.md) | Reject late fills and distinguish freshness, ordering and authority | F01, S02, S03 | Produced, checked and audited |
+| [X01 worked companion](SDE_X01_answers.md) | Reconstruct failure histories, compare ten schedules and test boundary cases | Attempt X01 practice first | Produced, checked and mapping-audited |
+| [X02 — When does a retry prevent recovery?](SDE_X02.md) | Budget recovery capacity and remaining time | S05, S06, C03 | Produced, checked and audited |
+| [X02 worked companion](SDE_X02_answers.md) | Reproduce queue and deadline calculations | X02 practice | Produced, checked and mapping-audited |
+| [X03 — Approximate membership and the price of forgetting](SDE_X03.md) | Price avoided negative work while preserving snapshot completeness | F01, F02, S02 | Produced, checked and audited |
+| [X03 worked companion](SDE_X03_answers.md) | Reproduce sizing, load and stale-snapshot decisions | X03 practice | Produced, checked and mapping-audited |
+| [X04 — Information gain and choosing the next experiment](SDE_X04.md) | Choose a discriminating measurement and price its decision value | F02, F03, B01 | Produced, checked and audited |
+| [X04 worked companion](SDE_X04_answers.md) | Reproduce Bayesian updates, entropy and decision-loss checks | X04 practice | Produced, checked and mapping-audited |
+| [Extension audit 01](SDE_Extension_Audit_01.md) | Recheck evidence boundaries, exercise mappings, examples and generated navigation | X01–X04 | Passed on 21 November 2026 |
 
 X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.
 
@@ -23,7 +24,9 @@ These are proposed work items, not completed lessons or a claim that sources hav
 
 | Order | Proposed extension | Why it compounds | Entry points |
 | --- | --- | --- | --- |
-| Next | Extension audit | Recheck X01–X04 claims, companion mappings, source boundaries and site navigation | Completed extensions |
+| Next | X05 — Safe data and schema migrations without split-brain truth | Protect durable state through expand/migrate/contract, backfill validation and rollback | S02, S03, S04, C03 |
+| Then | X06 — AI release gates under distribution shift | Connect offline slices, shadow traffic, canaries, guardrails and rollback | F03, A01, A04, C05, X04 |
+| Review | Extension audit 02 | Recheck X05–X06 evidence boundaries, examples and navigation before selecting more work | X05–X06 |
 
 ## How continued work is maintained
 
@@ -46,6 +49,8 @@ Keep the original R01–R24 identities stable. New extension sources use XR iden
 | XR09 | [OpenAI, GPT‑4 Technical Report, 2023](https://cdn.openai.com/papers/gpt-4.pdf), §3, §§3.1–3.2 and figures 1–3; inspected 2026-11-21 | Small-run scaling evidence, registered predictions, observed success and exceptions; no claim that every capability scales predictably |
 
 ## Change record
+
+21 November 2026 · Completed [Extension audit 01](SDE_Extension_Audit_01.md). Re-inspected XR01–XR09 boundaries, verified 20 practice-to-answer mappings, executed all four companion Python checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X05 and X06 only for the concrete mutation-safety and AI-release gaps recorded in the audit; audit 02 follows that mini-batch.
 
 21 November 2026 · Added X04 and five worked analyses. XR07–XR08 ground entropy and expected information; XR09 documents GPT‑4 small-run scaling predictions, their compute gap and reported exceptions. Checked all posterior, information-gain, decision-loss and cost-efficiency calculations. The X01–X04 extension audit is next.
 
