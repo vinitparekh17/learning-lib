@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X05 — Safe data migrations without split-brain truth | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="X05">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 29</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X05</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=X#track-X"><span aria-hidden="true">←</span> Extensions</a><p class="eyebrow">Extensions <span aria-hidden="true">/</span> X05</p><h1 id="x05-safe-data-migrations-without-split-brain-truth">Safe data migrations without split-brain truth</h1><p class="article-description">Move durable state between representations while preserving one explicit authority, rejecting stale backfill and proving each authority transfer before removing the old path.</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/s02.html" data-chip="S02">S02</a><a class="module-chip" href="/learn/s03.html" data-chip="S03">S03</a><a class="module-chip" href="/learn/s04.html" data-chip="S04">S04</a><a class="module-chip" href="/learn/c03.html" data-chip="C03">C03</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-deployment-questions" >Evidence</a><a class="button secondary" href="/answers/x05.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#a-schema-change-is-a-protocol-change">A schema change is a protocol change</a></li><li class="h2"><a href="#production-case-stripe-moved-live-subscription-state">Production case — Stripe moved live Subscription state</a></li><li class="h2"><a href="#expand-migrate-prove-contract">Expand, migrate, prove, contract</a></li><li class="h2"><a href="#the-stale-backfill-race">The stale-backfill race</a></li><li class="h2"><a href="#compatibility-is-a-matrix">Compatibility is a matrix</a></li><li class="h2"><a href="#enforce-new-rules-without-one-long-blocking-scan">Enforce new rules without one long blocking scan</a></li><li class="h2"><a href="#production-case-github-made-schema-migration-pauseable">Production case — GitHub made schema migration pauseable</a></li><li class="h2"><a href="#gates-that-measure-truth-not-motion">Gates that measure truth, not motion</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-deployment-questions">Evidence and deployment questions</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X05 · 1.0 · 22 November 2026</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>S02 identity, S03 concurrency, S04 replication and C03 useful capacity</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Move durable state between representations while preserving one explicit authority, rejecting stale backfill and proving each authority transfer before removing the old path.</td>
+</tr>
+<tr class="even">
+<td>Evidence</td>
+<td>XR10–XR12. Primary production passages and scope below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment</td>
+<td>Versioned backfill, rollout gates and capacity checks in the <a href="/answers/x05.html">worked companion</a>.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="a-schema-change-is-a-protocol-change">A schema change is a protocol change</h2>
+<p>Adding a nullable column can be mechanically easy. Changing which representation carries business truth is not. During a rolling release, old and new application binaries coexist. A backfill reads the past while live requests change the present. Replicas, queues and retries delay effects. If two representations can both accept an update, the migration has introduced a distributed protocol—even when both tables live in one database.</p>
+<p>The first migration artifact should therefore be a contract, not a DDL statement:</p>
+<ul>
+<li><strong>Logical identity:</strong> which old and new records describe the same object?</li>
+<li><strong>Invariant:</strong> which normalized values must agree?</li>
+<li><strong>Authority:</strong> which representation wins in this phase?</li>
+<li><strong>Order:</strong> which monotonic revision, commit position or event identity distinguishes newer state?</li>
+<li><strong>Repair:</strong> which mismatch can be retried automatically, and which must stop the migration?</li>
+<li><strong>Exit evidence:</strong> what proves every old reader or writer is gone?</li>
+</ul>
+<p>“Both tables are sources of truth” is not a safe transition state. One side remains authoritative while the other is derived, compared and repaired. Authority moves only at a named gate.</p>
+<h2 id="production-case-stripe-moved-live-subscription-state">Production case — Stripe moved live Subscription state</h2>
+<p>Stripe needed to move subscription data out of Customer objects into a separate table. The constraints were concrete: hundreds of millions of objects, continuous transactions, services operating at full availability, and subscription logic spread across thousands of lines. A sequential one-second-per-object process would take more than three years for 100 million objects. <a href="https://stripe.com/blog/online-migrations">Stripe, “Online migrations at scale,” “Why are migrations hard?” and “Our example migration”</a></p>
+<p>The team used four phases: write both stores, move reads, move writes, then remove old data. New objects were dual-written; existing identities were found from offline snapshots and backfilled with parallel workers; a second offline pass checked for missing objects. Before changing read authority, production reads were evaluated through both paths and mismatches generated alerts. Write paths were then moved incrementally, and only after old dependencies were gone did the new table become the source of truth. <a href="https://stripe.com/blog/online-migrations">Stripe, “A pattern for online migrations,” parts 1–4</a></p>
+<p>The reported outcome was an online transition without downtime. Stripe attributes confidence to small incremental changes, offline processing rather than expensive production discovery queries, and production comparison that surfaced even single inconsistencies. This is evidence for a migration method, not evidence that application-level dual writes are atomic or appropriate everywhere. To transfer it, you would need local evidence about write ordering, retry semantics, snapshot age, comparison coverage, database headroom and every mutation path.</p>
+<h2 id="expand-migrate-prove-contract">Expand, migrate, prove, contract</h2>
+<p>Treat the migration as a state machine. Each phase has one authority and a rollback boundary.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Phase</th>
+<th>Old representation</th>
+<th>New representation</th>
+<th>Gate to advance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 · Define</td>
+<td>Authoritative</td>
+<td>Absent</td>
+<td>Identity, invariant, revision and stop conditions reviewed</td>
+</tr>
+<tr class="even">
+<td>1 · Expand</td>
+<td>Authoritative</td>
+<td>Compatible but optional</td>
+<td>Old and new application versions both tolerate the expanded schema</td>
+</tr>
+<tr class="odd">
+<td>2 · Capture</td>
+<td>Authoritative</td>
+<td>Receives derived live changes</td>
+<td>Duplicate-write errors, lag and database load stay inside limits</td>
+</tr>
+<tr class="even">
+<td>3 · Backfill</td>
+<td>Authoritative</td>
+<td>Receives idempotent historical copies</td>
+<td>Coverage complete; stale copies rejected; repair queue drained</td>
+</tr>
+<tr class="odd">
+<td>4 · Compare</td>
+<td>Authoritative</td>
+<td>Shadow-read only</td>
+<td>Semantic mismatch rate and sampling coverage meet a fixed gate</td>
+</tr>
+<tr class="even">
+<td>5 · Read cutover</td>
+<td>Fallback</td>
+<td>Authoritative for canary readers</td>
+<td>User outcomes, mismatch and latency remain safe through rollback window</td>
+</tr>
+<tr class="odd">
+<td>6 · Write cutover</td>
+<td>Derived or archived</td>
+<td>Authoritative</td>
+<td>No old writers; reverse path or forward repair is proven</td>
+</tr>
+<tr class="even">
+<td>7 · Contract</td>
+<td>Removed only after delay</td>
+<td>Sole authority</td>
+<td>Old binaries, jobs and restore procedures no longer depend on old shape</td>
+</tr>
+</tbody>
+</table>
+</div><p>The phase number is operational state. Record it durably. A deploy succeeding does not prove the fleet is homogeneous; use observed binary versions, query telemetry, job inventories and restore tests.</p>
+<h2 id="the-stale-backfill-race">The stale-backfill race</h2>
+<p>Consider an invented insurance migration from <code>policy.annual_premium_cents</code> to a new <code>policy_terms</code> table. Both representations carry a monotonic <code>revision</code>.</p>
+<ol type="1">
+<li>A snapshot sees policy <code>P7</code> at <code>(120000, revision 41)</code>.</li>
+<li>A live request changes the premium to <code>125000</code> and dual-writes revision 42.</li>
+<li>A delayed backfill worker copies the snapshot row into the new table.</li>
+</ol>
+<p>An unconditional upsert makes the new representation older: it replaces revision 42 with 41. Faster workers only make the race less likely. The safe property is:</p>
+<blockquote>
+<p>Applying an incoming record must never reduce the stored revision for the same logical identity.</p>
+</blockquote>
+<p>One possible database boundary is a conditional upsert that changes the target only when <code>incoming.revision &gt; stored.revision</code>. Equal revisions with unequal normalized values indicate a broken premise; alert and quarantine rather than choosing silently. If the source has no stable revision, use a commit position, change-data-capture offset or another ordering identity whose lifetime and uniqueness you can defend. A wall-clock timestamp from multiple writers is not automatically such an identity.</p>
+<p>The backfill must also be idempotent. A crash after committing a batch but before recording its checkpoint should permit the same batch to run again without changing the result. Checkpoints are hints for progress, not the correctness boundary.</p>
+<h2 id="compatibility-is-a-matrix">Compatibility is a matrix</h2>
+<p>Rolling deployment safety is a matrix, not a single “backward compatible” label.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Application binary</th>
+<th>Expanded schema</th>
+<th>Contracted schema</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Old binary</td>
+<td>Must continue reading and writing its old shape</td>
+<td>Usually unsafe</td>
+</tr>
+<tr class="even">
+<td>New binary before cutover</td>
+<td>Writes or derives both; still reads old authority</td>
+<td>Unsafe if it retains fallback</td>
+</tr>
+<tr class="odd">
+<td>New binary after cutover</td>
+<td>Reads new authority; old path retained for bounded fallback</td>
+<td>Safe only after old dependency is removed</td>
+</tr>
+</tbody>
+</table>
+</div><p>Expand first and contract last. A rollback after read cutover can be cheap if live updates still reach the old representation. A rollback after new-only writes is a data migration, not merely an application deploy. After destructive contract, recovery may require restore and replay. State the last reversible phase before starting.</p>
+<h2 id="enforce-new-rules-without-one-long-blocking-scan">Enforce new rules without one long blocking scan</h2>
+<p>PostgreSQL documents a useful separation for foreign-key, <code>CHECK</code> and not-null constraints. Adding a constraint with <code>NOT VALID</code> skips the potentially long scan of existing rows but still enforces the rule for subsequent inserts and updates. <code>VALIDATE CONSTRAINT</code> later scans old rows with a weaker table lock than the initial validating form. <a href="https://www.postgresql.org/docs/current/sql-altertable.html">PostgreSQL 19 <code>ALTER TABLE</code>, <code>ADD table_constraint [ NOT VALID ]</code>, <code>VALIDATE CONSTRAINT</code>, and Notes</a></p>
+<p>That supports a sequence such as:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql" tabindex="0" aria-label="Code example"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> policy_terms</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> premium_nonnegative</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">CHECK</span> (annual_premium_cents <span class="op">&gt;=</span> <span class="dv">0</span>) <span class="kw">NOT</span> VALID;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- Repair or quarantine historical violations in bounded batches.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> policy_terms</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">VALIDATE</span> <span class="kw">CONSTRAINT</span> premium_nonnegative;</span></code></pre></div>
+<p>This is not lock-free. Inspect the exact database version, lock modes, transaction duration, replicas and table size. PostgreSQL also warns that rebuilds can require significant time and temporary disk space, and that rewriting forms of <code>ALTER TABLE</code> are not MVCC-safe for older snapshots. A syntactically valid migration can still violate the service capacity budget.</p>
+<h2 id="production-case-github-made-schema-migration-pauseable">Production case — GitHub made schema migration pauseable</h2>
+<p>GitHub reported that trigger-based MySQL schema migration became risky as traffic grew: some migrations caused outages, trigger work competed for locks, and even removing triggers could stall a busy table. The team built <code>gh-ost</code>, which copies into a ghost table but streams ongoing changes from row-based binary logs instead of attaching synchronous triggers to application transactions. <a href="https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/">GitHub, “gh-ost,” existing landscape and trigger limitations</a></p>
+<p>Decoupling change capture made the migration pauseable. GitHub describes throttling on server load or replication lag, postponing final cutover while continuing to apply changes, testing table swaps on replicas, and eventually running the tool for all production migrations, often several times a day. <a href="https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/">GitHub, “Pauseable,” “interactive commands,” operation modes and “gh-ost at GitHub”</a></p>
+<p>The transferable decision is not “always use <code>gh-ost</code>.” It is to isolate migration work from request transactions where possible, expose a stop control, measure change-capture lag, test the exact cutover mechanism and retain enough disk and log history to finish or abort. The tool’s assumptions—MySQL topology, binary-log format, keys and replication behavior—must be checked locally.</p>
+<h2 id="gates-that-measure-truth-not-motion">Gates that measure truth, not motion</h2>
+<p>Rows scanned and percent complete describe motion. Advance authority only on evidence about correctness and user impact:</p>
+<ul>
+<li><strong>Coverage:</strong> identities present in old authority but absent from new, and vice versa.</li>
+<li><strong>Semantic equality:</strong> normalized business values match; ignore representation-only differences intentionally.</li>
+<li><strong>Freshness:</strong> revision or commit-position lag, including the tail rather than only the average.</li>
+<li><strong>Mutation coverage:</strong> every writer, scheduled job, replay and administrative path observed on the new path.</li>
+<li><strong>Capacity:</strong> primary load, lock wait, replica lag, log growth, queue age and free disk during worst overlap.</li>
+<li><strong>Outcome:</strong> error, latency and domain invariants for canary readers after authority changes.</li>
+</ul>
+<p>Sampled comparison can find common mismatches but cannot prove absence of rare ones. Combine it with complete key-set checks, database constraints, event counts or reconciliations appropriate to the loss. Define the acceptable residual and who owns repair before cutover.</p>
+<h2 id="practice">Practice</h2>
+<p>All policy data, rates and thresholds below are invented teaching inputs.</p>
+<ol type="1">
+<li>Trace the three-event stale-backfill history for policy <code>P7</code>. Show the final new-table state under unconditional upsert and revision-guarded upsert. What should happen for equal revision but unequal value?</li>
+<li>A backfill has 2,400,000 rows. Workers can copy 800 rows/s, but production headroom limits the safe rate to 300 rows/s. Estimate the fastest safe duration, then add a 20% rescan. Why is this not a completion forecast?</li>
+<li>Build a compatibility decision for three fleet states: 30% old binaries, 100% new binaries with old fallback, and 100% new binaries with fallback removed. Which migration phases may safely contract the old column?</li>
+<li>Design a PostgreSQL rollout for a new nonnegative-premium rule over a large table with known historical violations. Include enforcement, repair, validation, observability and abort evidence.</li>
+<li>Design the authority-transfer gate for moving claim documents from a relational blob column to object storage. Name identity, ordering, comparison, capacity, rollback and deletion evidence. Do not treat object existence as content equality.</li>
+</ol>
+<h2 id="evidence-and-deployment-questions">Evidence and deployment questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Inspected locator</th>
+<th>Application boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XR10 · Stripe</td>
+<td><a href="https://stripe.com/blog/online-migrations">Online migrations at scale</a>, “Why are migrations hard?”, “A pattern for online migrations,” parts 1–4 and Conclusion</td>
+<td>Documents a production application-data migration, constraints, staged choice and reported no-downtime outcome. It does not make dual writes atomic or prescribe this topology universally.</td>
+</tr>
+<tr class="even">
+<td>XR11 · PostgreSQL Global Development Group</td>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertable.html"><code>ALTER TABLE</code></a>, <code>ADD table_constraint [ NOT VALID ]</code>, <code>VALIDATE CONSTRAINT</code>, Notes and examples</td>
+<td>Defines behavior and lock boundary for supported PostgreSQL constraints. Exact behavior is version- and operation-specific.</td>
+</tr>
+<tr class="odd">
+<td>XR12 · GitHub</td>
+<td><a href="https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/">gh-ost: GitHub’s online schema migration tool for MySQL</a>, existing landscape, trigger limitations, Pauseable, operation modes and “gh-ost at GitHub”</td>
+<td>Documents GitHub’s production problem, design choice and adoption. It is not evidence for non-MySQL systems or for unverified topologies.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Before applying this lesson, obtain the schema and application compatibility matrix, authoritative identity and revision semantics, real mutation inventory, backfill service curve, lock and replication behavior, mismatch loss, rollback window, restore test and deletion-retention obligations. A migration is complete only when the new authority is proven and the old dependency can be removed without guessing.</p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/x05.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/extensions.html#extension-evidence-register">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="X05"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/x04.html"><small>Previous module · X04</small><strong>Information gain and choosing the next experiment</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#a-schema-change-is-a-protocol-change">A schema change is a protocol change</a></li><li class="h2"><a href="#production-case-stripe-moved-live-subscription-state">Production case — Stripe moved live Subscription state</a></li><li class="h2"><a href="#expand-migrate-prove-contract">Expand, migrate, prove, contract</a></li><li class="h2"><a href="#the-stale-backfill-race">The stale-backfill race</a></li><li class="h2"><a href="#compatibility-is-a-matrix">Compatibility is a matrix</a></li><li class="h2"><a href="#enforce-new-rules-without-one-long-blocking-scan">Enforce new rules without one long blocking scan</a></li><li class="h2"><a href="#production-case-github-made-schema-migration-pauseable">Production case — GitHub made schema migration pauseable</a></li><li class="h2"><a href="#gates-that-measure-truth-not-motion">Gates that measure truth, not motion</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-deployment-questions">Evidence and deployment questions</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

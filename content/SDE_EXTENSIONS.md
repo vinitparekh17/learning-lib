@@ -15,6 +15,8 @@ The original 24-module curriculum and four audits form a completed first edition
 | [X04 — Information gain and choosing the next experiment](SDE_X04.md) | Choose a discriminating measurement and price its decision value | F02, F03, B01 | Produced, checked and audited |
 | [X04 worked companion](SDE_X04_answers.md) | Reproduce Bayesian updates, entropy and decision-loss checks | X04 practice | Produced, checked and mapping-audited |
 | [Extension audit 01](SDE_Extension_Audit_01.md) | Recheck evidence boundaries, exercise mappings, examples and generated navigation | X01–X04 | Passed on 21 November 2026 |
+| [X05 — Safe data migrations without split-brain truth](SDE_X05.md) | Preserve one authority through expand, backfill, cutover and contract | S02, S03, S04, C03 | Produced and checked; pending extension audit 02 |
+| [X05 worked companion](SDE_X05_answers.md) | Reproduce stale-backfill, capacity, compatibility and constraint decisions | X05 practice | Produced and checked |
 
 X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.
 
@@ -24,8 +26,7 @@ These are proposed work items, not completed lessons or a claim that sources hav
 
 | Order | Proposed extension | Why it compounds | Entry points |
 | --- | --- | --- | --- |
-| Next | X05 — Safe data and schema migrations without split-brain truth | Protect durable state through expand/migrate/contract, backfill validation and rollback | S02, S03, S04, C03 |
-| Then | X06 — AI release gates under distribution shift | Connect offline slices, shadow traffic, canaries, guardrails and rollback | F03, A01, A04, C05, X04 |
+| Next | X06 — AI release gates under distribution shift | Connect offline slices, shadow traffic, canaries, guardrails and rollback | F03, A01, A04, C05, X04 |
 | Review | Extension audit 02 | Recheck X05–X06 evidence boundaries, examples and navigation before selecting more work | X05–X06 |
 
 ## How continued work is maintained
@@ -47,8 +48,13 @@ Keep the original R01–R24 identities stable. New extension sources use XR iden
 | XR07 | [Claude E. Shannon, “A Mathematical Theory of Communication,” Bell System Technical Journal 27, 1948](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf), part I, §§1 and 6; inspected 2026-11-21 | Entropy of a probability distribution; engineering hypothesis likelihoods remain model inputs |
 | XR08 | [D. V. Lindley, “On a Measure of the Information Provided by an Experiment,” Annals of Mathematical Statistics 27(4), 1956](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-27/issue-4/On-a-Measure-of-the-Information-Provided-by-an-Experiment/10.1214/aoms/1177728069.full), pp. 986–990, definitions 1–2; inspected 2026-11-21 | Prior-to-posterior expected information and experimental-design framing; distinct from a specified loss function |
 | XR09 | [OpenAI, GPT‑4 Technical Report, 2023](https://cdn.openai.com/papers/gpt-4.pdf), §3, §§3.1–3.2 and figures 1–3; inspected 2026-11-21 | Small-run scaling evidence, registered predictions, observed success and exceptions; no claim that every capability scales predictably |
+| XR10 | [Jacqueline Xu, Stripe, “Online migrations at scale”](https://stripe.com/blog/online-migrations), “Why are migrations hard?”, “A pattern for online migrations,” parts 1–4 and Conclusion; inspected 2026-11-22 | Production migration of hundreds of millions of live Subscription objects, staged decision and reported no-downtime outcome; no claim that dual writes are atomic |
+| XR11 | [PostgreSQL 19 documentation, `ALTER TABLE`](https://www.postgresql.org/docs/current/sql-altertable.html), `ADD table_constraint [ NOT VALID ]`, `VALIDATE CONSTRAINT`, Notes and examples; inspected 2026-11-22 | Current PostgreSQL constraint enforcement/validation and lock boundary; exact behavior remains version- and operation-specific |
+| XR12 | [Shlomi Noach, GitHub, “gh-ost”](https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/), existing landscape, trigger limitations, Pauseable, operation modes and “gh-ost at GitHub”; inspected 2026-11-22 | GitHub's production MySQL constraint, triggerless/binlog choice and adoption; not a universal migration tool recommendation |
 
 ## Change record
+
+22 November 2026 · Added X05 and five worked migration decisions. XR10 documents Stripe's online Subscription migration; XR11 bounds PostgreSQL constraint enforcement and validation; XR12 documents GitHub's lock-related migration problems and pauseable binlog-driven response. Executed stale-backfill, conflict, capacity and compatibility checks. X06 is next, followed by extension audit 02.
 
 21 November 2026 · Completed [Extension audit 01](SDE_Extension_Audit_01.md). Re-inspected XR01–XR09 boundaries, verified 20 practice-to-answer mappings, executed all four companion Python checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X05 and X06 only for the concrete mutation-safety and AI-release gaps recorded in the audit; audit 02 follows that mini-batch.
 

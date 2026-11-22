@@ -21,7 +21,7 @@
 <div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
 </nav>
 <a class="side-progress" href="/progress.html">
-<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 28</strong></span>
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 29</strong></span>
 <span class="meter"><span data-meter></span></span>
 <span class="side-progress-note">Modules with a recorded level</span>
 </a>
@@ -109,6 +109,18 @@
 <td>X01–X04</td>
 <td>Passed on 21 November 2026</td>
 </tr>
+<tr class="even">
+<td><a href="/learn/x05.html">X05 — Safe data migrations without split-brain truth</a></td>
+<td>Preserve one authority through expand, backfill, cutover and contract</td>
+<td>S02, S03, S04, C03</td>
+<td>Produced and checked; pending extension audit 02</td>
+</tr>
+<tr class="odd">
+<td><a href="/answers/x05.html">X05 worked companion</a></td>
+<td>Reproduce stale-backfill, capacity, compatibility and constraint decisions</td>
+<td>X05 practice</td>
+<td>Produced and checked</td>
+</tr>
 </tbody>
 </table>
 </div><p>X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.</p>
@@ -132,17 +144,11 @@
 <tbody>
 <tr class="odd">
 <td>Next</td>
-<td>X05 — Safe data and schema migrations without split-brain truth</td>
-<td>Protect durable state through expand/migrate/contract, backfill validation and rollback</td>
-<td>S02, S03, S04, C03</td>
-</tr>
-<tr class="even">
-<td>Then</td>
 <td>X06 — AI release gates under distribution shift</td>
 <td>Connect offline slices, shadow traffic, canaries, guardrails and rollback</td>
 <td>F03, A01, A04, C05, X04</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Review</td>
 <td>Extension audit 02</td>
 <td>Recheck X05–X06 evidence boundaries, examples and navigation before selecting more work</td>
@@ -213,9 +219,25 @@
 <td><a href="https://cdn.openai.com/papers/gpt-4.pdf">OpenAI, GPT‑4 Technical Report, 2023</a>, §3, §§3.1–3.2 and figures 1–3; inspected 2026-11-21</td>
 <td>Small-run scaling evidence, registered predictions, observed success and exceptions; no claim that every capability scales predictably</td>
 </tr>
+<tr class="even">
+<td>XR10</td>
+<td><a href="https://stripe.com/blog/online-migrations">Jacqueline Xu, Stripe, “Online migrations at scale”</a>, “Why are migrations hard?”, “A pattern for online migrations,” parts 1–4 and Conclusion; inspected 2026-11-22</td>
+<td>Production migration of hundreds of millions of live Subscription objects, staged decision and reported no-downtime outcome; no claim that dual writes are atomic</td>
+</tr>
+<tr class="odd">
+<td>XR11</td>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertable.html">PostgreSQL 19 documentation, <code>ALTER TABLE</code></a>, <code>ADD table_constraint [ NOT VALID ]</code>, <code>VALIDATE CONSTRAINT</code>, Notes and examples; inspected 2026-11-22</td>
+<td>Current PostgreSQL constraint enforcement/validation and lock boundary; exact behavior remains version- and operation-specific</td>
+</tr>
+<tr class="even">
+<td>XR12</td>
+<td><a href="https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/">Shlomi Noach, GitHub, “gh-ost”</a>, existing landscape, trigger limitations, Pauseable, operation modes and “gh-ost at GitHub”; inspected 2026-11-22</td>
+<td>GitHub’s production MySQL constraint, triggerless/binlog choice and adoption; not a universal migration tool recommendation</td>
+</tr>
 </tbody>
 </table>
 </div><h2 id="change-record">Change record</h2>
+<p>22 November 2026 · Added X05 and five worked migration decisions. XR10 documents Stripe’s online Subscription migration; XR11 bounds PostgreSQL constraint enforcement and validation; XR12 documents GitHub’s lock-related migration problems and pauseable binlog-driven response. Executed stale-backfill, conflict, capacity and compatibility checks. X06 is next, followed by extension audit 02.</p>
 <p>21 November 2026 · Completed <a href="/reference/extension-audit-01.html">Extension audit 01</a>. Re-inspected XR01–XR09 boundaries, verified 20 practice-to-answer mappings, executed all four companion Python checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X05 and X06 only for the concrete mutation-safety and AI-release gaps recorded in the audit; audit 02 follows that mini-batch.</p>
 <p>21 November 2026 · Added X04 and five worked analyses. XR07–XR08 ground entropy and expected information; XR09 documents GPT‑4 small-run scaling predictions, their compute gap and reported exceptions. Checked all posterior, information-gain, decision-loss and cost-efficiency calculations. The X01–X04 extension audit is next.</p>
 <p>20 November 2026 · Added X03 and five worked analyses. XR05 is Bloom’s original one-sided membership construction and trade-off; XR06 is Google’s Bigtable account of using filters to avoid SSTable disk seeks. Checked the sizing, expected-load, incremental-memory and version-mismatch examples. X04 is next.</p>

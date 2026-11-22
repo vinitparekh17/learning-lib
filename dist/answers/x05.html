@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X05 — Worked migration decisions and checks | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 29</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X05</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/x05.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">X05 <span aria-hidden="true">/</span> Worked companion</p><h1 id="x05-worked-migration-decisions-and-checks">Worked migration decisions and checks</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/x05.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#reject-the-stale-copy">1. Reject the stale copy</a></li><li class="h2"><a href="#budget-backfill-against-headroom">2. Budget backfill against headroom</a></li><li class="h2"><a href="#contract-only-after-dependency-evidence">3. Contract only after dependency evidence</a></li><li class="h2"><a href="#separate-enforcement-from-historical-validation">4. Separate enforcement from historical validation</a></li><li class="h2"><a href="#gate-the-object-storage-authority-transfer">5. Gate the object-storage authority transfer</a></li><li class="h2"><a href="#reproduce-the-models">Reproduce the models</a></li></ol></nav></details><article class="prose"><p><a href="/learn/x05.html">Return to the lesson</a>. Attempt the practice before comparing your work. These answers operate on invented inputs and do not select production thresholds.</p>
+<h2 id="reject-the-stale-copy">1. Reject the stale copy</h2>
+<p>The snapshot carries <code>(120000, revision 41)</code>. The live request then stores <code>(125000, revision 42)</code> in both representations. An unconditional backfill upsert finally replaces the new row with <code>(120000, 41)</code>: the migration has made the derived representation older than its authority.</p>
+<p>A guarded apply compares revisions at the same atomic write boundary. Since 41 is not greater than 42, it leaves <code>(125000, 42)</code> unchanged. If the stored and incoming revisions are both 42 but the normalized values differ, neither is safely “newer.” Record the identity, both values and provenance in a repair queue; stop or quarantine the affected slice according to the predeclared gate. Silently accepting either side would hide a violated ordering or transformation premise.</p>
+<p>The guard requires revisions that are monotonic for the logical identity and retained through retries and restores. If those premises fail, the result does not transfer.</p>
+<h2 id="budget-backfill-against-headroom">2. Budget backfill against headroom</h2>
+<p>The workers’ isolated rate is not the safe rate. Production limits effective throughput to 300 rows/s:</p>
+<p><code>2,400,000 / 300 = 8,000 seconds</code>, or 2 hours 13 minutes 20 seconds.</p>
+<p>A 20% complete rescan adds 480,000 row checks. At the same limit that is 1,600 seconds, for a modeled total of 9,600 seconds or 2 hours 40 minutes.</p>
+<p>This is not a forecast because the rate is assumed constant and every row is treated as equal. Real duration includes throttling, hot keys, retries, checkpoint replay, replica lag, transformation cost, repair work and changes arriving during the run. Report processed and verified watermarks separately.</p>
+<h2 id="contract-only-after-dependency-evidence">3. Contract only after dependency evidence</h2>
+<ul>
+<li>With 30% old binaries, contract is unsafe: those binaries still require the old column. Remain in expand/capture/backfill/compare phases.</li>
+<li>With 100% new binaries but an old fallback, dropping the column is still unsafe. The fallback is a live dependency and may be the only cheap rollback after read cutover.</li>
+<li>With 100% new binaries and fallback removed, contract becomes a candidate, not an automatic action. First prove there are no old jobs, replays, admin tools, restore images or delayed messages; wait through the declared rollback and retention window; test restore using the new shape.</li>
+</ul>
+<p>Deployment inventory is stronger than an intended release percentage. Query telemetry and attempted access to the old field can expose hidden dependencies.</p>
+<h2 id="separate-enforcement-from-historical-validation">4. Separate enforcement from historical validation</h2>
+<p>A defensible PostgreSQL plan is:</p>
+<ol type="1">
+<li>Measure current negative/null count, table size, write rate, lock waits, replica lag and free disk. Set abort thresholds.</li>
+<li>Add a supported <code>CHECK (annual_premium_cents &gt;= 0) NOT VALID</code> in a short transaction. This rejects new violations while leaving old rows unvalidated.</li>
+<li>Repair or quarantine historical violations in small, idempotent batches. Record identity, old value, chosen correction and revision; throttle on database and replica signals.</li>
+<li>Recount violations from an independent query. Confirm no writer is failing unexpectedly on the new rule.</li>
+<li>Run <code>VALIDATE CONSTRAINT</code> in a controlled window while observing its actual lock and resource behavior. Abort or cancel if thresholds are crossed.</li>
+<li>Treat successful validation plus sustained application outcomes as the gate. Do not remove monitoring immediately.</li>
+</ol>
+<p>The exact syntax and lock behavior must be checked against the deployed PostgreSQL version. A different constraint type or database may need a different sequence.</p>
+<h2 id="gate-the-object-storage-authority-transfer">5. Gate the object-storage authority transfer</h2>
+<p>A useful plan names:</p>
+<ul>
+<li><strong>Identity:</strong> immutable document ID plus tenant, not a mutable filename.</li>
+<li><strong>Ordering:</strong> database revision or commit position attached to the object manifest; a stale copier cannot replace a newer manifest.</li>
+<li><strong>Comparison:</strong> byte length and cryptographic digest over canonical bytes, encryption/key metadata, content type and a sampled decode—not merely <code>HEAD 200</code>.</li>
+<li><strong>Coverage:</strong> complete database ID set compared with manifests, plus orphan objects in the new store.</li>
+<li><strong>Capacity:</strong> object-store request/error limits, network egress, database read headroom, queue age and retry amplification.</li>
+<li><strong>Read gate:</strong> shadow-read and verify objects without returning them, then canary by tenant or deterministic identity.</li>
+<li><strong>Rollback:</strong> continue old writes or a proven reverse path through the rollback window; know how an object written after cutover reaches the old reader.</li>
+<li><strong>Deletion:</strong> no old readers or jobs, restore succeeds from the new representation, retention/legal hold is satisfied, and a delayed deletion manifest is reviewed.</li>
+</ul>
+<p>Content equality and decryptability are separate claims. A present object with the wrong bytes, tenant key or metadata is not a successful migration.</p>
+<h2 id="reproduce-the-models">Reproduce the models</h2>
+<p>The code below uses deterministic invented records. <code>guarded_apply</code> models one atomic compare-and-write boundary; it does not model a distributed transaction.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span>(frozen<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Record:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    value: <span class="bu">int</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    revision: <span class="bu">int</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> unconditional_apply(_current, incoming):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> incoming</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> guarded_apply(current, incoming):</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> current <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> incoming.revision <span class="op">&gt;</span> current.revision:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> incoming, <span class="st">"applied"</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> incoming.revision <span class="op">&lt;</span> current.revision:</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> current, <span class="st">"stale-rejected"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> incoming.value <span class="op">==</span> current.value:</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> current, <span class="st">"duplicate"</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> current, <span class="st">"conflict"</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>snapshot <span class="op">=</span> Record(<span class="dv">120_000</span>, <span class="dv">41</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>live <span class="op">=</span> Record(<span class="dv">125_000</span>, <span class="dv">42</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> unconditional_apply(live, snapshot) <span class="op">==</span> Record(<span class="dv">120_000</span>, <span class="dv">41</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> guarded_apply(live, snapshot) <span class="op">==</span> (live, <span class="st">"stale-rejected"</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> guarded_apply(live, live) <span class="op">==</span> (live, <span class="st">"duplicate"</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> guarded_apply(live, Record(<span class="dv">126_000</span>, <span class="dv">42</span>)) <span class="op">==</span> (live, <span class="st">"conflict"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> guarded_apply(snapshot, live) <span class="op">==</span> (live, <span class="st">"applied"</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> <span class="dv">2_400_000</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>safe_rate <span class="op">=</span> <span class="bu">min</span>(<span class="dv">800</span>, <span class="dv">300</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>initial_seconds <span class="op">=</span> rows <span class="op">/</span> safe_rate</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>rescan_seconds <span class="op">=</span> <span class="fl">0.20</span> <span class="op">*</span> rows <span class="op">/</span> safe_rate</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> initial_seconds <span class="op">==</span> <span class="dv">8_000</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> rescan_seconds <span class="op">==</span> <span class="dv">1_600</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> initial_seconds <span class="op">+</span> rescan_seconds <span class="op">==</span> <span class="dv">9_600</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> may_contract(old_binary_share, fallback_enabled, hidden_dependencies):</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> old_binary_share <span class="op">==</span> <span class="dv">0</span> <span class="kw">and</span> <span class="kw">not</span> fallback_enabled <span class="kw">and</span> <span class="kw">not</span> hidden_dependencies</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> may_contract(<span class="fl">0.30</span>, <span class="va">True</span>, <span class="va">True</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> may_contract(<span class="fl">0.00</span>, <span class="va">True</span>, <span class="va">False</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> may_contract(<span class="fl">0.00</span>, <span class="va">False</span>, <span class="va">False</span>)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PASS: stale backfill rejected; conflicts surfaced; capacity and contract gates checked"</span>)</span></code></pre></div>
+<p>A complete answer distinguishes movement from proof, states the current authority in every phase, locates the atomic ordering guard and names evidence that could block cutover or contract. These checks reproduce the teaching model; they do not record learner mastery.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#reject-the-stale-copy">1. Reject the stale copy</a></li><li class="h2"><a href="#budget-backfill-against-headroom">2. Budget backfill against headroom</a></li><li class="h2"><a href="#contract-only-after-dependency-evidence">3. Contract only after dependency evidence</a></li><li class="h2"><a href="#separate-enforcement-from-historical-validation">4. Separate enforcement from historical validation</a></li><li class="h2"><a href="#gate-the-object-storage-authority-transfer">5. Gate the object-storage authority transfer</a></li><li class="h2"><a href="#reproduce-the-models">Reproduce the models</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>
