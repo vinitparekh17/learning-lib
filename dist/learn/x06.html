@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X06 — AI release gates under distribution shift | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="X06">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 30</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X06</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=X#track-X"><span aria-hidden="true">←</span> Extensions</a><p class="eyebrow">Extensions <span aria-hidden="true">/</span> X06</p><h1 id="x06-ai-release-gates-under-distribution-shift">AI release gates under distribution shift</h1><p class="article-description">Build an AI release ladder that joins offline slice evidence, live shadowing, bounded user exposure, delayed outcomes and a rehearsed rollback into one decision.</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f03.html" data-chip="F03">F03</a><a class="module-chip" href="/learn/a01.html" data-chip="A01">A01</a><a class="module-chip" href="/learn/a04.html" data-chip="A04">A04</a><a class="module-chip" href="/learn/c05.html" data-chip="C05">C05</a><a class="module-chip" href="/learn/x04.html" data-chip="X04">X04</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-deployment-questions" >Evidence</a><a class="button secondary" href="/answers/x06.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#a-better-offline-score-is-a-hypothesis">A better offline score is a hypothesis</a></li><li class="h2"><a href="#production-case-uber-made-safeguards-part-of-the-platform">Production case — Uber made safeguards part of the platform</a></li><li class="h2"><a href="#a-release-ladder">A release ladder</a></li><li class="h2"><a href="#aggregate-improvement-can-conceal-concentrated-loss">Aggregate improvement can conceal concentrated loss</a></li><li class="h2"><a href="#shadowing-finds-integration-failures-not-user-outcomes">Shadowing finds integration failures, not user outcomes</a></li><li class="h2"><a href="#distribution-shift-is-a-signal-not-a-verdict">Distribution shift is a signal, not a verdict</a></li><li class="h2"><a href="#spend-a-canary-risk-budget">Spend a canary risk budget</a></li><li class="h2"><a href="#delayed-labels-limit-the-ramp">Delayed labels limit the ramp</a></li><li class="h2"><a href="#rollback-is-an-executable-path">Rollback is an executable path</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-deployment-questions">Evidence and deployment questions</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X06 · 1.0 · 22 November 2026</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>F03 measurement, A01 generalization, A04 serving, C05 decision risk and X04 experiment choice</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Build an AI release ladder that joins offline slice evidence, live shadowing, bounded user exposure, delayed outcomes and a rehearsed rollback into one decision.</td>
+</tr>
+<tr class="even">
+<td>Evidence</td>
+<td>XR13–XR15. Primary paper and production passages below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment</td>
+<td>Slice, shadow, exposure-budget and rollback checks in the <a href="/answers/x06.html">worked companion</a>.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="a-better-offline-score-is-a-hypothesis">A better offline score is a hypothesis</h2>
+<p>A candidate claim-triage model improves validation accuracy from 88.6% to 89.65%. That is evidence about a saved dataset under one evaluator. Production adds different feature code, document mixtures, traffic, latency, user reactions and delayed claim outcomes. The release question is not “is 89.65 larger?” It is:</p>
+<blockquote>
+<p>Which bounded evidence permits the next increase in irreversible user exposure, and which signal returns traffic to the known-good bundle?</p>
+</blockquote>
+<p>An AI release changes more than model weights. Identify a deployable bundle: model, feature transformation, tokenizer, prompt or policy, retrieval index, label mapping, runtime and configuration. Rollback must restore a compatible bundle. Reverting only the model while leaving a new feature encoding or index live may preserve the failure.</p>
+<h2 id="production-case-uber-made-safeguards-part-of-the-platform">Production case — Uber made safeguards part of the platform</h2>
+<p>Uber reports more than 400 active ML use cases, over 20,000 monthly training jobs and more than 15 million real-time predictions per second at peak. At that scale, a small regression can spread within minutes, while static tests cannot fully specify behavior learned from changing data. In the first half of 2025, the Michelangelo team rolled out platform mechanisms for data validation, backtesting, shadow deployments, controlled rollout, monitoring and rollback. <a href="https://www.uber.com/sa/en/blog/raising-the-bar-on-ml-model-deployment-safety/">Uber, “Raising the Bar on ML Model Deployment Safety,” Introduction and “ML Model Safe Deployment Practices”</a></p>
+<p>Their candidate models process live shadow traffic without controlling user-facing predictions. Models that pass start with a small traffic slice; operational and prediction-quality signals are monitored, and threshold breaches can automatically restore the last known-good version. Uber reported shadow testing in more than 75% of critical online use cases when the article was published and said continuous validation reduced the time regressions lingered from days to hours. <a href="https://www.uber.com/sa/en/blog/raising-the-bar-on-ml-model-deployment-safety/">Uber, same report, “Built for Adoption,” “Data Quality at Scale with Hue,” and “Continuous Validation”</a></p>
+<p>This documents a production decision and reported operational outcome, not universal thresholds. To transfer it, a team needs its own loss model, feature contracts, label delay, traffic slices, fallback behavior, compute headroom and evidence that the rollback bundle actually loads.</p>
+<h2 id="a-release-ladder">A release ladder</h2>
+<p>Every stage should answer a different question. Passing one does not imply the next.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table style="width:100%;">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 30%">
+<col style="width: 23%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stage</th>
+<th style="text-align: right;">Candidate exposure</th>
+<th>Question answered</th>
+<th>Example block signal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 · Manifest</td>
+<td style="text-align: right;">None</td>
+<td>Can we identify and restore the complete compatible bundle?</td>
+<td>Missing artifact lineage or rollback rehearsal</td>
+</tr>
+<tr class="even">
+<td>1 · Offline slices</td>
+<td style="text-align: right;">Saved data</td>
+<td>Does quality meet absolute and relative gates on decision-relevant populations?</td>
+<td>Any critical slice crosses its loss threshold</td>
+</tr>
+<tr class="odd">
+<td>2 · Replay/backtest</td>
+<td style="text-align: right;">Historical production trace</td>
+<td>Does the entire pipeline reproduce features, outputs, latency and costs?</td>
+<td>Training-serving skew or capacity breach</td>
+</tr>
+<tr class="even">
+<td>3 · Shadow</td>
+<td style="text-align: right;">Live inputs, no candidate decisions</td>
+<td>Can the candidate load and behave on current traffic without affecting users?</td>
+<td>Runtime error, unexplained divergence or excess compute</td>
+</tr>
+<tr class="odd">
+<td>4 · Canary</td>
+<td style="text-align: right;">Small stable user cohort</td>
+<td>Do user-facing and delayed outcomes remain inside an exposure budget?</td>
+<td>Guardrail breach or exhausted risk budget</td>
+</tr>
+<tr class="even">
+<td>5 · Ramp</td>
+<td style="text-align: right;">Increasing cohorts</td>
+<td>Does evidence remain valid across time, region, caller and load?</td>
+<td>Slice regression, drift or rollback degradation</td>
+</tr>
+<tr class="odd">
+<td>6 · Steady state</td>
+<td style="text-align: right;">Full traffic</td>
+<td>Is the model, data and outcome relationship still acceptable?</td>
+<td>Staleness, skew or served-quality alert</td>
+</tr>
+</tbody>
+</table>
+</div><p>The Google ML Test Score paper separates these controls explicitly. It recommends absolute and relative release thresholds on important data slices; validation before serving; canarying because offline data cannot cover non-stationarity and serving incompatibility; a practiced rollback; and continued monitoring of input invariants, training-serving skew, model staleness, computing performance and served prediction quality. <a href="https://research.google.com/pubs/archive/aad9f93b86b7addfea4c419b9100c6cdd26cacea.pdf">Breck et al., 2017, Model 6, Infra 4 and 6–7, Monitor 2–7</a></p>
+<h2 id="aggregate-improvement-can-conceal-concentrated-loss">Aggregate improvement can conceal concentrated loss</h2>
+<p>Use an invented validation population:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Slice</th>
+<th style="text-align: right;">Share</th>
+<th style="text-align: right;">Baseline supported decision</th>
+<th style="text-align: right;">Candidate</th>
+<th style="text-align: right;">Change</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Common documents</td>
+<td style="text-align: right;">90%</td>
+<td style="text-align: right;">90.0%</td>
+<td style="text-align: right;">91.5%</td>
+<td style="text-align: right;">+1.5 pp</td>
+</tr>
+<tr class="even">
+<td>State-specific forms</td>
+<td style="text-align: right;">5%</td>
+<td style="text-align: right;">82.0%</td>
+<td style="text-align: right;">74.0%</td>
+<td style="text-align: right;">−8.0 pp</td>
+</tr>
+<tr class="odd">
+<td>Low-quality scans</td>
+<td style="text-align: right;">5%</td>
+<td style="text-align: right;">70.0%</td>
+<td style="text-align: right;">72.0%</td>
+<td style="text-align: right;">+2.0 pp</td>
+</tr>
+</tbody>
+</table>
+</div><p>The weighted score moves from 88.6% to 89.65%, a gain of 1.05 percentage points. A release gate that requires every critical slice to decline by no more than 2 points rejects the candidate. This is not an argument that every small slice gets the same threshold. Slice selection and loss limits should follow product harm, legal obligations, volume and uncertainty. A slice with five examples cannot support a precise rate.</p>
+<p>Fix slice definitions before inspecting the candidate where possible. Otherwise repeated slicing becomes another way to overfit the release process. Report denominators and uncertainty, not only percentages.</p>
+<h2 id="shadowing-finds-integration-failures-not-user-outcomes">Shadowing finds integration failures, not user outcomes</h2>
+<p>A shadow receives the same live input as the primary but its answer does not control the user experience. It can reveal:</p>
+<ul>
+<li>model or tokenizer load failures;</li>
+<li>feature-contract and online/offline skew;</li>
+<li>output divergence by stable slice;</li>
+<li>latency, accelerator memory and cost;</li>
+<li>policy or schema violations that can be evaluated without user action.</li>
+</ul>
+<p>It cannot directly reveal behavior created by the candidate’s own decisions. A ranking model changes what users see; an agent changes external state; a recommender changes future clicks and therefore future training data. The shadow observes inputs generated under the primary policy. Treat it as a live compatibility test, not a counterfactual product experiment.</p>
+<p>Suppose 100,000 invented shadow requests produce 4,000 primary/candidate disagreements. State-specific forms are only 5,000 requests but contribute 1,600 disagreements: 32% in that slice versus about 2.53% elsewhere. The global 4% rate hides where investigation belongs. Disagreement itself is not error; adjudicate a stratified sample or join delayed labels.</p>
+<h2 id="distribution-shift-is-a-signal-not-a-verdict">Distribution shift is a signal, not a verdict</h2>
+<p>Three different failures are often called drift:</p>
+<ul>
+<li><strong>Input shift:</strong> the distribution of observed requests or features changes.</li>
+<li><strong>Relationship shift:</strong> the same inputs map to different outcomes or losses.</li>
+<li><strong>Pipeline skew:</strong> training and serving compute supposedly identical features differently.</li>
+</ul>
+<p>An input alert can fire while quality remains acceptable, and quality can fall with little visible marginal-feature drift. Rabanser, Günnemann and Lipton evaluated multiple two-sample shift detectors across synthetic shifts. Their results favored classifier-output representations across their tested settings, but they also show representation reduction admits pathological false negatives and that some methods perform poorly with small samples. <a href="https://proceedings.neurips.cc/paper/2019/file/846c260d715e5b854ffad5f70a516c88-Paper.pdf">Rabanser et al., NeurIPS 2019, Abstract, §3.1 and §5</a></p>
+<p>Use shift detection to trigger diagnosis, labeling or a hold. Do not automatically retrain on every alert or automatically promote because no alert fired. Track feature contracts, slice outcomes and the causal path from change to harm.</p>
+<h2 id="spend-a-canary-risk-budget">Spend a canary risk budget</h2>
+<p>Canary traffic affects real users. Bound it with a loss budget rather than an arbitrary “10% rollout.”</p>
+<p>For an invented service with 200,000 daily decisions, suppose the candidate may add 0.15 percentage points of harmful decisions and the release owner permits at most five excess harms per day while learning. At fraction <code>f</code>:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>200</mn><mo>,</mo><mn>000</mn><mo>×</mo><mi>f</mi><mo>×</mo><mn>0.0015</mn><mo>≤</mo><mn>5</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">
+200{,}000 \times f \times 0.0015 \le 5,
+</annotation></semantics></math></p>
+<p>so <code>f ≤ 1/60</code>, about 1.67%. This arithmetic only translates stated assumptions. The true excess is uncertain, rare harm may be more severe, and correlated failures can violate the average. Start below the ceiling and define an immediate kill signal.</p>
+<p>Use stable cohort assignment so the same user or claim does not bounce between policies. Separate operational guardrails (errors, latency, cost) from model/product guardrails (supported decisions, policy violations, escalation, calibration). Choose both before launch.</p>
+<h2 id="delayed-labels-limit-the-ramp">Delayed labels limit the ramp</h2>
+<p>If claim outcomes arrive seven days later, a 20,000-decision daily canary exposes 140,000 decisions before its first full label cohort matures. A green latency dashboard cannot authorize the next ramp. Options include:</p>
+<ul>
+<li>hold exposure until a complete outcome cohort matures;</li>
+<li>use a validated leading indicator with a known relationship to the delayed loss;</li>
+<li>manually adjudicate a risk-weighted sample;</li>
+<li>cap cumulative exposure and exclude high-loss actions;</li>
+<li>require reversible recommendations before allowing autonomous actions.</li>
+</ul>
+<p>Label joins need stable prediction IDs, model/bundle version, feature snapshot, decision timestamp and outcome window. Without them, “online accuracy” can mix versions or omit unresolved outcomes.</p>
+<h2 id="rollback-is-an-executable-path">Rollback is an executable path</h2>
+<p>Before the canary, prove that the previous bundle is retained, loadable and compatible with current features and data. Record the maximum rollback time and test it under load. Decide what happens to in-flight work and external actions. A model rollback does not undo a denied claim, sent payment or changed training distribution.</p>
+<p>For retrieval or agent systems, version the index, prompt, tool policy and model together. If the candidate writes new memory or calls a changed API, the safe response may be forward repair or feature disablement rather than model-only rollback.</p>
+<h2 id="practice">Practice</h2>
+<p>All traffic, quality, cost and harm values below are invented teaching inputs.</p>
+<ol type="1">
+<li>Reproduce the weighted baseline and candidate score for the three slices. Apply a gate requiring global non-regression and no critical slice decline beyond 2 percentage points.</li>
+<li>Reproduce the shadow disagreement rates: 1,600 of 5,000 state-specific requests and 2,400 of the remaining 95,000. Design the next labeled sample without letting the large common slice dominate it.</li>
+<li>Derive the maximum canary fraction for 200,000 daily decisions, an assumed 0.15-point excess harmful-decision rate and a budget of five excess harms per day. Name two reasons to launch below that fraction.</li>
+<li>A label matures after seven days and the canary receives 20,000 decisions per day. Calculate exposure before the first complete outcome cohort. Design a ramp rule that cannot be authorized by latency alone.</li>
+<li>Design a release manifest and rollback drill for a RAG assistant changing embedding model, index snapshot, reranker and prompt together. State which shadow signals are useful and which product outcomes require a canary.</li>
+</ol>
+<h2 id="evidence-and-deployment-questions">Evidence and deployment questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Inspected locator</th>
+<th>Application boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XR13 · Breck et al., Google</td>
+<td><a href="https://research.google.com/pubs/archive/aad9f93b86b7addfea4c419b9100c6cdd26cacea.pdf">The ML Test Score</a>, Model 6, Infra 4 and 6–7, Monitor 2–7</td>
+<td>Production-readiness controls drawn from interviews and experience across real systems. It supplies tests, not universal metrics or thresholds.</td>
+</tr>
+<tr class="even">
+<td>XR14 · Wang, Wang and Li, Uber</td>
+<td><a href="https://www.uber.com/sa/en/blog/raising-the-bar-on-ml-model-deployment-safety/">Raising the Bar on ML Model Deployment Safety</a>, Introduction, “ML Model Safe Deployment Practices,” “Built for Adoption,” “Data Quality at Scale with Hue,” and “Continuous Validation”</td>
+<td>Documents Uber’s 2025 scale, chosen safeguards, adoption and reported time-to-detection improvement. It does not prove the same controls or rates fit another loss model.</td>
+</tr>
+<tr class="odd">
+<td>XR15 · Rabanser, Günnemann and Lipton</td>
+<td><a href="https://proceedings.neurips.cc/paper/2019/file/846c260d715e5b854ffad5f70a516c88-Paper.pdf">Failing Loudly</a>, Abstract, §3.1 and §5</td>
+<td>Empirical comparison of shift detectors under studied datasets and perturbations. It demonstrates useful methods and failure boundaries, not a universal detector or quality guarantee.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Before promoting a real model, obtain the exact deployment bundle, feature and output contracts, evaluation-set lineage, critical slice definitions, outcome delay, exposure loss budget, stable cohort unit, resource envelope, alert ownership and a timed rollback rehearsal. No learner answer or mastery level is inferred from opening this lesson.</p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/x06.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/extensions.html#extension-evidence-register">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="X06"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/x05.html"><small>Previous module · X05</small><strong>Safe data migrations without split-brain truth</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#a-better-offline-score-is-a-hypothesis">A better offline score is a hypothesis</a></li><li class="h2"><a href="#production-case-uber-made-safeguards-part-of-the-platform">Production case — Uber made safeguards part of the platform</a></li><li class="h2"><a href="#a-release-ladder">A release ladder</a></li><li class="h2"><a href="#aggregate-improvement-can-conceal-concentrated-loss">Aggregate improvement can conceal concentrated loss</a></li><li class="h2"><a href="#shadowing-finds-integration-failures-not-user-outcomes">Shadowing finds integration failures, not user outcomes</a></li><li class="h2"><a href="#distribution-shift-is-a-signal-not-a-verdict">Distribution shift is a signal, not a verdict</a></li><li class="h2"><a href="#spend-a-canary-risk-budget">Spend a canary risk budget</a></li><li class="h2"><a href="#delayed-labels-limit-the-ramp">Delayed labels limit the ramp</a></li><li class="h2"><a href="#rollback-is-an-executable-path">Rollback is an executable path</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-deployment-questions">Evidence and deployment questions</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

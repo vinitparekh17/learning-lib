@@ -17,6 +17,8 @@ The original 24-module curriculum and four audits form a completed first edition
 | [Extension audit 01](SDE_Extension_Audit_01.md) | Recheck evidence boundaries, exercise mappings, examples and generated navigation | X01–X04 | Passed on 21 November 2026 |
 | [X05 — Safe data migrations without split-brain truth](SDE_X05.md) | Preserve one authority through expand, backfill, cutover and contract | S02, S03, S04, C03 | Produced and checked; pending extension audit 02 |
 | [X05 worked companion](SDE_X05_answers.md) | Reproduce stale-backfill, capacity, compatibility and constraint decisions | X05 practice | Produced and checked |
+| [X06 — AI release gates under distribution shift](SDE_X06.md) | Join offline slices, shadow traffic, bounded exposure, delayed outcomes and rollback | F03, A01, A04, C05, X04 | Produced and checked; pending extension audit 02 |
+| [X06 worked companion](SDE_X06_answers.md) | Reproduce slice gates, disagreement strata, risk budget and delay calculations | X06 practice | Produced and checked |
 
 X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.
 
@@ -26,8 +28,7 @@ These are proposed work items, not completed lessons or a claim that sources hav
 
 | Order | Proposed extension | Why it compounds | Entry points |
 | --- | --- | --- | --- |
-| Next | X06 — AI release gates under distribution shift | Connect offline slices, shadow traffic, canaries, guardrails and rollback | F03, A01, A04, C05, X04 |
-| Review | Extension audit 02 | Recheck X05–X06 evidence boundaries, examples and navigation before selecting more work | X05–X06 |
+| Next | Extension audit 02 | Recheck X05–X06 evidence boundaries, examples and navigation before selecting more work | X05–X06 |
 
 ## How continued work is maintained
 
@@ -51,8 +52,13 @@ Keep the original R01–R24 identities stable. New extension sources use XR iden
 | XR10 | [Jacqueline Xu, Stripe, “Online migrations at scale”](https://stripe.com/blog/online-migrations), “Why are migrations hard?”, “A pattern for online migrations,” parts 1–4 and Conclusion; inspected 2026-11-22 | Production migration of hundreds of millions of live Subscription objects, staged decision and reported no-downtime outcome; no claim that dual writes are atomic |
 | XR11 | [PostgreSQL 19 documentation, `ALTER TABLE`](https://www.postgresql.org/docs/current/sql-altertable.html), `ADD table_constraint [ NOT VALID ]`, `VALIDATE CONSTRAINT`, Notes and examples; inspected 2026-11-22 | Current PostgreSQL constraint enforcement/validation and lock boundary; exact behavior remains version- and operation-specific |
 | XR12 | [Shlomi Noach, GitHub, “gh-ost”](https://github.blog/news-insights/company-news/gh-ost-github-s-online-migration-tool-for-mysql/), existing landscape, trigger limitations, Pauseable, operation modes and “gh-ost at GitHub”; inspected 2026-11-22 | GitHub's production MySQL constraint, triggerless/binlog choice and adoption; not a universal migration tool recommendation |
+| XR13 | [Breck et al., “The ML Test Score,” IEEE Big Data 2017](https://research.google.com/pubs/archive/aad9f93b86b7addfea4c419b9100c6cdd26cacea.pdf), Model 6, Infra 4 and 6–7, Monitor 2–7; inspected 2026-11-22 | Production-readiness tests from experience and interviews across real ML systems; no universal metrics or release thresholds |
+| XR14 | [Wang, Wang and Li, Uber, “Raising the Bar on ML Model Deployment Safety”](https://www.uber.com/sa/en/blog/raising-the-bar-on-ml-model-deployment-safety/), Introduction, safe deployment practices, Built for Adoption, Data Quality at Scale and Continuous Validation; inspected 2026-11-22 | Uber's 2025 scale, safeguards, adoption and reported detection improvement; transfer requires a local loss model and platform evidence |
+| XR15 | [Rabanser, Günnemann and Lipton, “Failing Loudly,” NeurIPS 2019](https://proceedings.neurips.cc/paper/2019/file/846c260d715e5b854ffad5f70a516c88-Paper.pdf), Abstract, §3.1 and §5; inspected 2026-11-22 | Empirical shift-detector comparison and documented representation/sample boundaries; not a universal detector or quality guarantee |
 
 ## Change record
+
+22 November 2026 · Added X06 and five worked AI release decisions. XR13 grounds slice, canary, rollback and continuous-monitoring controls; XR14 documents Uber's platform decision and reported operational outcomes; XR15 bounds what distribution-shift detection establishes. Executed aggregate/slice, shadow-stratum, exposure-budget and delayed-label checks. Extension audit 02 is next.
 
 22 November 2026 · Added X05 and five worked migration decisions. XR10 documents Stripe's online Subscription migration; XR11 bounds PostgreSQL constraint enforcement and validation; XR12 documents GitHub's lock-related migration problems and pauseable binlog-driven response. Executed stale-backfill, conflict, capacity and compatibility checks. X06 is next, followed by extension audit 02.
 
