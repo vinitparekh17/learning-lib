@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X07 — Backups are not recovery | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="X07">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 31</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X07</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=X#track-X"><span aria-hidden="true">←</span> Extensions</a><p class="eyebrow">Extensions <span aria-hidden="true">/</span> X07</p><h1 id="x07-backups-are-not-recovery">Backups are not recovery</h1><p class="article-description">Prove that a workload can return from corruption or regional loss within an explicit data-loss and service-time budget.</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/s02.html" data-chip="S02">S02</a><a class="module-chip" href="/learn/s04.html" data-chip="S04">S04</a><a class="module-chip" href="/learn/s06.html" data-chip="S06">S06</a><a class="module-chip" href="/learn/x05.html" data-chip="X05">X05</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-transfer-questions" >Evidence</a><a class="button secondary" href="/answers/x07.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#a-successful-backup-job-proves-very-little">A successful backup job proves very little</a></li><li class="h2"><a href="#production-case-gitlab-had-artifacts-but-not-a-recovery-path">Production case — GitLab had artifacts but not a recovery path</a></li><li class="h2"><a href="#separate-availability-from-disaster-recovery">Separate availability from disaster recovery</a></li><li class="h2"><a href="#define-the-two-clocks-before-the-incident">Define the two clocks before the incident</a></li><li class="h2"><a href="#a-restore-is-a-dependency-graph-not-a-checklist">A restore is a dependency graph, not a checklist</a></li><li class="h2"><a href="#prove-the-backup-chain-is-closed">Prove the backup chain is closed</a></li><li class="h2"><a href="#stop-corruption-before-replaying-it">Stop corruption before replaying it</a></li><li class="h2"><a href="#validate-four-layers">Validate four layers</a></li><li class="h2"><a href="#restore-does-not-reverse-external-effects">Restore does not reverse external effects</a></li><li class="h2"><a href="#design-a-drill-that-can-fail-usefully">Design a drill that can fail usefully</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-transfer-questions">Evidence and transfer questions</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X07 · 1.0 · 23 November 2026</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>S02 data recovery, S04 replication, S06 reliability boundaries and X05 migration safety</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Prove that a workload can return from corruption or regional loss within an explicit data-loss and service-time budget.</td>
+</tr>
+<tr class="even">
+<td>Evidence</td>
+<td>XR16–XR18. Primary postmortem, official recovery guidance and database documentation below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment</td>
+<td>Recovery-point, dependency-path, backup-chain and reconciliation checks in the <a href="/answers/x07.html">worked companion</a>.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="a-successful-backup-job-proves-very-little">A successful backup job proves very little</h2>
+<p>A green backup job proves that one producer wrote some artifact. It does not prove that the artifact is complete, that its keys and manifests survived, that the compatible software still exists, that the restore path has enough throughput, or that the restored service agrees with effects already committed outside it.</p>
+<p>The useful question is:</p>
+<blockquote>
+<p>From a declared failure boundary, can this team restore a verified service state within its loss and time objectives, without replaying corrupt data or duplicating external effects?</p>
+</blockquote>
+<p>That is a chain claim. Every required link must work: detection, write fencing, artifact selection, credentials, infrastructure, data restore, log replay, dependency ordering, application validation, traffic control and business reconciliation. A backup is only one input.</p>
+<h2 id="production-case-gitlab-had-artifacts-but-not-a-recovery-path">Production case — GitLab had artifacts but not a recovery path</h2>
+<p>On 31 January 2017, an engineer attempting to rebuild a lagging PostgreSQL secondary removed data from the primary instead. The secondary was already being rebuilt and could not be failed over. GitLab then discovered that its scheduled <code>pg_dump</code> output was absent: a PostgreSQL 9.2 client was being used against PostgreSQL 9.6, the job failed, and its email alert was rejected. <a href="https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/">GitLab postmortem, “Timeline” and “Database backups using pg_dump,” lines 131–158</a></p>
+<p>The team chose a manually created LVM snapshot from about six hours before the incident because the regular snapshot was almost 24 hours old. The available copy lived on slow staging storage. Copying it to production took about 18 hours; GitLab restored the database to 17:20 UTC, separately recovered removed webhooks, advanced sequences to avoid reusing identifiers and gradually re-enabled the service. GitLab reported loss of database changes made between 17:20 and 23:30 UTC. <a href="https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/">GitLab postmortem, “LVM snapshots,” “Recovering GitLab.com” and “Data loss impact,” lines 165–203</a></p>
+<p>The constraint was not simply “no backup.” Several mechanisms existed, but their failure domains and restore behavior did not form a tested path. The production replica shared the operational event; logical backups were missing; disk snapshots were not enabled for the database; the usable staging copy was old and slow; and recovery required application-specific webhook and identifier repairs.</p>
+<p>The response was to use the least-old usable copy, reconstruct dependent state, and accept bounded but material data loss. The postmortem then listed work on point-in-time recovery, hourly snapshots, automated restore tests, monitoring, runbooks and explicit durability ownership. Its stated root-cause chain says the restore exceeded 18 hours because the team needed a staging copy on slower storage in another region, while the standard backup was not working and the secondary was unavailable. <a href="https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/">GitLab postmortem, “Root cause analysis” and “Improving recovery procedures,” lines 207–251</a></p>
+<p>This is evidence about GitLab’s 2017 system, not a forecast for a current managed database. To apply the lesson elsewhere, obtain the workload’s actual artifact ages, corruption boundaries, restore throughput, dependency graph, retained credentials, compatible binaries, external side effects and measured validation time.</p>
+<h2 id="separate-availability-from-disaster-recovery">Separate availability from disaster recovery</h2>
+<p>These mechanisms answer different failures:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mechanism</th>
+<th>Useful against</th>
+<th>Can share the original failure?</th>
+<th>What it does not prove</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Restart / crash recovery</td>
+<td>Process or host crash with durable log intact</td>
+<td>Yes</td>
+<td>Survival of storage loss or logical corruption</td>
+</tr>
+<tr class="even">
+<td>Replica failover</td>
+<td>Primary host or zone loss</td>
+<td>Often</td>
+<td>Independence from bad writes, operator deletion or shared control plane</td>
+</tr>
+<tr class="odd">
+<td>Snapshot / full backup</td>
+<td>Lost or damaged data set</td>
+<td>Depends on location and credentials</td>
+<td>Recent recovery point, log completeness or application usability</td>
+</tr>
+<tr class="even">
+<td>Point-in-time recovery</td>
+<td>Logical corruption with a known safe boundary</td>
+<td>Depends on archive isolation</td>
+<td>Correct target selection or business reconciliation</td>
+</tr>
+<tr class="odd">
+<td>Regional recovery environment</td>
+<td>Regional service loss</td>
+<td>Less, if genuinely independent</td>
+<td>Data correctness, current configuration or acceptable cutover time</td>
+</tr>
+</tbody>
+</table>
+</div><p>Replication rapidly copies good writes <strong>and bad writes</strong>. It is an availability mechanism when the replica is isolated from a host failure; it is not automatically a corruption archive. Conversely, an offline backup may survive corruption but be too old or slow to meet the service objective.</p>
+<p>Name the failure before choosing the mechanism: host loss, zone loss, region loss, credential loss, operator deletion, ransomware, software bug, schema error or silent corruption. “DR” without a failure boundary cannot be tested.</p>
+<h2 id="define-the-two-clocks-before-the-incident">Define the two clocks before the incident</h2>
+<p>Use explicit clocks rather than slogans:</p>
+<ul>
+<li><strong>Recovery point objective (RPO):</strong> maximum tolerable distance between the failure boundary and the newest recoverable committed state. It is a data-loss budget, expressed in time only because commits are time-ordered.</li>
+<li><strong>Recovery time objective (RTO):</strong> maximum tolerable time from a declared start event to a defined usable-service state.</li>
+</ul>
+<p>For an invented incident, corruption occurs at 02:18:30 and the newest safe archived log ends at 02:17:40. The observed recovery-point distance is 50 seconds. That meets a 60-second RPO if — and only if — every required commit through 02:17:40 is present and the business accepts the missing interval.</p>
+<p>RTO needs both endpoints. “Database accepts connections” is not the same as “customers can safely transact.” A defensible endpoint might require dependency health, invariant checks, authenticated reads, a controlled write, queue reconciliation and traffic shifted. Detection time may be included or excluded, but the service owner must say which; otherwise two teams can report different RTOs for the same incident.</p>
+<p>Objectives are product decisions. A ledger and a rebuildable recommendation cache should not inherit the same RPO merely because they share an account. Record objectives per state class and identify which data is authoritative, derived, externally committed or legally retained.</p>
+<h2 id="a-restore-is-a-dependency-graph-not-a-checklist">A restore is a dependency graph, not a checklist</h2>
+<p>Recovery stages overlap. Summing all durations overstates parallel work; timing only the database understates the service path. Model a directed acyclic graph and find the critical path.</p>
+<p>Consider invented drill timings measured from disaster declaration:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Stage</th>
+<th>Dependencies</th>
+<th style="text-align: right;">Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Identity and KMS access</td>
+<td>None</td>
+<td style="text-align: right;">6 min</td>
+</tr>
+<tr class="even">
+<td>Network and DNS control</td>
+<td>None</td>
+<td style="text-align: right;">8 min</td>
+</tr>
+<tr class="odd">
+<td>Database restore and replay</td>
+<td>Identity, network</td>
+<td style="text-align: right;">42 min</td>
+</tr>
+<tr class="even">
+<td>Object-store validation</td>
+<td>Identity</td>
+<td style="text-align: right;">18 min</td>
+</tr>
+<tr class="odd">
+<td>Application deployment</td>
+<td>Database, network</td>
+<td style="text-align: right;">12 min</td>
+</tr>
+<tr class="even">
+<td>Smoke tests and reconciliation</td>
+<td>Application, object store</td>
+<td style="text-align: right;">15 min</td>
+</tr>
+<tr class="odd">
+<td>Traffic shift</td>
+<td>Smoke tests</td>
+<td style="text-align: right;">5 min</td>
+</tr>
+</tbody>
+</table>
+</div><p>Identity and network start together. The database starts at minute 8 and ends at 50; object validation ends at 24. Application deployment ends at 62, smoke and reconciliation at 77, and traffic shift at 82. The critical path is 82 minutes, not the 106-minute sum and not the 42-minute database restore. Under a 90-minute objective the invented drill has eight minutes of margin.</p>
+<p>That margin is not capacity evidence until the drill uses production-scale artifacts, realistic service quotas and a clean environment. A warm cache, pre-existing role or manually installed secret can make the test easier than the real disaster.</p>
+<h2 id="prove-the-backup-chain-is-closed">Prove the backup chain is closed</h2>
+<p>For PostgreSQL point-in-time recovery, a base backup and the write-ahead log belong together. Current PostgreSQL documentation says a usable base backup requires the WAL generated during and after that backup, and recovery time grows with the amount of WAL to replay. Incremental recovery additionally requires all earlier backups that supply omitted blocks; PostgreSQL does not itself track which earlier backups must be retained. <a href="https://www.postgresql.org/docs/current/continuous-archiving.html">PostgreSQL 19 documentation, §25.3.2–25.3.3, lines 75–93</a></p>
+<p>Recovery creates timelines so that a restored branch does not overwrite the WAL history from which it came. Timeline-history files are themselves required to choose the correct segments when an archive contains branches. <a href="https://www.postgresql.org/docs/current/continuous-archiving.html">PostgreSQL 19 documentation, §25.3.6, lines 171–180</a></p>
+<p>A generic recovery manifest should therefore identify:</p>
+<ul>
+<li>base or full artifact, checksums and immutable location;</li>
+<li>every incremental ancestor and its order;</li>
+<li>log range, recovery target and timeline or equivalent history;</li>
+<li>database engine and extension versions;</li>
+<li>encryption-key identity and an independently tested access path;</li>
+<li>configuration, schema, network and identity dependencies;</li>
+<li>validation code and expected invariants;</li>
+<li>owner, retention policy and last successful restore drill.</li>
+</ul>
+<p>“Latest backup succeeded” is not chain validation. Build the dependency closure from the chosen recovery point to every required ancestor, log segment, key and manifest. Then restore it into an isolated location. Never discover retention gaps by deleting the active system.</p>
+<h2 id="stop-corruption-before-replaying-it">Stop corruption before replaying it</h2>
+<p>Logical corruption changes the recovery problem. The newest state may be the least useful state.</p>
+<ol type="1">
+<li>Fence new writes or route them to an explicitly separate journal.</li>
+<li>Preserve evidence: clocks, logs, damaged state and candidate recovery points.</li>
+<li>Identify a last-known-good boundary using an invariant or event, not intuition.</li>
+<li>Restore into isolation and replay only to that boundary.</li>
+<li>Validate before granting production authority.</li>
+<li>Reconcile accepted writes and external effects after the boundary.</li>
+</ol>
+<p>Do not let the restored copy and damaged primary both accept authority. X05’s migration principle returns here: one representation must be authoritative at each step. If traffic continues in degraded mode, give each accepted operation an immutable identity and record where it must be reconciled.</p>
+<h2 id="validate-four-layers">Validate four layers</h2>
+<p>AWS’s current recovery guidance recommends periodic restoration into a new location, data-integrity checks, measurement against RPO/RTO and an end timestamp recorded when validation finishes. It explicitly lists assuming that a backup exists, assuming it is operational and restoring without querying data as anti-patterns. <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_backing_up_data_periodic_recovery_testing_data.html">AWS Well-Architected REL09-BP04, lines 5–41</a></p>
+<p>Use four gates:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gate</th>
+<th>Example evidence</th>
+<th>Failure it catches</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Artifact</td>
+<td>Manifest closure, signatures, checksums, decrypt test</td>
+<td>Missing/corrupt object or lost key</td>
+</tr>
+<tr class="even">
+<td>Data</td>
+<td>Database starts; schema and relational invariants hold; sampled rows match</td>
+<td>Structurally present but unusable data</td>
+</tr>
+<tr class="odd">
+<td>Application</td>
+<td>Authenticated read and controlled write through the real service</td>
+<td>Wrong config, secret, version or dependency</td>
+</tr>
+<tr class="even">
+<td>Business</td>
+<td>Queues, object store and external providers reconcile by operation ID</td>
+<td>Effects that crossed the recovery point</td>
+</tr>
+</tbody>
+</table>
+</div><p>The RTO clock stops only at the declared gate. A database-only drill does not establish an application RTO. A checksum-only drill does not establish semantic correctness.</p>
+<h2 id="restore-does-not-reverse-external-effects">Restore does not reverse external effects</h2>
+<p>Suppose a payment service restores its database to 02:17:40. The payment provider still contains a successful charge <code>P102</code> accepted at 02:18:05, but <code>P102</code> is absent from the restored database. Retrying the customer request without checking the provider could charge twice.</p>
+<p>Reconcile by stable operation identity:</p>
+<ul>
+<li>present internally and externally: verify attributes and mark settled;</li>
+<li>present externally but absent internally: import or compensate under policy;</li>
+<li>present internally but absent externally: resume or cancel from a durable intent state;</li>
+<li>present in neither: safe to accept as new only if no other authority exists.</li>
+</ul>
+<p>The same issue appears with email, queues, object storage, search indexes, webhooks and model-training events. Restoration returns one subsystem to an earlier state; it does not time-travel the world.</p>
+<h2 id="design-a-drill-that-can-fail-usefully">Design a drill that can fail usefully</h2>
+<p>A restore drill should start from a clean account or environment and a sampled artifact selected by policy, not the artifact an operator already knows works. Inject one failure at a time: missing incremental, corrupt block, revoked key, incompatible image, unavailable region, quota limit or changed DNS authority.</p>
+<p>Record:</p>
+<ul>
+<li>failure scenario and independence assumptions;</li>
+<li>selected recovery point and measured loss window;</li>
+<li>dependency-stage start/end times and critical path;</li>
+<li>automated and manual actions, owners and approval waits;</li>
+<li>validation results at all four gates;</li>
+<li>unreconciled external effects;</li>
+<li>actual objective margin and the evidence that would invalidate it.</li>
+</ul>
+<p>AWS Prescriptive Guidance says DR tests should verify functioning database restoration within RTO and data recovery within RPO, and should include growth, corrupt backups, drift, observability and local business objectives. It does not prescribe one universal test frequency. <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-database-disaster-recovery/testing.html">AWS Prescriptive Guidance, “Testing to achieve confidence,” lines 5–35</a></p>
+<p>Schedule by change and risk: after engine upgrades, key-policy changes, topology changes, large growth, retention changes and runbook ownership changes, plus a periodic cadence. A passed drill expires as the system changes.</p>
+<h2 id="practice">Practice</h2>
+<p>All timestamps, durations, artifacts and operation IDs below are invented teaching inputs.</p>
+<ol type="1">
+<li>Corruption begins at 02:18:30. A base backup at 02:00 has a complete archived-log chain through 02:17:40. Calculate the observed recovery-point distance and decide whether it meets a 60-second RPO. State what the arithmetic does not prove.</li>
+<li>Reproduce the dependency schedule above. Calculate earliest start and finish times, identify the critical path, compare the result with a 90-minute RTO, and explain why adding durations is wrong.</li>
+<li>A full backup <code>F0</code> has incrementals <code>I1 → F0</code>, <code>I2 → I1</code>, and <code>I3 → I2</code>. <code>I3</code> is newest, but <code>I1</code> has expired. Decide whether <code>I3</code> is restorable. Design a closure check that fails before an incident.</li>
+<li>The restored database contains operations <code>P100</code> and <code>P101</code>. The external payment provider contains <code>P100</code>, <code>P101</code> and <code>P102</code>; the durable request journal also contains <code>P103</code>, which the provider does not. Classify the two mismatches and choose a safe next action.</li>
+<li>Design a regional recovery drill for an API whose authoritative database, object store, identity configuration and outbound queue have different recovery mechanisms. Define the failure boundary, the RTO endpoint, validation gates and evidence needed before claiming that the drill transfers to production.</li>
+</ol>
+<h2 id="evidence-and-transfer-questions">Evidence and transfer questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Inspected locator</th>
+<th>Application boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XR16 · GitLab</td>
+<td><a href="https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/">Postmortem of database outage of January 31</a>, Timeline; Broken recovery procedures; Recovering GitLab.com; Root cause analysis; Improving recovery procedures</td>
+<td>Documents the 2017 failure, available mechanisms, chosen restore path, observed bottleneck, data loss and response. It does not establish current GitLab architecture or another workload’s objectives.</td>
+</tr>
+<tr class="even">
+<td>XR17 · AWS</td>
+<td><a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_backing_up_data_periodic_recovery_testing_data.html">REL09-BP04</a>, Desired outcome, Common anti-patterns and Implementation steps 1–7; <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-database-disaster-recovery/testing.html">Testing to achieve confidence</a>, checks, considerations, drift and observability</td>
+<td>Current provider guidance on tested restore evidence and objectives. It is not proof that an AWS service configuration meets a particular workload’s RPO/RTO.</td>
+</tr>
+<tr class="odd">
+<td>XR18 · PostgreSQL</td>
+<td><a href="https://www.postgresql.org/docs/current/continuous-archiving.html">PostgreSQL 19, Continuous Archiving and PITR</a>, §§25.3.2–25.3.3 and 25.3.6</td>
+<td>Current base/incremental/WAL dependency and timeline semantics. Exact commands and guarantees depend on the deployed version and backup tool.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Before applying this lesson, obtain the authoritative-state inventory, explicit failure scenarios, business-approved objectives, artifact dependency manifests, key independence, production-scale throughput, service dependency graph, external-effect identifiers, clean-environment drill results and named recovery authority. No learner answer or mastery level is inferred from opening this lesson.</p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/x07.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/extensions.html#extension-evidence-register">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="X07"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/x06.html"><small>Previous module · X06</small><strong>AI release gates under distribution shift</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#a-successful-backup-job-proves-very-little">A successful backup job proves very little</a></li><li class="h2"><a href="#production-case-gitlab-had-artifacts-but-not-a-recovery-path">Production case — GitLab had artifacts but not a recovery path</a></li><li class="h2"><a href="#separate-availability-from-disaster-recovery">Separate availability from disaster recovery</a></li><li class="h2"><a href="#define-the-two-clocks-before-the-incident">Define the two clocks before the incident</a></li><li class="h2"><a href="#a-restore-is-a-dependency-graph-not-a-checklist">A restore is a dependency graph, not a checklist</a></li><li class="h2"><a href="#prove-the-backup-chain-is-closed">Prove the backup chain is closed</a></li><li class="h2"><a href="#stop-corruption-before-replaying-it">Stop corruption before replaying it</a></li><li class="h2"><a href="#validate-four-layers">Validate four layers</a></li><li class="h2"><a href="#restore-does-not-reverse-external-effects">Restore does not reverse external effects</a></li><li class="h2"><a href="#design-a-drill-that-can-fail-usefully">Design a drill that can fail usefully</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-transfer-questions">Evidence and transfer questions</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

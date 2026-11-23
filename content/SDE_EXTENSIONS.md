@@ -20,6 +20,8 @@ The original 24-module curriculum and four audits form a completed first edition
 | [X06 — AI release gates under distribution shift](SDE_X06.md) | Join offline slices, shadow traffic, bounded exposure, delayed outcomes and rollback | F03, A01, A04, C05, X04 | Produced, checked and audited |
 | [X06 worked companion](SDE_X06_answers.md) | Reproduce slice gates, disagreement strata, risk budget and delay calculations | X06 practice | Produced, checked and mapping-audited |
 | [Extension audit 02](SDE_Extension_Audit_02.md) | Recheck X05–X06 evidence, example boundaries, mappings and generated navigation | X05–X06 | Passed on 23 November 2026 |
+| [X07 — Backups are not recovery](SDE_X07.md) | Prove restore chains, dependency order, recovery objectives and external-effect reconciliation | S02, S04, S06, X05 | Produced and checked; pending extension audit 03 |
+| [X07 worked companion](SDE_X07_answers.md) | Reproduce recovery-point, critical-path, chain-closure and reconciliation decisions | X07 practice | Produced and checked |
 
 X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.
 
@@ -29,8 +31,7 @@ These are proposed work items, not completed lessons or a claim that sources hav
 
 | Order | Proposed extension | Why it compounds | Entry points |
 | --- | --- | --- | --- |
-| Next | X07 — Backups are not recovery | Prove restore chains, dependency order, RPO/RTO and reconciliation under corruption or regional loss | S02, S04, S06, X05 |
-| Then | X08 — Point-in-time feature correctness | Prevent future leakage and online/offline skew across late, mutable feature data | F03, A01, A04, X06 |
+| Next | X08 — Point-in-time feature correctness | Prevent future leakage and online/offline skew across late, mutable feature data | F03, A01, A04, X06 |
 | Review | Extension audit 03 | Recheck X07–X08 evidence boundaries, examples and navigation before selecting more work | X07–X08 |
 
 ## How continued work is maintained
@@ -58,8 +59,13 @@ Keep the original R01–R24 identities stable. New extension sources use XR iden
 | XR13 | [Breck et al., “The ML Test Score,” IEEE Big Data 2017](https://research.google.com/pubs/archive/aad9f93b86b7addfea4c419b9100c6cdd26cacea.pdf), Model 6, Infra 4 and 6–7, Monitor 2–7; inspected 2026-11-22 | Production-readiness tests from experience and interviews across real ML systems; no universal metrics or release thresholds |
 | XR14 | [Wang, Wang and Li, Uber, “Raising the Bar on ML Model Deployment Safety”](https://www.uber.com/sa/en/blog/raising-the-bar-on-ml-model-deployment-safety/), Introduction, safe deployment practices, Built for Adoption, Data Quality at Scale and Continuous Validation; inspected 2026-11-22 | Uber's 2025 scale, safeguards, adoption and reported detection improvement; transfer requires a local loss model and platform evidence |
 | XR15 | [Rabanser, Günnemann and Lipton, “Failing Loudly,” NeurIPS 2019](https://proceedings.neurips.cc/paper/2019/file/846c260d715e5b854ffad5f70a516c88-Paper.pdf), Abstract, §3.1 and §5; inspected 2026-11-22 | Empirical shift-detector comparison and documented representation/sample boundaries; not a universal detector or quality guarantee |
+| XR16 | [GitLab, “Postmortem of database outage of January 31”](https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/), Timeline, Broken recovery procedures, Recovering GitLab.com, Root cause analysis and Improving recovery procedures; inspected 2026-11-23 | Documents the 2017 failure, unavailable/missing recovery paths, six-hour snapshot choice, reported data loss, approximately 18-hour storage-bound restore and follow-up; not current GitLab architecture or a universal restore estimate |
+| XR17 | [AWS Well-Architected, REL09-BP04](https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_backing_up_data_periodic_recovery_testing_data.html), Desired outcome, Common anti-patterns and Implementation steps 1–7; [AWS Prescriptive Guidance, Testing to achieve confidence](https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-database-disaster-recovery/testing.html), checks, considerations, drift and observability; inspected 2026-11-23 | Current provider guidance on tested restore evidence, corruption cases and objective measurement; not proof that a configured workload meets its objectives |
+| XR18 | [PostgreSQL 19 documentation, Continuous Archiving and Point-in-Time Recovery](https://www.postgresql.org/docs/current/continuous-archiving.html), §§25.3.2–25.3.3 and 25.3.6; inspected 2026-11-23 | Current base/incremental/WAL dependency and timeline semantics; deployed-version and tool behavior still requires local inspection |
 
 ## Change record
+
+23 November 2026 · Added X07 and five worked recovery decisions. XR16 documents GitLab's 2017 recovery constraints, chosen six-hour snapshot, reported loss and approximately 18-hour storage bottleneck; XR17 bounds restore-test evidence; XR18 grounds PostgreSQL chain and timeline semantics. Executed recovery-point, dependency-path, incremental-closure and external-effect reconciliation checks. X08 is next, followed by extension audit 03.
 
 23 November 2026 · Completed [Extension audit 02](SDE_Extension_Audit_02.md). Re-inspected XR10–XR15 boundaries, verified 10 practice-to-answer mappings, executed both companion checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X07 and X08 only for the concrete disaster-restore and point-in-time feature gaps recorded in the audit; audit 03 follows that mini-batch.
 
