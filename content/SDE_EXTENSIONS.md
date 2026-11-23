@@ -15,10 +15,11 @@ The original 24-module curriculum and four audits form a completed first edition
 | [X04 — Information gain and choosing the next experiment](SDE_X04.md) | Choose a discriminating measurement and price its decision value | F02, F03, B01 | Produced, checked and audited |
 | [X04 worked companion](SDE_X04_answers.md) | Reproduce Bayesian updates, entropy and decision-loss checks | X04 practice | Produced, checked and mapping-audited |
 | [Extension audit 01](SDE_Extension_Audit_01.md) | Recheck evidence boundaries, exercise mappings, examples and generated navigation | X01–X04 | Passed on 21 November 2026 |
-| [X05 — Safe data migrations without split-brain truth](SDE_X05.md) | Preserve one authority through expand, backfill, cutover and contract | S02, S03, S04, C03 | Produced and checked; pending extension audit 02 |
-| [X05 worked companion](SDE_X05_answers.md) | Reproduce stale-backfill, capacity, compatibility and constraint decisions | X05 practice | Produced and checked |
-| [X06 — AI release gates under distribution shift](SDE_X06.md) | Join offline slices, shadow traffic, bounded exposure, delayed outcomes and rollback | F03, A01, A04, C05, X04 | Produced and checked; pending extension audit 02 |
-| [X06 worked companion](SDE_X06_answers.md) | Reproduce slice gates, disagreement strata, risk budget and delay calculations | X06 practice | Produced and checked |
+| [X05 — Safe data migrations without split-brain truth](SDE_X05.md) | Preserve one authority through expand, backfill, cutover and contract | S02, S03, S04, C03 | Produced, checked and audited |
+| [X05 worked companion](SDE_X05_answers.md) | Reproduce stale-backfill, capacity, compatibility and constraint decisions | X05 practice | Produced, checked and mapping-audited |
+| [X06 — AI release gates under distribution shift](SDE_X06.md) | Join offline slices, shadow traffic, bounded exposure, delayed outcomes and rollback | F03, A01, A04, C05, X04 | Produced, checked and audited |
+| [X06 worked companion](SDE_X06_answers.md) | Reproduce slice gates, disagreement strata, risk budget and delay calculations | X06 practice | Produced, checked and mapping-audited |
+| [Extension audit 02](SDE_Extension_Audit_02.md) | Recheck X05–X06 evidence, example boundaries, mappings and generated navigation | X05–X06 | Passed on 23 November 2026 |
 
 X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.
 
@@ -28,7 +29,9 @@ These are proposed work items, not completed lessons or a claim that sources hav
 
 | Order | Proposed extension | Why it compounds | Entry points |
 | --- | --- | --- | --- |
-| Next | Extension audit 02 | Recheck X05–X06 evidence boundaries, examples and navigation before selecting more work | X05–X06 |
+| Next | X07 — Backups are not recovery | Prove restore chains, dependency order, RPO/RTO and reconciliation under corruption or regional loss | S02, S04, S06, X05 |
+| Then | X08 — Point-in-time feature correctness | Prevent future leakage and online/offline skew across late, mutable feature data | F03, A01, A04, X06 |
+| Review | Extension audit 03 | Recheck X07–X08 evidence boundaries, examples and navigation before selecting more work | X07–X08 |
 
 ## How continued work is maintained
 
@@ -57,6 +60,8 @@ Keep the original R01–R24 identities stable. New extension sources use XR iden
 | XR15 | [Rabanser, Günnemann and Lipton, “Failing Loudly,” NeurIPS 2019](https://proceedings.neurips.cc/paper/2019/file/846c260d715e5b854ffad5f70a516c88-Paper.pdf), Abstract, §3.1 and §5; inspected 2026-11-22 | Empirical shift-detector comparison and documented representation/sample boundaries; not a universal detector or quality guarantee |
 
 ## Change record
+
+23 November 2026 · Completed [Extension audit 02](SDE_Extension_Audit_02.md). Re-inspected XR10–XR15 boundaries, verified 10 practice-to-answer mappings, executed both companion checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X07 and X08 only for the concrete disaster-restore and point-in-time feature gaps recorded in the audit; audit 03 follows that mini-batch.
 
 22 November 2026 · Added X06 and five worked AI release decisions. XR13 grounds slice, canary, rollback and continuous-monitoring controls; XR14 documents Uber's platform decision and reported operational outcomes; XR15 bounds what distribution-shift detection establishes. Executed aggregate/slice, shadow-stratum, exposure-budget and delayed-label checks. Extension audit 02 is next.
 

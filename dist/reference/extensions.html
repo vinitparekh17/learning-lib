@@ -113,25 +113,31 @@
 <td><a href="/learn/x05.html">X05 — Safe data migrations without split-brain truth</a></td>
 <td>Preserve one authority through expand, backfill, cutover and contract</td>
 <td>S02, S03, S04, C03</td>
-<td>Produced and checked; pending extension audit 02</td>
+<td>Produced, checked and audited</td>
 </tr>
 <tr class="odd">
 <td><a href="/answers/x05.html">X05 worked companion</a></td>
 <td>Reproduce stale-backfill, capacity, compatibility and constraint decisions</td>
 <td>X05 practice</td>
-<td>Produced and checked</td>
+<td>Produced, checked and mapping-audited</td>
 </tr>
 <tr class="even">
 <td><a href="/learn/x06.html">X06 — AI release gates under distribution shift</a></td>
 <td>Join offline slices, shadow traffic, bounded exposure, delayed outcomes and rollback</td>
 <td>F03, A01, A04, C05, X04</td>
-<td>Produced and checked; pending extension audit 02</td>
+<td>Produced, checked and audited</td>
 </tr>
 <tr class="odd">
 <td><a href="/answers/x06.html">X06 worked companion</a></td>
 <td>Reproduce slice gates, disagreement strata, risk budget and delay calculations</td>
 <td>X06 practice</td>
-<td>Produced and checked</td>
+<td>Produced, checked and mapping-audited</td>
+</tr>
+<tr class="even">
+<td><a href="/reference/extension-audit-02.html">Extension audit 02</a></td>
+<td>Recheck X05–X06 evidence, example boundaries, mappings and generated navigation</td>
+<td>X05–X06</td>
+<td>Passed on 23 November 2026</td>
 </tr>
 </tbody>
 </table>
@@ -156,9 +162,21 @@
 <tbody>
 <tr class="odd">
 <td>Next</td>
-<td>Extension audit 02</td>
-<td>Recheck X05–X06 evidence boundaries, examples and navigation before selecting more work</td>
-<td>X05–X06</td>
+<td>X07 — Backups are not recovery</td>
+<td>Prove restore chains, dependency order, RPO/RTO and reconciliation under corruption or regional loss</td>
+<td>S02, S04, S06, X05</td>
+</tr>
+<tr class="even">
+<td>Then</td>
+<td>X08 — Point-in-time feature correctness</td>
+<td>Prevent future leakage and online/offline skew across late, mutable feature data</td>
+<td>F03, A01, A04, X06</td>
+</tr>
+<tr class="odd">
+<td>Review</td>
+<td>Extension audit 03</td>
+<td>Recheck X07–X08 evidence boundaries, examples and navigation before selecting more work</td>
+<td>X07–X08</td>
 </tr>
 </tbody>
 </table>
@@ -258,6 +276,7 @@
 </tbody>
 </table>
 </div><h2 id="change-record">Change record</h2>
+<p>23 November 2026 · Completed <a href="/reference/extension-audit-02.html">Extension audit 02</a>. Re-inspected XR10–XR15 boundaries, verified 10 practice-to-answer mappings, executed both companion checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X07 and X08 only for the concrete disaster-restore and point-in-time feature gaps recorded in the audit; audit 03 follows that mini-batch.</p>
 <p>22 November 2026 · Added X06 and five worked AI release decisions. XR13 grounds slice, canary, rollback and continuous-monitoring controls; XR14 documents Uber’s platform decision and reported operational outcomes; XR15 bounds what distribution-shift detection establishes. Executed aggregate/slice, shadow-stratum, exposure-budget and delayed-label checks. Extension audit 02 is next.</p>
 <p>22 November 2026 · Added X05 and five worked migration decisions. XR10 documents Stripe’s online Subscription migration; XR11 bounds PostgreSQL constraint enforcement and validation; XR12 documents GitHub’s lock-related migration problems and pauseable binlog-driven response. Executed stale-backfill, conflict, capacity and compatibility checks. X06 is next, followed by extension audit 02.</p>
 <p>21 November 2026 · Completed <a href="/reference/extension-audit-01.html">Extension audit 01</a>. Re-inspected XR01–XR09 boundaries, verified 20 practice-to-answer mappings, executed all four companion Python checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X05 and X06 only for the concrete mutation-safety and AI-release gaps recorded in the audit; audit 02 follows that mini-batch.</p>
