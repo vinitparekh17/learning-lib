@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X08 — Point-in-time feature correctness | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="X08">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 32</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X08</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=X#track-X"><span aria-hidden="true">←</span> Extensions</a><p class="eyebrow">Extensions <span aria-hidden="true">/</span> X08</p><h1 id="x08-point-in-time-feature-correctness">Point-in-time feature correctness</h1><p class="article-description">Reconstruct the feature vector that was actually knowable at prediction time, despite late events, mutable dimensions, backfills and separate online/offline pipelines.</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/f03.html" data-chip="F03">F03</a><a class="module-chip" href="/learn/a01.html" data-chip="A01">A01</a><a class="module-chip" href="/learn/a04.html" data-chip="A04">A04</a><a class="module-chip" href="/learn/x06.html" data-chip="X06">X06</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-transfer-questions" >Evidence</a><a class="button secondary" href="/answers/x08.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#historical-truth-is-not-prediction-time-truth">Historical truth is not prediction-time truth</a></li><li class="h2"><a href="#production-case-uber-logged-the-features-the-model-actually-consumed">Production case — Uber logged the features the model actually consumed</a></li><li class="h2"><a href="#four-clocks-belong-in-the-data-contract">Four clocks belong in the data contract</a></li><li class="h2"><a href="#event-time-only-joins-can-leak-late-data">Event-time-only joins can leak late data</a></li><li class="h2"><a href="#mutable-dimensions-need-version-as-known-semantics">Mutable dimensions need version-as-known semantics</a></li><li class="h2"><a href="#the-label-is-allowed-to-arrive-later-the-features-are-not">The label is allowed to arrive later; the features are not</a></li><li class="h2"><a href="#window-boundaries-are-part-of-the-feature-definition">Window boundaries are part of the feature definition</a></li><li class="h2"><a href="#shared-computation-and-exact-logging-solve-different-gaps">Shared computation and exact logging solve different gaps</a></li><li class="h2"><a href="#test-parity-as-data-not-as-confidence">Test parity as data, not as confidence</a></li><li class="h2"><a href="#late-data-needs-a-declared-policy">Late data needs a declared policy</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-transfer-questions">Evidence and transfer questions</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X08 · 1.0 · 24 November 2026</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>F03 measurement, A01 distribution change, A04 serving and X06 release evidence</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Reconstruct the feature vector that was actually knowable at prediction time, despite late events, mutable dimensions, backfills and separate online/offline pipelines.</td>
+</tr>
+<tr class="even">
+<td>Evidence</td>
+<td>XR19–XR21. Production engineering reports and current feature-store semantics below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment</td>
+<td>Event/availability-time joins, correction versions, window boundaries and parity checks in the <a href="/answers/x08.html">worked companion</a>.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="historical-truth-is-not-prediction-time-truth">Historical truth is not prediction-time truth</h2>
+<p>A warehouse queried today may know that a payment occurred at 09:45, that a customer dimension was corrected, and that a claim was fraudulent. A model deciding at 10:00 did not necessarily know any of those facts. Training on today’s best reconstruction can therefore teach the model with information that production did not have.</p>
+<p>The decision is:</p>
+<blockquote>
+<p>For every historical prediction row, can we reproduce the feature values available to the serving system at that instant, under the same keys, windows, transformations and missing-data rules?</p>
+</blockquote>
+<p>A shared feature name does not establish this. <code>customer_chargeback_count_30d</code> can mean different things when batch and streaming paths disagree about time zones, late arrivals, corrections, window edges, nulls, identity joins or freshness.</p>
+<h2 id="production-case-uber-logged-the-features-the-model-actually-consumed">Production case — Uber logged the features the model actually consumed</h2>
+<p>Uber reported that its online and offline pipelines produced inconsistent feature representations and values. Its examples include language codes formatted differently across training and serving, fragile ETL lineages and multi-day freshness gaps. Engineers sometimes spent weeks tracing the discrepancies. <a href="https://www.uber.com/us/en/blog/taming-ml-firehose/">Uber, “Taming the ML Firehose,” Problem, lines 32–70</a></p>
+<p>The team chose inference-time feature logging as a canonical training source: record the exact feature values consumed by a prediction, join them later to independently emitted impression events, and train on the resulting records. This avoids reconstructing already-served vectors through a different batch pipeline. <a href="https://www.uber.com/us/en/blog/taming-ml-firehose/">Uber, same report, Solution and Online Architecture, lines 71–108</a></p>
+<p>The constraint was scale. Uber describes recommendation traffic up to 8 million queries per second; logging everything was estimated at about 1.7 PB per day and 5 trillion rows per month for the discussed use case. The design therefore allow-listed used features, encoded long names as compact identifiers and retained prediction records only when a user impression made them useful for training. The allow list reduced payload size by 4–5×. <a href="https://www.uber.com/us/en/blog/taming-ml-firehose/">Uber, same report, Scale Challenges and Feature Allow List, lines 77–121</a></p>
+<p>After rollout to search and ranking models, Uber reported 0% mismatch on selected key features that had exceeded 10% mismatch, and priority-feature freshness improving from multi-day latency to hours. It also reported roughly 70% lower peak consumer lag after a series of pipeline optimizations. <a href="https://www.uber.com/us/en/blog/taming-ml-firehose/">Uber, same report, High Throughput and Conclusion, lines 127–156</a></p>
+<p>This is a documented production decision, not proof that logging is always preferable. It preserves what the model consumed for existing traffic, but costs bandwidth and storage, may omit unlogged experimental features, and still needs correct label joins and sampling. To transfer it, measure local prediction volume, retained impressions, feature payload, delay distribution, privacy limits and whether logging failures are correlated with important traffic.</p>
+<h2 id="four-clocks-belong-in-the-data-contract">Four clocks belong in the data contract</h2>
+<p>Use explicit timestamps:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Clock</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Prediction time <code>t_p</code></td>
+<td>When the model had to decide</td>
+<td>Claim submitted at 10:00</td>
+</tr>
+<tr class="even">
+<td>Event time <code>t_e</code></td>
+<td>When the underlying fact occurred</td>
+<td>Payment occurred at 09:45</td>
+</tr>
+<tr class="odd">
+<td>Availability time <code>t_a</code></td>
+<td>When the feature system could read the fact</td>
+<td>Payment reached the feature pipeline at 10:07</td>
+</tr>
+<tr class="even">
+<td>Revision time <code>t_r</code></td>
+<td>When a prior fact was corrected or superseded</td>
+<td>Customer tier corrected at 11:00</td>
+</tr>
+</tbody>
+</table>
+</div><p>For a training row at <code>t_p</code>, a fact is eligible only if its domain semantics allow it and both <code>t_e ≤ t_p</code> and <code>t_a ≤ t_p</code>. For a half-open historical window of width <code>W</code>, require:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>p</mi></msub><mo>−</mo><mi>W</mi><mo>≤</mo><msub><mi>t</mi><mi>e</mi></msub><mo>&lt;</mo><msub><mi>t</mi><mi>p</mi></msub><mspace width="1.0em"></mspace><mtext mathvariant="normal">and</mtext><mspace width="1.0em"></mspace><msub><mi>t</mi><mi>a</mi></msub><mo>≤</mo><msub><mi>t</mi><mi>p</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+t_p-W \le t_e &lt; t_p \quad\text{and}\quad t_a \le t_p.
+</annotation></semantics></math></p>
+<p>The strict upper event-time bound prevents the prediction-triggering event from entering a feature that should describe only prior behavior. Some products deliberately include fields from the current request; those belong to request context and need a separate contract rather than an accidental aggregate.</p>
+<p>Availability time means observable by the serving path, not merely inserted somewhere. A warehouse ingestion timestamp is useful only if it faithfully represents when the online system could have used the value.</p>
+<h2 id="event-time-only-joins-can-leak-late-data">Event-time-only joins can leak late data</h2>
+<p>Use an invented prediction at 10:00 and three transactions:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Event</th>
+<th style="text-align: right;">Amount</th>
+<th>Event time</th>
+<th>Available time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>E1</td>
+<td style="text-align: right;">40</td>
+<td>09:10</td>
+<td>09:11</td>
+</tr>
+<tr class="even">
+<td>E2</td>
+<td style="text-align: right;">90</td>
+<td>09:45</td>
+<td>10:07</td>
+</tr>
+<tr class="odd">
+<td>E3</td>
+<td style="text-align: right;">30</td>
+<td>10:05</td>
+<td>10:05</td>
+</tr>
+</tbody>
+</table>
+</div><p>An offline query run later with only <code>event_time &lt; 10:00</code> returns E1 and E2, sum 130. The production model at 10:00 could see only E1, sum 40. E2 is historically valid but arrived seven minutes after the decision; E3 occurred after it. The event-time-only backfill leaks 90.</p>
+<p>Current Feast documentation makes this boundary explicit. Its default point-in-time join constrains event time; a later backfill or correction can still appear in an earlier training row. When a source supplies a created/availability timestamp, <code>filter_by_created_timestamp=True</code> adds the requirement that it be no later than the entity-row timestamp. Unsupported stores raise rather than silently ignoring that option. <a href="https://github.com/feast-dev/feast/blob/master/docs/getting-started/concepts/point-in-time-joins.md">Feast, “Point-in-time joins,” Retrieving features as of the event time, lines 218–232</a></p>
+<p>That option is a tool-specific implementation. The transferable principle is bitemporal: constrain both when the fact was true and when the decision system could know it.</p>
+<h2 id="mutable-dimensions-need-version-as-known-semantics">Mutable dimensions need version-as-known semantics</h2>
+<p>Suppose customer <code>C7</code> has two versions with the same effective time:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<thead>
+<tr class="header">
+<th>Value</th>
+<th>Effective event time</th>
+<th>Available/revision time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>risk_tier=low</code></td>
+<td>08:00</td>
+<td>08:02</td>
+</tr>
+<tr class="even">
+<td><code>risk_tier=high</code></td>
+<td>08:00</td>
+<td>11:00</td>
+</tr>
+</tbody>
+</table>
+</div><p>The 11:00 correction may be the best current account history, but a 10:00 prediction saw <code>low</code>. A query that chooses the latest row for the effective timestamp leaks the correction.</p>
+<p>For each entity and effective interval, first exclude versions with availability after <code>t_p</code>; then select the latest eligible revision. Preserve deletions and corrections as versions rather than overwriting warehouse rows. Without history, exact reconstruction is impossible; log the served value or declare the training row non-reproducible.</p>
+<p>Slowly changing dimension labels such as state, policy status, merchant category and account verification are especially dangerous because a corrected row can silently rewrite many old examples.</p>
+<h2 id="the-label-is-allowed-to-arrive-later-the-features-are-not">The label is allowed to arrive later; the features are not</h2>
+<p>Supervised learning intentionally attaches a future outcome to an earlier decision. A fraud confirmation at day 30 can label a transaction predicted on day 0. That does not permit day-30 information into the day-0 feature vector.</p>
+<p>Store separately:</p>
+<ul>
+<li>immutable prediction identity and <code>t_p</code>;</li>
+<li>served feature/bundle version or reproducible feature manifest;</li>
+<li>label definition, observation window and maturity time;</li>
+<li>censoring rule for examples whose label window is incomplete.</li>
+</ul>
+<p>Split data by prediction time or entity according to the deployment question. Randomly splitting rows after feature leakage does not repair the leakage; the forbidden information is already inside each row.</p>
+<h2 id="window-boundaries-are-part-of-the-feature-definition">Window boundaries are part of the feature definition</h2>
+<p>For <code>count_prior_payments_24h</code> at 10:00, choose and test one interval, such as <code>[previous-day 10:00, current-day 10:00)</code>. Decide:</p>
+<ul>
+<li>whether the lower boundary is inclusive;</li>
+<li>whether current-request data is separate;</li>
+<li>which time zone and daylight-saving rule applies;</li>
+<li>whether late events update only future predictions or also historical backfills;</li>
+<li>TTL and missing-value behavior;</li>
+<li>whether deletes/corrections retract earlier aggregates.</li>
+</ul>
+<p>Two pipelines both implementing “24 hours” can disagree by one event, a day boundary or an entire late partition. Version the semantics, not only the column name.</p>
+<h2 id="shared-computation-and-exact-logging-solve-different-gaps">Shared computation and exact logging solve different gaps</h2>
+<p>Airbnb’s Chronon engineering report describes one declarative feature computation used in both online and offline contexts. Snapshot mode provides daily/midnight accuracy; temporal mode uses change data to backfill historical points with finer accuracy. Joins take the prediction event and its time column as the left side, so features are computed as of the historical decision time. Airbnb reported more than ten thousand Chronon features and said teams typically moved from months of manual pipeline/index work to less than a week for new feature sets. <a href="https://medium.com/airbnb-engineering/chronon-a-declarative-feature-engineering-framework-b7b8ce796e04">Airbnb, “Chronon — A declarative feature Engineering framework,” computation contexts/types and conclusion, lines 125–159</a></p>
+<p>Chronon’s current Join documentation distinguishes real-time temporal backfills from batch sources that are midnight-accurate by default. That distinction matters: one definition does not make a daily source millisecond-fresh. <a href="https://chronon.ai/authoring_features/Join.html">Chronon Join documentation, timeline and accuracy scenarios, lines 54–80 and 229–245</a></p>
+<p>Choose evidence by use case:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Strategy</th>
+<th>Strongest evidence</th>
+<th>Main limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Exact inference logging</td>
+<td>Reproduces what an existing model consumed</td>
+<td>Does not create unlogged experimental features; logging can drop or bias</td>
+</tr>
+<tr class="even">
+<td>Shared online/offline computation</td>
+<td>Recomputes known and new features with one definition</td>
+<td>Correctness still depends on source history, clocks and execution mode</td>
+</tr>
+<tr class="odd">
+<td>Hybrid</td>
+<td>Logged baseline features plus point-in-time backfilled experiments</td>
+<td>Must prove keys, timestamps and versions align across both sources</td>
+</tr>
+</tbody>
+</table>
+</div><p>Do not call exact logging and recomputation interchangeable. Compare them on overlapping traffic; disagreement is a diagnostic signal.</p>
+<h2 id="test-parity-as-data-not-as-confidence">Test parity as data, not as confidence</h2>
+<p>Sample predictions with immutable IDs and store:</p>
+<ul>
+<li>served feature vector or digest;</li>
+<li>feature-definition and source versions;</li>
+<li>prediction time and request context;</li>
+<li>offline-reconstructed vector;</li>
+<li>reason-coded differences: late data, correction, null/default, type/format, window edge, missing partition or code version.</li>
+</ul>
+<p>Report mismatch per feature and important slice, not only one global percentage. A 0.1% global mismatch concentrated in high-value claims can be more dangerous than 5% mismatch in a discarded diagnostic field. Separate exact-value, tolerance-based numeric and semantic-category comparisons.</p>
+<p>Treat the comparison as a release gate for feature-pipeline changes. X06’s model canary cannot rescue a training set that already contains future knowledge.</p>
+<h2 id="late-data-needs-a-declared-policy">Late data needs a declared policy</h2>
+<p>A watermark is an operational belief about how complete an event-time interval is. It is not proof that no older event will arrive.</p>
+<p>Choose per feature:</p>
+<ul>
+<li><strong>as-served history:</strong> late events affect future predictions only; historical rows preserve what was known;</li>
+<li><strong>best-current history:</strong> historical analytics are corrected, but the result must not be used as prediction-time training data without availability filtering;</li>
+<li><strong>dual views:</strong> retain both as-served and best-current representations with clear names and lineage.</li>
+</ul>
+<p>Measure delay distributions by source and slice. A seven-minute cutoff that covers 99% globally may systematically exclude one region or partner. Record late-drop and correction rates; do not hide them inside null counts.</p>
+<h2 id="practice">Practice</h2>
+<p>All entities, timestamps, values and sample counts below are invented teaching inputs.</p>
+<ol type="1">
+<li>For the 10:00 prediction and E1–E3 table, compute the event-time-only sum and the as-known sum. Identify each excluded row and the violated predicate.</li>
+<li>Reconstruct <code>risk_tier</code> for customer C7 at 10:00 and 12:00. Explain why overwriting the <code>low</code> row makes the 10:00 feature unrecoverable.</li>
+<li>Add E0 with amount 10, event/availability time 09:00, and E-old with amount 100 at 08:59. For the half-open window <code>[09:00, 10:00)</code>, calculate the as-known sum and state what changes if the lower edge is exclusive.</li>
+<li>In an invented parity sample of 1,000 predictions, 120 have language-format mismatch, 25 have count mismatch and 5 have both. Calculate the any-mismatch rate. Design a gate that cannot hide a critical-feature slice behind the global average.</li>
+<li>Design training data for an insurance claim-triage model with mutable policy status, late repair invoices and a fraud label maturing after 30 days. Choose logging, recomputation or a hybrid; specify clocks, keys, windows, label maturity and parity evidence.</li>
+</ol>
+<h2 id="evidence-and-transfer-questions">Evidence and transfer questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Inspected locator</th>
+<th>Application boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XR19 · Uber</td>
+<td><a href="https://www.uber.com/us/en/blog/taming-ml-firehose/">Taming the ML Firehose</a>, Problem, Solution, Scale Challenges, Online Architecture, High Throughput and Conclusion</td>
+<td>Documents Uber’s observed skew, feature-logging decision, scale trade-offs and reported rollout results. It does not prove logging is complete, unbiased or affordable for another workload.</td>
+</tr>
+<tr class="even">
+<td>XR20 · Airbnb / Chronon</td>
+<td><a href="https://medium.com/airbnb-engineering/chronon-a-declarative-feature-engineering-framework-b7b8ce796e04">Chronon engineering report</a>, computation contexts/types and conclusion; <a href="https://chronon.ai/authoring_features/Join.html">Chronon Join</a>, timeline and accuracy scenarios</td>
+<td>Documents a shared online/offline computation design, temporal versus snapshot semantics and Airbnb’s reported adoption/productivity. It does not make an arbitrary source bitemporal or guarantee a caller chose the right accuracy mode.</td>
+</tr>
+<tr class="odd">
+<td>XR21 · Feast</td>
+<td><a href="https://github.com/feast-dev/feast/blob/master/docs/getting-started/concepts/point-in-time-joins.md">Point-in-time joins</a>, full page, especially “Retrieving features as of the event time”</td>
+<td>Current implementation semantics distinguish event-time filtering from optional created-time filtering. Availability meaning and offline-store support remain deployment inputs.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Before training a real model, obtain immutable prediction IDs, decision timestamps, source event and availability clocks, versioned feature definitions, correction/delete history, online TTL/default behavior, label windows, late-data distributions, logged-versus-recomputed parity by slice, and ownership for mismatches. No learner answer or mastery level is inferred from opening this lesson.</p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/x08.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/extensions.html#extension-evidence-register">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="X08"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/x07.html"><small>Previous module · X07</small><strong>Backups are not recovery</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#historical-truth-is-not-prediction-time-truth">Historical truth is not prediction-time truth</a></li><li class="h2"><a href="#production-case-uber-logged-the-features-the-model-actually-consumed">Production case — Uber logged the features the model actually consumed</a></li><li class="h2"><a href="#four-clocks-belong-in-the-data-contract">Four clocks belong in the data contract</a></li><li class="h2"><a href="#event-time-only-joins-can-leak-late-data">Event-time-only joins can leak late data</a></li><li class="h2"><a href="#mutable-dimensions-need-version-as-known-semantics">Mutable dimensions need version-as-known semantics</a></li><li class="h2"><a href="#the-label-is-allowed-to-arrive-later-the-features-are-not">The label is allowed to arrive later; the features are not</a></li><li class="h2"><a href="#window-boundaries-are-part-of-the-feature-definition">Window boundaries are part of the feature definition</a></li><li class="h2"><a href="#shared-computation-and-exact-logging-solve-different-gaps">Shared computation and exact logging solve different gaps</a></li><li class="h2"><a href="#test-parity-as-data-not-as-confidence">Test parity as data, not as confidence</a></li><li class="h2"><a href="#late-data-needs-a-declared-policy">Late data needs a declared policy</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-transfer-questions">Evidence and transfer questions</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

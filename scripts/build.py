@@ -52,7 +52,7 @@ ROUTES = [
 ]
 TOPIC_ROUTES = [
     ("Cloud and distributed systems", "F01 S01 S02 S03 S04 S05 S06 C01 C03 X01 X02 X03 X05 X07"),
-    ("AI engineering and LLM judgment", "F02 F03 F04 A01 A02 A03 A04 A05 C02 C05 C06 X03 X04 X06"),
+    ("AI engineering and LLM judgment", "F02 F03 F04 A01 A02 A03 A04 A05 C02 C05 C06 X03 X04 X06 X08"),
     ("Technology and business decisions", "B01 F02 F03 B02 B03 C02 C04 C06 X04"),
 ]
 LEVELS = ["Unstarted", "Recognize", "Reproduce", "Transfer", "Defend"]
@@ -212,7 +212,7 @@ def home_page():
 <div class="hero-graphic" aria-hidden="true"><div class="hero-grid"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><div class="orbit orbit-four"></div><div class="orbit orbit-five"></div><div class="orbit orbit-six"></div><div class="orbit orbit-seven"></div><div class="graphic-point"></div></div>
 </section>
 <div class="overview-facts"><span><strong>{len(modules)}</strong> modules</span><span><strong>{len(TRACKS)}</strong> topic areas</span><span><strong>{len(modules)}</strong> worked companions</span></div>
-<section class="dashboard-section panel"><p class="eyebrow">New Cloud extension · X07</p><h2>Backups are not recovery</h2><p>Turn artifacts, logs, keys, dependencies and reconciliation into a timed path back to a verified service.</p><div class="hero-actions">{button('/learn/x07.html', 'Build the recovery path')}{button('/reference/extensions.html', 'View extension roadmap', 'secondary')}</div></section>
+<section class="dashboard-section panel"><p class="eyebrow">New AI extension · X08</p><h2>Point-in-time feature correctness</h2><p>Reconstruct what the model could actually know across late events, corrections, backfills and separate serving paths.</p><div class="hero-actions">{button('/learn/x08.html', 'Trace the feature clocks')}{button('/reference/extensions.html', 'View extension roadmap', 'secondary')}</div></section>
 <section class="dashboard-section"><div class="section-head"><div><p class="eyebrow">Choose a subject</p><h2>Browse by topic</h2></div><a class="text-link" href="/topics.html">All modules <span aria-hidden="true">→</span></a></div>
 <div class="topic-grid">{track_cards}</div>
 </section>
@@ -457,6 +457,7 @@ prereq_ids["X04"] = ["F02", "F03", "B01"]
 prereq_ids["X05"] = ["S02", "S03", "S04", "C03"]
 prereq_ids["X06"] = ["F03", "A01", "A04", "C05", "X04"]
 prereq_ids["X07"] = ["S02", "S04", "S06", "X05"]
+prereq_ids["X08"] = ["F03", "A01", "A04", "X06"]
 register_anchors = {}
 for heading in docs["SDE_SOURCES"][0].xpath("./h2[@id] | ./h3[@id]"):
     match = re.search(r"\b([FSABC]\d\d)\b", clean_text(heading))

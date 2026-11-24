@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X08 — Worked point-in-time feature decisions | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 32</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X08</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/learn/x08.html"><span aria-hidden="true">←</span> Back to lesson</a><p class="eyebrow">X08 <span aria-hidden="true">/</span> Worked companion</p><h1 id="x08-worked-point-in-time-feature-decisions">Worked point-in-time feature decisions</h1><p class="article-description">Use the hints first, then compare your reasoning with the worked analysis and checks.</p><a class="button secondary" href="/learn/x08.html" >Return to lesson</a></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#apply-both-time-predicates">1. Apply both time predicates</a></li><li class="h2"><a href="#select-the-version-known-at-the-decision">2. Select the version known at the decision</a></li><li class="h2"><a href="#make-the-window-edges-executable">3. Make the window edges executable</a></li><li class="h2"><a href="#count-the-union-then-retain-feature-gates">4. Count the union, then retain feature gates</a></li><li class="h2"><a href="#build-a-claim-triage-training-record">5. Build a claim-triage training record</a></li><li class="h2"><a href="#reproduce-the-temporal-checks">Reproduce the temporal checks</a></li></ol></nav></details><article class="prose"><p><a href="/learn/x08.html">Return to the lesson</a>. Every entity, timestamp, value and sample count below is invented. These checks teach reconstruction; they do not validate a production feature platform.</p>
+<h2 id="apply-both-time-predicates">1. Apply both time predicates</h2>
+<p>For prediction time 10:00:</p>
+<ul>
+<li>E1 has <code>event_time=09:10 &lt; 10:00</code> and <code>available_time=09:11 ≤ 10:00</code>, so include 40.</li>
+<li>E2 has <code>event_time=09:45 &lt; 10:00</code> but <code>available_time=10:07 &gt; 10:00</code>, so exclude 90.</li>
+<li>E3 has <code>event_time=10:05 &gt; 10:00</code>, so exclude 30 regardless of its availability.</li>
+</ul>
+<p>An event-time-only query returns <code>40 + 90 = 130</code>. The as-known feature is <code>40</code>. The leaked amount is 90. Running the warehouse query later does not move the prediction clock.</p>
+<p>Before using <code>available_time</code>, prove it represents feature visibility to the serving path. An ingestion timestamp upstream of a delayed materialization can still leak.</p>
+<h2 id="select-the-version-known-at-the-decision">2. Select the version known at the decision</h2>
+<p>At 10:00, only the <code>low</code> version is eligible because it became available at 08:02; the <code>high</code> correction is not available until 11:00. At 12:00, both versions are eligible and the latest revision is <code>high</code>.</p>
+<p>Overwriting <code>low</code> with <code>high</code> destroys the availability history. A later backfill can know the current effective value but cannot prove what the 10:00 service returned. Preserve version rows or store the served feature vector/digest with the prediction.</p>
+<p>This is a bitemporal selection: first restrict by knowledge time, then resolve the applicable effective-time version.</p>
+<h2 id="make-the-window-edges-executable">3. Make the window edges executable</h2>
+<p>For <code>[09:00, 10:00)</code> with the as-known predicate:</p>
+<ul>
+<li>E0 at 09:00 is included because the lower edge is inclusive: 10.</li>
+<li>E1 is included: 40.</li>
+<li>E2 is excluded because it was unavailable at prediction time.</li>
+<li>E-old at 08:59 is outside the event-time window.</li>
+<li>E3 is beyond the upper edge.</li>
+</ul>
+<p>The sum is <code>10 + 40 = 50</code>. If the lower edge becomes exclusive, E0 is excluded and the sum becomes 40. That single bracket is part of the feature contract and needs a boundary fixture in both batch and serving implementations.</p>
+<h2 id="count-the-union-then-retain-feature-gates">4. Count the union, then retain feature gates</h2>
+<p>Use inclusion–exclusion:</p>
+<p><code>120 + 25 − 5 = 140</code> predictions with at least one mismatch.</p>
+<p>The global any-mismatch rate is <code>140 / 1,000 = 14%</code>. Language mismatch is 12%; count mismatch is 2.5%; their overlap is 0.5%.</p>
+<p>A gate should be conjunctive: global mismatch under its limit <strong>and</strong> every critical feature/slice under its own limit. Report denominators for state, partner, device and model version. A low global value cannot purchase a breach in <code>prior_claim_count</code> for one state. Define exact matching for categories and tolerances for numeric values before inspecting the candidate pipeline.</p>
+<p>Also compare missingness and reason codes. Equal aggregate mismatch can result from a harmless formatting normalization or a future-leaking late join.</p>
+<h2 id="build-a-claim-triage-training-record">5. Build a claim-triage training record</h2>
+<p>Use immutable <code>claim_id</code> plus <code>prediction_id</code>, with prediction time set when the triage decision is requested. Treat current-request fields separately from historical aggregates.</p>
+<p>For mutable policy status, retain effective and availability/revision times and select the latest version available at prediction time. For repair invoices, store service/event time and feature-availability time; a late invoice must not enter an earlier claim’s training vector even if its service date predates the claim. Define windows such as <code>[prediction_time − 365 days, prediction_time)</code> and test the edges.</p>
+<p>The fraud outcome can mature 30 days later as a label. It joins by claim/prediction identity but does not change the feature cutoff. Exclude or explicitly censor examples whose 30-day window is incomplete.</p>
+<p>A useful hybrid is:</p>
+<ul>
+<li>log the exact served baseline vector, bundle version and request context;</li>
+<li>point-in-time backfill experimental features using both event and availability cutoffs;</li>
+<li>compare recomputed baseline features with the logged vector on overlapping rows;</li>
+<li>block training when critical-feature mismatch or missing logged coverage breaches a slice limit.</li>
+</ul>
+<p>The evidence package needs source-delay distributions, correction history, online TTL/default rules, bundle/feature versions, label maturity, parity by state and a review path for mismatches. Logging failures must be measured; otherwise the retained sample may exclude the hardest traffic.</p>
+<h2 id="reproduce-the-temporal-checks">Reproduce the temporal checks</h2>
+<p>The deterministic script implements the invented joins, window boundaries, mutable version and parity arithmetic.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python" tabindex="0" aria-label="Code example"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ts(value):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> datetime.fromisoformat(<span class="ss">f"2026-11-24T</span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">:00"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> ts(<span class="st">"10:00"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>events <span class="op">=</span> [</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"id"</span>: <span class="st">"E0"</span>, <span class="st">"amount"</span>: <span class="dv">10</span>, <span class="st">"event"</span>: ts(<span class="st">"09:00"</span>), <span class="st">"available"</span>: ts(<span class="st">"09:00"</span>)},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"id"</span>: <span class="st">"E-old"</span>, <span class="st">"amount"</span>: <span class="dv">100</span>, <span class="st">"event"</span>: ts(<span class="st">"08:59"</span>), <span class="st">"available"</span>: ts(<span class="st">"08:59"</span>)},</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"id"</span>: <span class="st">"E1"</span>, <span class="st">"amount"</span>: <span class="dv">40</span>, <span class="st">"event"</span>: ts(<span class="st">"09:10"</span>), <span class="st">"available"</span>: ts(<span class="st">"09:11"</span>)},</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"id"</span>: <span class="st">"E2"</span>, <span class="st">"amount"</span>: <span class="dv">90</span>, <span class="st">"event"</span>: ts(<span class="st">"09:45"</span>), <span class="st">"available"</span>: ts(<span class="st">"10:07"</span>)},</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"id"</span>: <span class="st">"E3"</span>, <span class="st">"amount"</span>: <span class="dv">30</span>, <span class="st">"event"</span>: ts(<span class="st">"10:05"</span>), <span class="st">"available"</span>: ts(<span class="st">"10:05"</span>)},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>event_only <span class="op">=</span> <span class="bu">sum</span>(row[<span class="st">"amount"</span>] <span class="cf">for</span> row <span class="kw">in</span> events <span class="cf">if</span> row[<span class="st">"id"</span>] <span class="kw">in</span> {<span class="st">"E1"</span>, <span class="st">"E2"</span>} <span class="kw">and</span> row[<span class="st">"event"</span>] <span class="op">&lt;</span> prediction)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>as_known <span class="op">=</span> <span class="bu">sum</span>(row[<span class="st">"amount"</span>] <span class="cf">for</span> row <span class="kw">in</span> events <span class="cf">if</span> row[<span class="st">"id"</span>] <span class="kw">in</span> {<span class="st">"E1"</span>, <span class="st">"E2"</span>, <span class="st">"E3"</span>} <span class="kw">and</span> row[<span class="st">"event"</span>] <span class="op">&lt;</span> prediction <span class="kw">and</span> row[<span class="st">"available"</span>] <span class="op">&lt;=</span> prediction)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> event_only <span class="op">==</span> <span class="dv">130</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> as_known <span class="op">==</span> <span class="dv">40</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>lower <span class="op">=</span> ts(<span class="st">"09:00"</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>window_rows <span class="op">=</span> [row <span class="cf">for</span> row <span class="kw">in</span> events <span class="cf">if</span> lower <span class="op">&lt;=</span> row[<span class="st">"event"</span>] <span class="op">&lt;</span> prediction <span class="kw">and</span> row[<span class="st">"available"</span>] <span class="op">&lt;=</span> prediction]</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> {row[<span class="st">"id"</span>] <span class="cf">for</span> row <span class="kw">in</span> window_rows} <span class="op">==</span> {<span class="st">"E0"</span>, <span class="st">"E1"</span>}</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(row[<span class="st">"amount"</span>] <span class="cf">for</span> row <span class="kw">in</span> window_rows) <span class="op">==</span> <span class="dv">50</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>versions <span class="op">=</span> [</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"value"</span>: <span class="st">"low"</span>, <span class="st">"effective"</span>: ts(<span class="st">"08:00"</span>), <span class="st">"available"</span>: ts(<span class="st">"08:02"</span>)},</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"value"</span>: <span class="st">"high"</span>, <span class="st">"effective"</span>: ts(<span class="st">"08:00"</span>), <span class="st">"available"</span>: ts(<span class="st">"11:00"</span>)},</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> value_as_known(at):</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    eligible <span class="op">=</span> [row <span class="cf">for</span> row <span class="kw">in</span> versions <span class="cf">if</span> row[<span class="st">"effective"</span>] <span class="op">&lt;=</span> at <span class="kw">and</span> row[<span class="st">"available"</span>] <span class="op">&lt;=</span> at]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">max</span>(eligible, key<span class="op">=</span><span class="kw">lambda</span> row: row[<span class="st">"available"</span>])[<span class="st">"value"</span>]</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> value_as_known(ts(<span class="st">"10:00"</span>)) <span class="op">==</span> <span class="st">"low"</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> value_as_known(ts(<span class="st">"12:00"</span>)) <span class="op">==</span> <span class="st">"high"</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>language_mismatch <span class="op">=</span> <span class="dv">120</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>count_mismatch <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>any_mismatch <span class="op">=</span> language_mismatch <span class="op">+</span> count_mismatch <span class="op">-</span> both</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> any_mismatch <span class="op">==</span> <span class="dv">140</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> any_mismatch <span class="op">/</span> <span class="dv">1_000</span> <span class="op">==</span> <span class="fl">0.14</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> count_mismatch <span class="op">/</span> <span class="dv">1_000</span> <span class="op">==</span> <span class="fl">0.025</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PASS: availability cutoffs, window edges, corrections and parity checked"</span>)</span></code></pre></div>
+<p>A complete answer identifies the exact decision clock, distinguishes truth from knowability, versions mutable data, keeps label time separate and treats logged/recomputed disagreement as evidence rather than noise. These checks do not record learner mastery.</p>
+</article></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#apply-both-time-predicates">1. Apply both time predicates</a></li><li class="h2"><a href="#select-the-version-known-at-the-decision">2. Select the version known at the decision</a></li><li class="h2"><a href="#make-the-window-edges-executable">3. Make the window edges executable</a></li><li class="h2"><a href="#count-the-union-then-retain-feature-gates">4. Count the union, then retain feature gates</a></li><li class="h2"><a href="#build-a-claim-triage-training-record">5. Build a claim-triage training record</a></li><li class="h2"><a href="#reproduce-the-temporal-checks">Reproduce the temporal checks</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>
