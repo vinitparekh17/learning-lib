@@ -25,6 +25,7 @@ REFERENCES = {
     "SDE_EXTENSIONS": ("Extension roadmap", "New lessons, evidence checks, and the next useful questions.", "extensions"),
     "SDE_Extension_Audit_01": ("Extension audit 01", "X01–X04 evidence boundaries, companion mappings, executed checks, and the next concrete gaps.", "extension-audit-01"),
     "SDE_Extension_Audit_02": ("Extension audit 02", "X05–X06 evidence boundaries, companion mappings, executed checks, and the next concrete gaps.", "extension-audit-02"),
+    "SDE_Extension_Audit_03": ("Extension audit 03", "X07–X08 evidence boundaries, companion mappings, executed checks, and the next concrete gaps.", "extension-audit-03"),
     "SDE_CONSOLIDATED_NOTES": ("Consolidated notes", "Cross-cutting principles and a reusable decision template.", "notes"),
     "SDE_REFERENCE_CARDS": ("Reference cards", "One compact recall prompt for each module.", "reference-cards"),
     "SDE_OPEN_QUESTIONS": ("Open questions", "Real inputs that the fictional cases leave unresolved.", "open-questions"),
@@ -212,7 +213,7 @@ def home_page():
 <div class="hero-graphic" aria-hidden="true"><div class="hero-grid"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><div class="orbit orbit-four"></div><div class="orbit orbit-five"></div><div class="orbit orbit-six"></div><div class="orbit orbit-seven"></div><div class="graphic-point"></div></div>
 </section>
 <div class="overview-facts"><span><strong>{len(modules)}</strong> modules</span><span><strong>{len(TRACKS)}</strong> topic areas</span><span><strong>{len(modules)}</strong> worked companions</span></div>
-<section class="dashboard-section panel"><p class="eyebrow">New AI extension · X08</p><h2>Point-in-time feature correctness</h2><p>Reconstruct what the model could actually know across late events, corrections, backfills and separate serving paths.</p><div class="hero-actions">{button('/learn/x08.html', 'Trace the feature clocks')}{button('/reference/extensions.html', 'View extension roadmap', 'secondary')}</div></section>
+<section class="dashboard-section panel"><p class="eyebrow">Extension batch audited · X07–X08</p><h2>Recovery and point-in-time features, checked</h2><p>Primary-source boundaries, ten exercise mappings, executable examples, search, routes and navigation have passed the third extension audit.</p><div class="hero-actions">{button('/reference/extension-audit-03.html', 'Read the audit')}{button('/reference/extensions.html', 'View the next batch', 'secondary')}</div></section>
 <section class="dashboard-section"><div class="section-head"><div><p class="eyebrow">Choose a subject</p><h2>Browse by topic</h2></div><a class="text-link" href="/topics.html">All modules <span aria-hidden="true">→</span></a></div>
 <div class="topic-grid">{track_cards}</div>
 </section>
@@ -279,7 +280,7 @@ def reference_page():
     groups = [
         ("Study aids", ["SDE_EXTENSIONS", "SDE_CONSOLIDATED_NOTES", "SDE_REFERENCE_CARDS", "SDE_OPEN_QUESTIONS", "SDE_START_HERE"]),
         ("Evidence and curriculum", ["SDE_SOURCES", "SDE_INDEX", "SDE_Foundations_Library_v1", "SDE_Foundations_Scheduled_Prompt"]),
-        ("Audit reports", [f"SDE_Audit_{letter}" for letter in "ABCD"] + ["SDE_Extension_Audit_01", "SDE_Extension_Audit_02"]),
+        ("Audit reports", [f"SDE_Audit_{letter}" for letter in "ABCD"] + ["SDE_Extension_Audit_01", "SDE_Extension_Audit_02", "SDE_Extension_Audit_03"]),
         ("Companions and exports", ["SDE_SOLUTIONS_INDEX", "SDE_Foundations_Complete", "SDE_Foundations_Solutions", "STUDY_PROGRESS", "README"]),
     ]
     intro = page_intro("Library", "Reference", "Revisit the source checks, use a recall aid, or open a saved export.")

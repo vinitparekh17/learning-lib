@@ -20,10 +20,11 @@ The original 24-module curriculum and four audits form a completed first edition
 | [X06 — AI release gates under distribution shift](SDE_X06.md) | Join offline slices, shadow traffic, bounded exposure, delayed outcomes and rollback | F03, A01, A04, C05, X04 | Produced, checked and audited |
 | [X06 worked companion](SDE_X06_answers.md) | Reproduce slice gates, disagreement strata, risk budget and delay calculations | X06 practice | Produced, checked and mapping-audited |
 | [Extension audit 02](SDE_Extension_Audit_02.md) | Recheck X05–X06 evidence, example boundaries, mappings and generated navigation | X05–X06 | Passed on 23 November 2026 |
-| [X07 — Backups are not recovery](SDE_X07.md) | Prove restore chains, dependency order, recovery objectives and external-effect reconciliation | S02, S04, S06, X05 | Produced and checked; pending extension audit 03 |
-| [X07 worked companion](SDE_X07_answers.md) | Reproduce recovery-point, critical-path, chain-closure and reconciliation decisions | X07 practice | Produced and checked |
-| [X08 — Point-in-time feature correctness](SDE_X08.md) | Reconstruct what a model could know across late events, mutable data and separate serving/training paths | F03, A01, A04, X06 | Produced and checked; pending extension audit 03 |
-| [X08 worked companion](SDE_X08_answers.md) | Reproduce availability cutoffs, mutable versions, window boundaries and parity decisions | X08 practice | Produced and checked |
+| [X07 — Backups are not recovery](SDE_X07.md) | Prove restore chains, dependency order, recovery objectives and external-effect reconciliation | S02, S04, S06, X05 | Produced, checked and audited |
+| [X07 worked companion](SDE_X07_answers.md) | Reproduce recovery-point, critical-path, chain-closure and reconciliation decisions | X07 practice | Produced, checked and mapping-audited |
+| [X08 — Point-in-time feature correctness](SDE_X08.md) | Reconstruct what a model could know across late events, mutable data and separate serving/training paths | F03, A01, A04, X06 | Produced, checked and audited |
+| [X08 worked companion](SDE_X08_answers.md) | Reproduce availability cutoffs, mutable versions, window boundaries and parity decisions | X08 practice | Produced, checked and mapping-audited |
+| [Extension audit 03](SDE_Extension_Audit_03.md) | Recheck X07–X08 evidence, example boundaries, mappings and generated navigation | X07–X08 | Passed on 24 November 2026 |
 
 X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.
 
@@ -33,7 +34,9 @@ These are proposed work items, not completed lessons or a claim that sources hav
 
 | Order | Proposed extension | Why it compounds | Entry points |
 | --- | --- | --- | --- |
-| Next | Extension audit 03 | Recheck X07–X08 evidence boundaries, examples and navigation before selecting more work | X07–X08 |
+| Next | X09 — Safe configuration rollout and control-plane blast radius | Bound globally propagated configuration with staged scope, independent rollback and last-known-good behavior | S06, X05, X06, X07 |
+| Then | X10 — Selective labels and decision feedback | Reason when deployed decisions determine which outcomes become observable | F02, F03, A01, X06, X08 |
+| Review | Extension audit 04 | Recheck X09–X10 evidence boundaries, examples and navigation before selecting more work | X09–X10 |
 
 ## How continued work is maintained
 
@@ -68,6 +71,8 @@ Keep the original R01–R24 identities stable. New extension sources use XR iden
 | XR21 | [Feast, “Point-in-time joins”](https://github.com/feast-dev/feast/blob/master/docs/getting-started/concepts/point-in-time-joins.md), full page, especially “Retrieving features as of the event time”; inspected 2026-11-24 | Current event-time versus optional created-time filtering semantics; availability meaning and store support remain deployment inputs |
 
 ## Change record
+
+24 November 2026 · Completed [Extension audit 03](SDE_Extension_Audit_03.md). Re-inspected XR16–XR21, verified 10 practice-to-answer mappings, executed both companion checks and checked generated routes, fragments, search and navigation. Direct inspection confirmed the current PostgreSQL page is version 19 despite stale search metadata, so no lesson claim required correction. Selected X09 and X10 only for the concrete configuration-blast-radius and selective-label gaps recorded in the audit; audit 04 follows that mini-batch.
 
 24 November 2026 · Added X08 and five worked feature-time decisions. XR19 documents Uber's feature mismatch, exact inference logging choice, scale constraints and reported rollout results; XR20 grounds Chronon's shared temporal computation and accuracy modes; XR21 exposes the event-time versus availability-time boundary directly. Executed late-event, mutable-version, half-open-window and parity checks. Extension audit 03 is next.
 

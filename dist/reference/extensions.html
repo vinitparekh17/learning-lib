@@ -143,25 +143,31 @@
 <td><a href="/learn/x07.html">X07 — Backups are not recovery</a></td>
 <td>Prove restore chains, dependency order, recovery objectives and external-effect reconciliation</td>
 <td>S02, S04, S06, X05</td>
-<td>Produced and checked; pending extension audit 03</td>
+<td>Produced, checked and audited</td>
 </tr>
 <tr class="even">
 <td><a href="/answers/x07.html">X07 worked companion</a></td>
 <td>Reproduce recovery-point, critical-path, chain-closure and reconciliation decisions</td>
 <td>X07 practice</td>
-<td>Produced and checked</td>
+<td>Produced, checked and mapping-audited</td>
 </tr>
 <tr class="odd">
 <td><a href="/learn/x08.html">X08 — Point-in-time feature correctness</a></td>
 <td>Reconstruct what a model could know across late events, mutable data and separate serving/training paths</td>
 <td>F03, A01, A04, X06</td>
-<td>Produced and checked; pending extension audit 03</td>
+<td>Produced, checked and audited</td>
 </tr>
 <tr class="even">
 <td><a href="/answers/x08.html">X08 worked companion</a></td>
 <td>Reproduce availability cutoffs, mutable versions, window boundaries and parity decisions</td>
 <td>X08 practice</td>
-<td>Produced and checked</td>
+<td>Produced, checked and mapping-audited</td>
+</tr>
+<tr class="odd">
+<td><a href="/reference/extension-audit-03.html">Extension audit 03</a></td>
+<td>Recheck X07–X08 evidence, example boundaries, mappings and generated navigation</td>
+<td>X07–X08</td>
+<td>Passed on 24 November 2026</td>
 </tr>
 </tbody>
 </table>
@@ -186,9 +192,21 @@
 <tbody>
 <tr class="odd">
 <td>Next</td>
-<td>Extension audit 03</td>
-<td>Recheck X07–X08 evidence boundaries, examples and navigation before selecting more work</td>
-<td>X07–X08</td>
+<td>X09 — Safe configuration rollout and control-plane blast radius</td>
+<td>Bound globally propagated configuration with staged scope, independent rollback and last-known-good behavior</td>
+<td>S06, X05, X06, X07</td>
+</tr>
+<tr class="even">
+<td>Then</td>
+<td>X10 — Selective labels and decision feedback</td>
+<td>Reason when deployed decisions determine which outcomes become observable</td>
+<td>F02, F03, A01, X06, X08</td>
+</tr>
+<tr class="odd">
+<td>Review</td>
+<td>Extension audit 04</td>
+<td>Recheck X09–X10 evidence boundaries, examples and navigation before selecting more work</td>
+<td>X09–X10</td>
 </tr>
 </tbody>
 </table>
@@ -318,6 +336,7 @@
 </tbody>
 </table>
 </div><h2 id="change-record">Change record</h2>
+<p>24 November 2026 · Completed <a href="/reference/extension-audit-03.html">Extension audit 03</a>. Re-inspected XR16–XR21, verified 10 practice-to-answer mappings, executed both companion checks and checked generated routes, fragments, search and navigation. Direct inspection confirmed the current PostgreSQL page is version 19 despite stale search metadata, so no lesson claim required correction. Selected X09 and X10 only for the concrete configuration-blast-radius and selective-label gaps recorded in the audit; audit 04 follows that mini-batch.</p>
 <p>24 November 2026 · Added X08 and five worked feature-time decisions. XR19 documents Uber’s feature mismatch, exact inference logging choice, scale constraints and reported rollout results; XR20 grounds Chronon’s shared temporal computation and accuracy modes; XR21 exposes the event-time versus availability-time boundary directly. Executed late-event, mutable-version, half-open-window and parity checks. Extension audit 03 is next.</p>
 <p>23 November 2026 · Added X07 and five worked recovery decisions. XR16 documents GitLab’s 2017 recovery constraints, chosen six-hour snapshot, reported loss and approximately 18-hour storage bottleneck; XR17 bounds restore-test evidence; XR18 grounds PostgreSQL chain and timeline semantics. Executed recovery-point, dependency-path, incremental-closure and external-effect reconciliation checks. X08 is next, followed by extension audit 03.</p>
 <p>23 November 2026 · Completed <a href="/reference/extension-audit-02.html">Extension audit 02</a>. Re-inspected XR10–XR15 boundaries, verified 10 practice-to-answer mappings, executed both companion checks and checked generated routes, fragments, search and navigation. No lesson claim required correction. Selected X07 and X08 only for the concrete disaster-restore and point-in-time feature gaps recorded in the audit; audit 03 follows that mini-batch.</p>
