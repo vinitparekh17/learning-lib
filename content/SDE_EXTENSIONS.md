@@ -25,6 +25,8 @@ The original 24-module curriculum and four audits form a completed first edition
 | [X08 — Point-in-time feature correctness](SDE_X08.md) | Reconstruct what a model could know across late events, mutable data and separate serving/training paths | F03, A01, A04, X06 | Produced, checked and audited |
 | [X08 worked companion](SDE_X08_answers.md) | Reproduce availability cutoffs, mutable versions, window boundaries and parity decisions | X08 practice | Produced, checked and mapping-audited |
 | [Extension audit 03](SDE_Extension_Audit_03.md) | Recheck X07–X08 evidence, example boundaries, mappings and generated navigation | X07–X08 | Passed on 24 November 2026 |
+| [X09 — Safe configuration rollout and control-plane blast radius](SDE_X09.md) | Bound globally propagated configuration with semantic validation, staged scope, ordered application and independent rollback | S06, X05, X06, X07 | Produced and checked; audit 04 pending |
+| [X09 worked companion](SDE_X09_answers.md) | Reproduce exposure, guardrail, version-authority, stale-state and rollback-independence decisions | X09 practice | Produced and checked; mapping audit 04 pending |
 
 X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.
 
@@ -34,8 +36,7 @@ These are proposed work items, not completed lessons or a claim that sources hav
 
 | Order | Proposed extension | Why it compounds | Entry points |
 | --- | --- | --- | --- |
-| Next | X09 — Safe configuration rollout and control-plane blast radius | Bound globally propagated configuration with staged scope, independent rollback and last-known-good behavior | S06, X05, X06, X07 |
-| Then | X10 — Selective labels and decision feedback | Reason when deployed decisions determine which outcomes become observable | F02, F03, A01, X06, X08 |
+| Next | X10 — Selective labels and decision feedback | Reason when deployed decisions determine which outcomes become observable | F02, F03, A01, X06, X08 |
 | Review | Extension audit 04 | Recheck X09–X10 evidence boundaries, examples and navigation before selecting more work | X09–X10 |
 
 ## How continued work is maintained
@@ -69,8 +70,13 @@ Keep the original R01–R24 identities stable. New extension sources use XR iden
 | XR19 | [Uber, “Taming the ML Firehose: Scaling Feature Consistency”](https://www.uber.com/us/en/blog/taming-ml-firehose/), Problem, Solution, Scale Challenges, Online Architecture Deep Dive, High Throughput and Conclusion; inspected 2026-11-24 | Documents online/offline mismatches, exact inference-feature logging, scale constraints and reported rollout outcomes; no proof that logging is complete, unbiased or economical elsewhere |
 | XR20 | [Nikhil Simha, Airbnb, “Chronon — A declarative feature Engineering framework”](https://medium.com/airbnb-engineering/chronon-a-declarative-feature-engineering-framework-b7b8ce796e04), entity sources, computation contexts/types and conclusion; [Chronon Join documentation](https://chronon.ai/authoring_features/Join.html), timeline and accuracy scenarios; inspected 2026-11-24 | Airbnb's shared online/offline computation decision, temporal/snapshot semantics and reported adoption/productivity; source history and chosen accuracy mode remain local obligations |
 | XR21 | [Feast, “Point-in-time joins”](https://github.com/feast-dev/feast/blob/master/docs/getting-started/concepts/point-in-time-joins.md), full page, especially “Retrieving features as of the event time”; inspected 2026-11-24 | Current event-time versus optional created-time filtering semantics; availability meaning and store support remain deployment inputs |
+| XR22 | [Cloudflare, “Details of the Cloudflare outage on July 2, 2019”](https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/), “The events of July 2,” “What happened,” “How Cloudflare operates,” “WAF Threats,” “Quicksilver” and “What went wrong,” lines 886–922 and 935–981; inspected 2026-11-25 | Documents the urgency constraint, functional-test gap, seconds-scale global distribution, CPU exhaustion, operator-access coupling and mitigation; not current Cloudflare architecture or a universal rollout prescription |
+| XR23 | [Google SRE Workbook, “Configuration Design and Best Practices”](https://sre.google/workbook/configuration-design/), “Semantic validation,” “Ownership and Change Tracking” and “Safe Configuration Change Application,” lines 143–182; inspected 2026-11-25 | Grounds semantic validation, provenance, gradual application, rollback and loss-of-control safeguards; workload limits and stale-state policy remain local decisions |
+| XR24 | [AWS Well-Architected, OPS04-BP01](https://docs.aws.amazon.com/wellarchitected/latest/framework/ops04-bp01.html), “Implementation guidance,” lines 37–42 and implementation steps; inspected 2026-11-25 | Current guidance for fault-aligned fractional stages, health signals and bake time; does not prove any deployed gate is sufficient |
 
 ## Change record
+
+25 November 2026 · Added X09 and five worked configuration-rollout decisions. XR22 documents Cloudflare's 2019 WAF urgency constraint, passing functional tests, seconds-scale global propagation, CPU exhaustion and impaired operator path; XR23 grounds semantic validation and recoverable gradual application; XR24 grounds fault-aligned stages and bake time. Executed exposure, guardrail and version-authority checks. X10 is next, followed by extension audit 04.
 
 24 November 2026 · Completed [Extension audit 03](SDE_Extension_Audit_03.md). Re-inspected XR16–XR21, verified 10 practice-to-answer mappings, executed both companion checks and checked generated routes, fragments, search and navigation. Direct inspection confirmed the current PostgreSQL page is version 19 despite stale search metadata, so no lesson claim required correction. Selected X09 and X10 only for the concrete configuration-blast-radius and selective-label gaps recorded in the audit; audit 04 follows that mini-batch.
 

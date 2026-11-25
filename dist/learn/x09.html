@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f7f1">
+<title>X09 — Safe configuration rollout and control-plane blast radius | SDE Foundations</title>
+<link rel="icon" href="/assets/mark.png" type="image/png">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/catalog.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body class="reading-page" data-module="X09">
+<a class="skip" href="#main">Skip to content</a>
+<button class="scrim" type="button" aria-label="Close navigation" hidden></button>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>SDE Foundations</strong><small>Private learning library</small></span></a>
+<nav aria-label="Main navigation">
+<div class="sidebar-label">Learn</div><a class="nav-link " href="/"><span class="ico home" aria-hidden="true"></span>Overview</a><a class="nav-link " href="/paths.html"><span class="ico route" aria-hidden="true"></span>Study paths</a><a class="nav-link active" href="/topics.html" aria-current="page"><span class="ico grid" aria-hidden="true"></span>Browse topics</a><a class="nav-link " href="/reference/extensions.html"><span class="ico books" aria-hidden="true"></span>Extensions</a><a class="nav-link " href="/progress.html"><span class="ico progress" aria-hidden="true"></span>My progress</a>
+<div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
+</nav>
+<a class="side-progress" href="/progress.html">
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 33</strong></span>
+<span class="meter"><span data-meter></span></span>
+<span class="side-progress-note">Modules with a recorded level</span>
+</a>
+</aside>
+<div class="workspace">
+<header class="topbar">
+<div class="topbar-inner">
+<button class="mobile-menu" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation"><span class="ico menu" aria-hidden="true"></span></button>
+<a class="mobile-brand" href="/">SDE Foundations</a>
+<div class="header-location"><span>Topics</span><span class="header-separator">/</span><span class="header-topic">X09</span></div>
+<button class="search-trigger" type="button" aria-haspopup="dialog"><span class="ico search" aria-hidden="true"></span><span>Search library</span><kbd>Ctrl K</kbd></button>
+</div>
+</header>
+<main id="main" class="page" tabindex="-1">
+<div class="reader-heading"><a class="back-link" href="/topics.html?track=X#track-X"><span aria-hidden="true">←</span> Extensions</a><p class="eyebrow">Extensions <span aria-hidden="true">/</span> X09</p><h1 id="x09-safe-configuration-rollout-and-control-plane-blast-radius">Safe configuration rollout and control-plane blast radius</h1><p class="article-description">Treat configuration as executable behavior: validate its meaning, bound its rollout, preserve last-known-good state and keep rollback usable when the control plane or new configuration fails.</p><div class="prereq-line"><span>Related prerequisites</span><div class="module-chips"><a class="module-chip" href="/learn/s06.html" data-chip="S06">S06</a><a class="module-chip" href="/learn/x05.html" data-chip="X05">X05</a><a class="module-chip" href="/learn/x06.html" data-chip="X06">X06</a><a class="module-chip" href="/learn/x07.html" data-chip="X07">X07</a></div></div>
+<div class="article-actions"><a class="button primary" href="#practice" >Jump to practice</a><a class="button secondary" href="#evidence-and-transfer-questions" >Evidence</a><a class="button secondary" href="/answers/x09.html" >Worked companion</a><a class="text-link level-jump" href="#study-level-heading">Record level</a></div></div>
+<div class="reader-grid"><div class="reader-main"><details class="toc-mobile"><summary>On this page</summary><nav aria-label="On this page"><ol><li class="h2"><a href="#configuration-can-change-behavior-faster-than-code">Configuration can change behavior faster than code</a></li><li class="h2"><a href="#production-case-a-fast-waf-rule-path-made-one-rule-global">Production case — a fast WAF rule path made one rule global</a></li><li class="h2"><a href="#make-the-configuration-artifact-explicit">Make the configuration artifact explicit</a></li><li class="h2"><a href="#separate-distribution-success-from-application-success">Separate distribution success from application success</a></li><li class="h2"><a href="#reject-late-and-conflicting-updates">Reject late and conflicting updates</a></li><li class="h2"><a href="#roll-out-by-fault-container-not-percentage-alone">Roll out by fault container, not percentage alone</a></li><li class="h2"><a href="#promotion-is-a-decision-with-missing-data-rules">Promotion is a decision with missing-data rules</a></li><li class="h2"><a href="#keep-stop-and-rollback-independent">Keep stop and rollback independent</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-transfer-questions">Evidence and transfer questions</a></li></ol></nav></details><article class="prose"><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ID / revision / date</td>
+<td>X09 · 1.0 · 25 November 2026</td>
+</tr>
+<tr class="even">
+<td>Prerequisites</td>
+<td>S06 overload control, X05 migration authority, X06 release evidence and X07 recovery proof</td>
+</tr>
+<tr class="odd">
+<td>Capability developed</td>
+<td>Treat configuration as executable behavior: validate its meaning, bound its rollout, preserve last-known-good state and keep rollback usable when the control plane or new configuration fails.</td>
+</tr>
+<tr class="even">
+<td>Evidence</td>
+<td>XR22–XR24. Production postmortem and current engineering guidance below.</td>
+</tr>
+<tr class="odd">
+<td>Experiment</td>
+<td>Blast-radius arithmetic, promotion gates, version ordering, stale-state policy and rollback-dependency review in the <a href="/answers/x09.html">worked companion</a>.</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="configuration-can-change-behavior-faster-than-code">Configuration can change behavior faster than code</h2>
+<p>A configuration change can alter routing, authorization, resource use, model selection or safety policy without replacing a binary. That convenience can bypass the long observation periods normally attached to software releases. A schema-valid value can still be operationally catastrophic: a regular expression can consume unbounded CPU, a route weight can overload one cell, or a feature flag can activate code that has never handled production traffic.</p>
+<p>The decision is:</p>
+<blockquote>
+<p>Can this change prove useful on a small, representative scope before it can affect the next fault container—and can operators stop or reverse it through a path that the change cannot disable?</p>
+</blockquote>
+<p>Approval and syntax validation are inputs, not the safety property. Safety comes from semantic limits, bounded exposure, observable promotion, ordered application and recoverable authority.</p>
+<h2 id="production-case-a-fast-waf-rule-path-made-one-rule-global">Production case — a fast WAF rule path made one rule global</h2>
+<p>Cloudflare’s 2 July 2019 postmortem reports that a new WAF Managed Rule contained a regular expression with enormous backtracking. It exhausted the CPU cores serving HTTP/HTTPS traffic worldwide, affected proxying, CDN and WAF functionality, and produced 502 responses. Cloudflare reports 27 minutes of service impact. <a href="https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/">Cloudflare, “Details of the Cloudflare outage on July 2, 2019,” “The events of July 2,” lines 886–901</a></p>
+<p>The constraint was legitimate urgency. WAF rules had to respond quickly to emerging attacks, so they did not use Cloudflare’s slower DOG/PIG/Canary software path. The rule passed the normal functional test suite, but that suite did not test runaway CPU consumption. Quicksilver then distributed the change across more than 180 cities with a reported global p99 of 2.29 seconds. <a href="https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/">Cloudflare, same postmortem, “How Cloudflare operates,” “WAF Threats” and “Quicksilver,” lines 923–971</a></p>
+<p>The team chose a global WAF termination after live CPU evidence isolated the component. Access to the internal control panel was itself impaired because Cloudflare Access was down, so responders used a rarely practised bypass. After disabling the WAF, they tested the rollback in one city on a subset of traffic before re-enabling it globally. <a href="https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/">Cloudflare, same postmortem, “What happened,” lines 902–922</a></p>
+<p>The postmortem lists the converging failures: no resource-cost test, a non-emergency global rollout, a slow rebuild-based rollback, delayed global alerting, and difficulty reaching internal systems. This was not simply a bad regex. A rapid control plane converted a local mistake into global exposure while the affected data plane obstructed operator access.</p>
+<p>The transferable evidence is not “copy Cloudflare’s current system.” Before applying the lesson elsewhere, measure propagation time, fault-containment boundaries, representative canary traffic, semantic cost limits, alert latency, rollback duration, last-known-good behavior and whether the emergency path shares identity, network, DNS or policy dependencies with the system it must disable.</p>
+<h2 id="make-the-configuration-artifact-explicit">Make the configuration artifact explicit</h2>
+<p>Promote an immutable artifact, not a mutable key/value intention. A useful envelope contains:</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>epoch</code> and <code>version</code></td>
+<td>Establish total ordering within an authority generation</td>
+</tr>
+<tr class="even">
+<td>content digest</td>
+<td>Detect equal-version conflicts and prove what was applied</td>
+</tr>
+<tr class="odd">
+<td>schema and target compatibility</td>
+<td>Reject values the binary cannot interpret</td>
+</tr>
+<tr class="even">
+<td>author, review and reason</td>
+<td>Preserve provenance and incident context</td>
+</tr>
+<tr class="odd">
+<td>intended scope</td>
+<td>Name tenant, cell, zone, region or fleet boundaries</td>
+</tr>
+<tr class="even">
+<td>semantic budget</td>
+<td>Bound CPU, memory, fan-out, route weight or another domain cost</td>
+</tr>
+<tr class="odd">
+<td>issued and expiry times</td>
+<td>Bound stale use where time semantics are safe</td>
+</tr>
+<tr class="even">
+<td>rollback artifact</td>
+<td>Identify the tested predecessor or disable action</td>
+</tr>
+</tbody>
+</table>
+</div><p>Schema validation answers whether a document is shaped correctly. Semantic validation asks whether it can do useful work within real limits. Google SRE’s configuration guidance gives examples such as a valid path that does not exist or a RAM request one thousand times larger than intended; it recommends preventing such errors when the user commits the configuration. <a href="https://sre.google/workbook/configuration-design/">Google SRE Workbook, “Configuration Design and Best Practices,” “Semantic validation,” lines 143–146</a></p>
+<p>Validate domain invariants before rollout: regex work or execution timeout, total traffic weights, recursion depth, memory expansion, dependency existence, permitted principals, mutually exclusive flags and target-version compatibility. Then run the artifact against representative load. A functional test that gets the right answer once does not establish a resource bound.</p>
+<h2 id="separate-distribution-success-from-application-success">Separate distribution success from application success</h2>
+<p>The control plane distributes desired state. The data plane decides whether and how to apply it while continuing to serve. Track at least these states per target:</p>
+<ol type="1">
+<li>artifact accepted by the control plane;</li>
+<li>artifact delivered with digest intact;</li>
+<li>artifact parsed and semantically validated locally;</li>
+<li>artifact activated at a named version;</li>
+<li>post-activation health observed;</li>
+<li>target promoted, held or rolled back.</li>
+</ol>
+<p>“Delivered to 100%” can coexist with “crashing at 100%.” Promotion must use data-plane outcomes—availability, latency, saturation, correctness and business/safety signals—not acknowledgement alone.</p>
+<p>Keep the last-known-good (LKG) artifact locally. Fetching a new version should not erase the active one. Parse and validate into a candidate, activate atomically, observe, and retain the predecessor until the rollback window closes. If the control plane disappears, an established data plane should normally continue with LKG rather than turn a control-plane outage into a serving outage.</p>
+<p>That default is not universal. An expired certificate revocation or emergency deny rule may need fail-closed behavior, while a recommendation layout can safely remain stale. Choose per configuration class and document the consequence of stale, missing and invalid state.</p>
+<h2 id="reject-late-and-conflicting-updates">Reject late and conflicting updates</h2>
+<p>Distributed delivery reorders and duplicates messages. A target holding <code>(epoch=7, version=42, digest=A)</code> should:</p>
+<ul>
+<li>ignore a duplicate <code>(7, 42, A)</code>;</li>
+<li>reject an older <code>(7, 41, …)</code> even if it arrives later;</li>
+<li>surface <code>(7, 42, B)</code> as an authority conflict rather than guessing;</li>
+<li>accept a new epoch only through an explicit authority-transfer rule.</li>
+</ul>
+<p>A timestamp alone is fragile because clocks skew and two writers can race. An epoch/version pair establishes authority and monotonic progress; the digest detects equivocation. Persist the applied tuple across restarts so an old snapshot cannot silently replace a newer safe configuration.</p>
+<h2 id="roll-out-by-fault-container-not-percentage-alone">Roll out by fault container, not percentage alone</h2>
+<p>Choose rings that align with containment boundaries: one process, one host, one cell, one availability zone, then additional regions. A “1% canary” spread across every region may create a global failure shape; one isolated cell can make rollback and diagnosis clearer.</p>
+<p>For each stage define before rollout:</p>
+<ul>
+<li>maximum targets and traffic at risk;</li>
+<li>representative workloads and excluded critical tenants;</li>
+<li>guardrails with denominator, window and missing-data behavior;</li>
+<li>observation time longer than alert and effect latency;</li>
+<li>automatic hold/rollback rules;</li>
+<li>manual authority and an abort deadline.</li>
+</ul>
+<p>AWS Well-Architected guidance describes fractional deployment through a one-box stage, progressively larger fractions aligned to fault-isolation boundaries, and bake time after each stage. It explicitly warns that without bake time the change expands before problems surface. <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops04-bp01.html">AWS Well-Architected, OPS04-BP01, “Implementation guidance,” lines 37–42</a></p>
+<p>For an invented fleet with <code>N</code> targets, canary size <code>c</code>, detection time <code>d</code> and rollback time <code>r</code>, a simple upper bound is:</p>
+<p class="math-scroll" tabindex="0" role="region" aria-label="Equation"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mrow><mi>c</mi><mi>a</mi><mi>n</mi><mi>a</mi><mi>r</mi><mi>y</mi></mrow></msub><mo>=</mo><mi>c</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> target-minutes</mtext></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>E</mi><mrow><mi>g</mi><mi>l</mi><mi>o</mi><mi>b</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>=</mo><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+E_{canary}=c(d+r)\text{ target-minutes}, \qquad E_{global}=N(d+r).
+</annotation></semantics></math></p>
+<p>This is exposure, not loss. Targets have different traffic and consequences, so real gates should weight requests, tenants or expected harm. The arithmetic forces the rollout to name its bound.</p>
+<h2 id="promotion-is-a-decision-with-missing-data-rules">Promotion is a decision with missing-data rules</h2>
+<p>Suppose the baseline CPU is 45%, the candidate reaches 98%, the absolute limit is 75%, and the permitted increase is 15 percentage points. The candidate fails both gates. Do not average it with healthy baseline hosts or promote because the dashboard is missing.</p>
+<p>Use conjunctive gates:</p>
+<ul>
+<li>all critical metrics present and fresh;</li>
+<li>each absolute safety limit passes;</li>
+<li>each permitted change from a comparable baseline passes;</li>
+<li>no critical slice or fault container breaches its limit;</li>
+<li>enough traffic and time have accumulated to exercise the change.</li>
+</ul>
+<p>If the metric pipeline fails, hold. “No evidence of harm” is not “evidence of safety.” X06’s delayed-outcome reasoning still applies: a configuration whose effect appears after an hour needs an hour-scale observation or a tighter proxy, not a five-minute bake chosen for convenience.</p>
+<h2 id="keep-stop-and-rollback-independent">Keep stop and rollback independent</h2>
+<p>A safe rollout needs two different actions:</p>
+<ul>
+<li><strong>stop:</strong> prevent distribution beyond the current stage;</li>
+<li><strong>rollback/disable:</strong> restore the tested predecessor or bypass the affected component on already-exposed targets.</li>
+</ul>
+<p>The emergency action should be minimal, pre-authorized, rehearsed and reachable without the feature it controls. Test dependency independence: identity provider, DNS, dashboard, configuration database, network path, build service and on-call credentials. Cloudflare’s incident demonstrates why a documented switch is insufficient when the normal access path is impaired.</p>
+<p>Avoid rollback that requires rebuilding the entire artifact during the incident. Keep an immutable predecessor or a narrow, resource-bounded kill switch at the data plane. Protect the emergency channel with strong authentication and audit, but maintain a tested break-glass route.</p>
+<h2 id="practice">Practice</h2>
+<p>All fleet sizes, timings, thresholds, versions and policy examples below are invented teaching inputs.</p>
+<ol type="1">
+<li>A 12,000-node fleet receives a configuration globally. Detection takes two minutes and rollback one minute. Compare its target-minute exposure with a 12-node first ring under the same timings. State what this metric omits.</li>
+<li>A candidate raises CPU from 45% to 98%. The gate requires CPU at or below 75% and an increase no greater than 15 percentage points. Evaluate both predicates and the promotion decision. What should happen if candidate CPU is missing?</li>
+<li>A node has applied <code>(epoch=7, version=42, digest=A)</code>. It later receives <code>(7,41,Z)</code>, <code>(7,42,A)</code>, <code>(7,42,B)</code> and <code>(8,1,C)</code>. Classify each result and name the extra evidence needed for the epoch change.</li>
+<li>Choose behavior during control-plane loss for: a recommendation-layout setting, an emergency account-revocation list and a routing policy whose safe staleness limit is 15 minutes. Specify LKG, expiry and fail-open/fail-closed behavior rather than one global rule.</li>
+<li>Review an invented WAF rollout whose disable button requires the same SSO, DNS and edge proxy affected by the WAF. Redesign stop, rollback and break-glass paths; list the evidence that would prove independence.</li>
+</ol>
+<h2 id="evidence-and-transfer-questions">Evidence and transfer questions</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable table"><table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Inspected locator</th>
+<th>Application boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XR22 · Cloudflare</td>
+<td><a href="https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/">2019 WAF outage postmortem</a>, “The events of July 2,” “What happened,” “How Cloudflare operates,” “WAF Threats,” “Quicksilver” and “What went wrong,” especially lines 886–922 and 935–981</td>
+<td>Documents the urgency constraint, passing functional tests, seconds-scale global distribution, CPU exhaustion, impaired operator access and mitigation. It does not describe Cloudflare’s current architecture or establish universal ring sizes.</td>
+</tr>
+<tr class="even">
+<td>XR23 · Google SRE</td>
+<td><a href="https://sre.google/workbook/configuration-design/">Configuration Design and Best Practices</a>, “Semantic validation,” “Ownership and Change Tracking” and “Safe Configuration Change Application,” lines 143–182</td>
+<td>Grounds semantic validation, provenance, gradual application, rollback and loss-of-control concerns. It does not supply workload-specific limits or stale-state policy.</td>
+</tr>
+<tr class="odd">
+<td>XR24 · AWS Well-Architected</td>
+<td><a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops04-bp01.html">OPS04-BP01</a>, “Implementation guidance,” lines 37–42 and implementation steps</td>
+<td>Current guidance for fault-aligned fractional stages, health signals and bake time. It is design guidance, not evidence that a particular deployment is safe.</td>
+</tr>
+</tbody>
+</table>
+</div><p>Before changing a real control plane, obtain the artifact/version model, semantic resource bounds, propagation and activation telemetry, fault-containment map, representative traffic, guardrail latency and missingness, LKG/expiry policy by configuration class, tested rollback duration, emergency-path dependency graph and recent drill evidence. No learner answer or mastery level is inferred from opening this lesson.</p>
+</article><nav class="learning-links" aria-label="Lesson resources"><a href="/answers/x09.html">Open worked companion <span aria-hidden="true">→</span></a><a href="/reference/extensions.html#extension-evidence-register">Source register <span aria-hidden="true">→</span></a></nav>
+<section class="lesson-progress"><div><h2 id="study-level-heading">Your study level</h2><p data-level-note>Record what you can do after working through this module.</p><p class="storage-warning" data-storage-warning hidden>Browser storage is unavailable. This level lasts until you leave this page.</p></div><div><label class="sr-only" for="study-level">Study level</label><select id="study-level" data-level="X09"><option value="0">Unstarted</option><option value="1">Recognize</option><option value="2">Reproduce</option><option value="3">Transfer</option><option value="4">Defend</option></select><a href="/progress.html">Mastery levels</a></div></section><nav class="lesson-neighbors" aria-label="Adjacent lessons"><a href="/learn/x08.html"><small>Previous module · X08</small><strong>Point-in-time feature correctness</strong></a></nav></div><aside class="toc-side"><nav aria-label="On this page"><p>On this page</p><ol><li class="h2"><a href="#configuration-can-change-behavior-faster-than-code">Configuration can change behavior faster than code</a></li><li class="h2"><a href="#production-case-a-fast-waf-rule-path-made-one-rule-global">Production case — a fast WAF rule path made one rule global</a></li><li class="h2"><a href="#make-the-configuration-artifact-explicit">Make the configuration artifact explicit</a></li><li class="h2"><a href="#separate-distribution-success-from-application-success">Separate distribution success from application success</a></li><li class="h2"><a href="#reject-late-and-conflicting-updates">Reject late and conflicting updates</a></li><li class="h2"><a href="#roll-out-by-fault-container-not-percentage-alone">Roll out by fault container, not percentage alone</a></li><li class="h2"><a href="#promotion-is-a-decision-with-missing-data-rules">Promotion is a decision with missing-data rules</a></li><li class="h2"><a href="#keep-stop-and-rollback-independent">Keep stop and rollback independent</a></li><li class="h2"><a href="#practice">Practice</a></li><li class="h2"><a href="#evidence-and-transfer-questions">Evidence and transfer questions</a></li></ol></nav></aside></div></main>
+<footer class="site-footer"><a href="/">SDE Foundations</a><a href="/reference/sources.html">Source register</a><a href="/reference/execution-index.html">Execution index</a></footer>
+</div>
+<dialog id="search-dialog" aria-labelledby="search-name">
+<div class="search-head"><span class="ico search" aria-hidden="true"></span><label id="search-name" class="sr-only" for="search-input">Search library</label><input id="search-input" type="search" placeholder="Search titles, concepts, or source IDs…" autocomplete="off"><button type="button" class="close-search" aria-label="Close search">×</button></div>
+<div class="search-filter"><label for="search-scope">Search in</label><select id="search-scope"><option value="library">Lessons and reference</option><option value="modules">Lessons only</option><option value="references">Reference and sources</option><option value="answers">Worked answers</option></select></div>
+<div class="search-output" aria-live="polite"><p>Try <strong>invariants</strong>, <strong>tail latency</strong>, or a source ID like <strong>R07</strong>.</p></div>
+</dialog>
+</body>
+</html>

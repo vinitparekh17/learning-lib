@@ -21,7 +21,7 @@
 <div class="sidebar-label reference-nav">Library</div><a class="nav-link " href="/reference.html"><span class="ico books" aria-hidden="true"></span>Reference</a><a class="nav-link " href="/reference/sources.html"><span class="ico source" aria-hidden="true"></span>Source register</a>
 </nav>
 <a class="side-progress" href="/progress.html">
-<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 32</strong></span>
+<span class="side-progress-label"><span>Your study progress</span><strong data-side-count>0 / 33</strong></span>
 <span class="meter"><span data-meter></span></span>
 <span class="side-progress-note">Modules with a recorded level</span>
 </a>
@@ -169,6 +169,18 @@
 <td>X07–X08</td>
 <td>Passed on 24 November 2026</td>
 </tr>
+<tr class="even">
+<td><a href="/learn/x09.html">X09 — Safe configuration rollout and control-plane blast radius</a></td>
+<td>Bound globally propagated configuration with semantic validation, staged scope, ordered application and independent rollback</td>
+<td>S06, X05, X06, X07</td>
+<td>Produced and checked; audit 04 pending</td>
+</tr>
+<tr class="odd">
+<td><a href="/answers/x09.html">X09 worked companion</a></td>
+<td>Reproduce exposure, guardrail, version-authority, stale-state and rollback-independence decisions</td>
+<td>X09 practice</td>
+<td>Produced and checked; mapping audit 04 pending</td>
+</tr>
 </tbody>
 </table>
 </div><p>X01 adds a concrete application-cache mechanism beyond the original authority and retrieval discussions. It includes a step-through race explorer on its lesson page. Opening a lesson does not change your recorded mastery.</p>
@@ -192,17 +204,11 @@
 <tbody>
 <tr class="odd">
 <td>Next</td>
-<td>X09 — Safe configuration rollout and control-plane blast radius</td>
-<td>Bound globally propagated configuration with staged scope, independent rollback and last-known-good behavior</td>
-<td>S06, X05, X06, X07</td>
-</tr>
-<tr class="even">
-<td>Then</td>
 <td>X10 — Selective labels and decision feedback</td>
 <td>Reason when deployed decisions determine which outcomes become observable</td>
 <td>F02, F03, A01, X06, X08</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Review</td>
 <td>Extension audit 04</td>
 <td>Recheck X09–X10 evidence boundaries, examples and navigation before selecting more work</td>
@@ -333,9 +339,25 @@
 <td><a href="https://github.com/feast-dev/feast/blob/master/docs/getting-started/concepts/point-in-time-joins.md">Feast, “Point-in-time joins”</a>, full page, especially “Retrieving features as of the event time”; inspected 2026-11-24</td>
 <td>Current event-time versus optional created-time filtering semantics; availability meaning and store support remain deployment inputs</td>
 </tr>
+<tr class="even">
+<td>XR22</td>
+<td><a href="https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/">Cloudflare, “Details of the Cloudflare outage on July 2, 2019”</a>, “The events of July 2,” “What happened,” “How Cloudflare operates,” “WAF Threats,” “Quicksilver” and “What went wrong,” lines 886–922 and 935–981; inspected 2026-11-25</td>
+<td>Documents the urgency constraint, functional-test gap, seconds-scale global distribution, CPU exhaustion, operator-access coupling and mitigation; not current Cloudflare architecture or a universal rollout prescription</td>
+</tr>
+<tr class="odd">
+<td>XR23</td>
+<td><a href="https://sre.google/workbook/configuration-design/">Google SRE Workbook, “Configuration Design and Best Practices”</a>, “Semantic validation,” “Ownership and Change Tracking” and “Safe Configuration Change Application,” lines 143–182; inspected 2026-11-25</td>
+<td>Grounds semantic validation, provenance, gradual application, rollback and loss-of-control safeguards; workload limits and stale-state policy remain local decisions</td>
+</tr>
+<tr class="even">
+<td>XR24</td>
+<td><a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops04-bp01.html">AWS Well-Architected, OPS04-BP01</a>, “Implementation guidance,” lines 37–42 and implementation steps; inspected 2026-11-25</td>
+<td>Current guidance for fault-aligned fractional stages, health signals and bake time; does not prove any deployed gate is sufficient</td>
+</tr>
 </tbody>
 </table>
 </div><h2 id="change-record">Change record</h2>
+<p>25 November 2026 · Added X09 and five worked configuration-rollout decisions. XR22 documents Cloudflare’s 2019 WAF urgency constraint, passing functional tests, seconds-scale global propagation, CPU exhaustion and impaired operator path; XR23 grounds semantic validation and recoverable gradual application; XR24 grounds fault-aligned stages and bake time. Executed exposure, guardrail and version-authority checks. X10 is next, followed by extension audit 04.</p>
 <p>24 November 2026 · Completed <a href="/reference/extension-audit-03.html">Extension audit 03</a>. Re-inspected XR16–XR21, verified 10 practice-to-answer mappings, executed both companion checks and checked generated routes, fragments, search and navigation. Direct inspection confirmed the current PostgreSQL page is version 19 despite stale search metadata, so no lesson claim required correction. Selected X09 and X10 only for the concrete configuration-blast-radius and selective-label gaps recorded in the audit; audit 04 follows that mini-batch.</p>
 <p>24 November 2026 · Added X08 and five worked feature-time decisions. XR19 documents Uber’s feature mismatch, exact inference logging choice, scale constraints and reported rollout results; XR20 grounds Chronon’s shared temporal computation and accuracy modes; XR21 exposes the event-time versus availability-time boundary directly. Executed late-event, mutable-version, half-open-window and parity checks. Extension audit 03 is next.</p>
 <p>23 November 2026 · Added X07 and five worked recovery decisions. XR16 documents GitLab’s 2017 recovery constraints, chosen six-hour snapshot, reported loss and approximately 18-hour storage bottleneck; XR17 bounds restore-test evidence; XR18 grounds PostgreSQL chain and timeline semantics. Executed recovery-point, dependency-path, incremental-closure and external-effect reconciliation checks. X08 is next, followed by extension audit 03.</p>
